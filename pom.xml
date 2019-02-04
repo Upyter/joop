@@ -27,7 +27,7 @@
 
     <groupId>io.github.upyter</groupId>
     <artifactId>joop</artifactId>
-    <version>0.3</version>
+    <version>0.4</version>
     <packaging>jar</packaging>
     <name>joop</name>
     <description>Object oriented java 2d wrapper for shapes</description>
@@ -86,10 +86,18 @@
             <version>1.3</version>
             <scope>compile</scope>
         </dependency>
+        <!-- my library for the basic units -->
         <dependency>
             <groupId>com.github.Upyter</groupId>
             <artifactId>unit</artifactId>
             <version>44c44050cf</version>
+        </dependency>
+        <!-- to compare swing drawing with expectation images -->
+        <dependency>
+            <groupId>net.avh4.util</groupId>
+            <artifactId>imagecomparison-swing</artifactId>
+            <version>0.3.1</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 

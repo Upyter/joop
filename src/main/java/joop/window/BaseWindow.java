@@ -21,6 +21,7 @@
 
 package joop.window;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -58,19 +59,25 @@ public class BaseWindow implements Showable {
                     final var panel = new JPanel();
                     Tuple.applyOn(
                         area,
-                        (pos, size) -> {
-                            Tuple.applyOn(pos, result::setLocation);
-                            Tuple.applyOn(
-                                size,
-                                (width, height) -> panel.setPreferredSize(
-                                    new Dimension(width, height)
-                                )
-                            );
-                        }
+                        (pos, size) -> Tuple.applyOn(
+                            size,
+                            (width, height) -> panel.setPreferredSize(
+                                new Dimension(width, height)
+                            )
+                        )
                     );
+                    panel.setBackground(Color.WHITE);
                     result.add(panel);
                     result.pack();
                     result.setVisible(true);
+                    Area.applyOn(
+                        area,
+                        // @checkstyle ParameterName (1 line)
+                        (x, y, width, height) -> result.setLocation(
+                            x - result.getInsets().left,
+                            y - result.getInsets().top
+                        )
+                    );
                     return result;
                 }
             )
