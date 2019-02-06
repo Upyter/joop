@@ -23,8 +23,12 @@ package joop.window;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.util.Collection;
+import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import joop.shape.Shape;
 import unit.area.Area;
 import unit.functional.Cached;
 import unit.functional.Lazy;
@@ -49,14 +53,30 @@ public class BaseWindow implements Showable {
 
     /**
      * Ctor.
-     * @param area The area of this window.
+     * @param area The area of the window.
+     * @param shapes The shapes to put on the window.
      */
-    public BaseWindow(final Area area) {
+    public BaseWindow(final Area area, final Shape... shapes) {
+        this(area, List.of(shapes));
+    }
+
+    /**
+     * Ctor.
+     * @param area The area of the window.
+     * @param shapes The shapes to put on the window.
+     */
+    public BaseWindow(final Area area, final Collection<Shape> shapes) {
         this(
             new Cached<>(
                 () -> {
                     final var result = new JFrame();
-                    final var panel = new JPanel();
+                    final var panel = new JPanel() {
+                        @Override
+                        protected void paintComponent(final Graphics graphics) {
+                            super.paintComponent(graphics);
+                            shapes.forEach(it -> it.draw(graphics));
+                        }
+                    };
                     Tuple.applyOn(
                         area,
                         (pos, size) -> Tuple.applyOn(

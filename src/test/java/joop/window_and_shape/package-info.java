@@ -19,39 +19,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package joop.shape;
-
-import java.awt.Color;
-import java.awt.Graphics;
-import java.util.Optional;
-import unit.area.Area;
-
 /**
- * A rectangle using java2d.
- * <p>This class doesn't change its own state. Whether it is immutable or not,
- * depends on the given constructor arguments. Additionally whether this
- * class is thread-safe or not, depends on the given graphics instance for
- * {@link this#draw(Graphics)}.</p>
- * @since 2.1.0
+ * Integration tests that combine windows and shapes.
+ * @since 0.8
  */
-public class Rect implements Shape {
-    /**
-     * The area of the rect.
-     */
-    private final Area area;
-
-    /**
-     * Ctor.
-     * @param area The area of the rect.
-     */
-    public Rect(final Area area) {
-        this.area = area;
-    }
-
-    @Override
-    public final Optional<Shape> draw(final Graphics graphics) {
-        graphics.setColor(Color.BLACK);
-        Area.applyOn(this.area, graphics::fillRect);
-        return Optional.of(this);
-    }
-}
+package joop.window_and_shape;
