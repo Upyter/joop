@@ -21,10 +21,11 @@
 
 package joop.shape;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Optional;
 import unit.area.Area;
+import unit.color.Black;
+import unit.color.Color;
 
 /**
  * A filled rectangle.
@@ -41,16 +42,31 @@ public class Rect implements Shape {
     private final Area area;
 
     /**
-     * Ctor.
+     * The color of the rect.
+     */
+    private final Color color;
+
+    /**
+     * Ctor. Creates a black rect.
      * @param area The area of the rect.
      */
     public Rect(final Area area) {
+        this(area, new Black());
+    }
+
+    /**
+     * Ctor.
+     * @param area The area of the rect.
+     * @param color The color of the rect.
+     */
+    public Rect(final Area area, final Color color) {
         this.area = area;
+        this.color = color;
     }
 
     @Override
     public final Optional<Shape> draw(final Graphics graphics) {
-        graphics.setColor(Color.BLACK);
+        graphics.setColor(this.color.result(java.awt.Color::new));
         Area.applyOn(this.area, graphics::fillRect);
         return Optional.of(this);
     }

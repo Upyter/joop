@@ -29,6 +29,7 @@ import net.avh4.util.imagecomparison.hamcrest.ImageComparisonMatchers;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import unit.area.AreaOf;
+import unit.color.RGBA;
 import unit.size.SizeOf;
 
 /**
@@ -69,6 +70,45 @@ public final class WindowAndRectTest {
             ),
             ImageComparisonMatchers.looksLike(
                 "window_and_rect/blackRectOnWhiteWindow.png"
+            )
+        );
+    }
+
+    /**
+     * {@link BaseWindow#show()} must show a rect with the given color
+     * for a {@link BaseWindow} with a {@link Rect} on it.
+     * joop/src/main/java/resources/joop/window_and_shape/
+     * coloredRectAndWhiteWindow.png is used as the expected image of the inner
+     * area.
+     * @throws Exception Because of Thread.sleep and Robot.
+     */
+    @Test
+    public void coloredRect() throws Exception {
+        // @checkstyle LocalFinalVariableName (6 lines)
+        final var windowWidth = 340;
+        final var windowHeight = 270;
+        final var rectX = 50;
+        final var rectY = 10;
+        final var rectWidth = 100;
+        final var rectHeight = 140;
+        final var red = 255;
+        new BaseWindow(
+            new AreaOf(
+                new SizeOf(windowWidth, windowHeight)
+            ),
+            new Rect(
+                new AreaOf(rectX, rectY, rectWidth, rectHeight),
+                new RGBA(red, 0, 0)
+            )
+        ).show();
+        final long milliseconds = 350L;
+        Thread.sleep(milliseconds);
+        MatcherAssert.assertThat(
+            new Robot().createScreenCapture(
+                new Rectangle(0, 0, windowWidth, windowHeight)
+            ),
+            ImageComparisonMatchers.looksLike(
+                "window_and_rect/coloredRectOnWhiteWindow.png"
             )
         );
     }
