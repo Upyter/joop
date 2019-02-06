@@ -46,7 +46,7 @@ public final class WindowAndOvalTest {
      * @throws Exception Because of Thread.sleep and Robot.
      */
     @Test
-    public void blackRect() throws Exception {
+    public void black() throws Exception {
         // @checkstyle LocalFinalVariableName (6 lines)
         final var windowWidth = 300;
         final var windowHeight = 200;
@@ -83,7 +83,7 @@ public final class WindowAndOvalTest {
      * @throws Exception Because of Thread.sleep and Robot.
      */
     @Test
-    public void coloredOval() throws Exception {
+    public void colored() throws Exception {
         // @checkstyle LocalFinalVariableName (6 lines)
         final var windowWidth = 450;
         final var windowHeight = 300;
