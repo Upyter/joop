@@ -75,8 +75,8 @@ public final class WindowAndOvalTest {
     }
 
     /**
-     * {@link BaseWindow#show()} must show a black oval for {@link BaseWindow}
-     * with a black {@link Oval} on it.
+     * {@link BaseWindow#show()} must show a colored oval for {@link BaseWindow}
+     * with a colored {@link Oval} on it.
      * joop/src/main/java/resources/joop/window_and_shape/
      * coloredOvalAndWhiteWindow.png is used as the expected image of the inner
      * area.
