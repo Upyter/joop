@@ -27,12 +27,12 @@ import java.util.Optional;
 import unit.area.Area;
 
 /**
- * A rectangle using java2d.
+ * A filled rectangle.
  * <p>This class doesn't change its own state. Whether it is immutable or not,
  * depends on the given constructor arguments. Additionally whether this
  * class is thread-safe or not, depends on the given graphics instance for
  * {@link this#draw(Graphics)}.</p>
- * @since 2.1.0
+ * @since 0.7
  */
 public class Rect implements Shape {
     /**
