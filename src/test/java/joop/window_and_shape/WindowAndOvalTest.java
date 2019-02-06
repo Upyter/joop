@@ -29,6 +29,7 @@ import net.avh4.util.imagecomparison.hamcrest.ImageComparisonMatchers;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import unit.area.AreaOf;
+import unit.color.RGBA;
 import unit.size.SizeOf;
 
 /**
@@ -69,6 +70,45 @@ public final class WindowAndOvalTest {
             ),
             ImageComparisonMatchers.looksLike(
                 "window_and_oval/blackOvalOnWhiteWindow.png"
+            )
+        );
+    }
+
+    /**
+     * {@link BaseWindow#show()} must show a black oval for {@link BaseWindow}
+     * with a black {@link Oval} on it.
+     * joop/src/main/java/resources/joop/window_and_shape/
+     * coloredOvalAndWhiteWindow.png is used as the expected image of the inner
+     * area.
+     * @throws Exception Because of Thread.sleep and Robot.
+     */
+    @Test
+    public void coloredOval() throws Exception {
+        // @checkstyle LocalFinalVariableName (6 lines)
+        final var windowWidth = 450;
+        final var windowHeight = 300;
+        final var ovalX = 40;
+        final var ovalY = 30;
+        final var ovalWidth = 140;
+        final var ovalHeight = 150;
+        final var blue = 255;
+        new BaseWindow(
+            new AreaOf(
+                new SizeOf(windowWidth, windowHeight)
+            ),
+            new Oval(
+                new AreaOf(ovalX, ovalY, ovalWidth, ovalHeight),
+                new RGBA(0, 0, blue)
+            )
+        ).show();
+        final long milliseconds = 350L;
+        Thread.sleep(milliseconds);
+        MatcherAssert.assertThat(
+            new Robot().createScreenCapture(
+                new Rectangle(0, 0, windowWidth, windowHeight)
+            ),
+            ImageComparisonMatchers.looksLike(
+                "window_and_oval/coloredOvalOnWhiteWindow.png"
             )
         );
     }
