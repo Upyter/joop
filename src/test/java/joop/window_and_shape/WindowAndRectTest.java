@@ -21,12 +21,9 @@
 
 package joop.window_and_shape;
 
-import java.awt.Rectangle;
-import java.awt.Robot;
 import joop.matcher.CorrectContent;
 import joop.shape.Rect;
 import joop.window.BaseWindow;
-import net.avh4.util.imagecomparison.hamcrest.ImageComparisonMatchers;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import unit.area.AreaOf;
@@ -69,33 +66,26 @@ public final class WindowAndRectTest {
      * joop/src/main/java/resources/joop/window_and_shape/
      * coloredRectAndWhiteWindow.png is used as the expected image of the inner
      * area.
-     * @throws Exception Because of Thread.sleep and Robot.
      */
     @Test
-    public void colored() throws Exception {
-        // @checkstyle LocalFinalVariableName (6 lines)
+    public void colored() {
+        // @checkstyle LocalFinalVariableName (4 lines)
         final var windowWidth = 340;
         final var windowHeight = 270;
-        final var rectX = 50;
-        final var rectY = 10;
-        final var rectWidth = 100;
-        final var rectHeight = 140;
+        final var x = 50;
+        final var y = 10;
+        final var width = 100;
+        final var height = 140;
         final var red = 255;
-        new BaseWindow(
-            new AreaOf(windowWidth, windowHeight),
-            new Rect(
-                new AreaOf(rectX, rectY, rectWidth, rectHeight),
-                new RGBA(red, 0, 0)
-            )
-        ).show();
-        final long milliseconds = 350L;
-        Thread.sleep(milliseconds);
         MatcherAssert.assertThat(
-            new Robot().createScreenCapture(
-                new Rectangle(0, 0, windowWidth, windowHeight)
+            new Rect(
+                new AreaOf(x, y, width, height),
+                new RGBA(red, 0, 0)
             ),
-            ImageComparisonMatchers.looksLike(
-                "window_and_rect/coloredRectOnWhiteWindow.png"
+            new CorrectContent(
+                "window_and_rect/coloredRectOnWhiteWindow.png",
+                windowWidth,
+                windowHeight
             )
         );
     }
