@@ -23,6 +23,7 @@ package joop.window_and_shape;
 
 import java.awt.Rectangle;
 import java.awt.Robot;
+import joop.matcher.CorrectContent;
 import joop.shape.Rect;
 import joop.window.BaseWindow;
 import net.avh4.util.imagecomparison.hamcrest.ImageComparisonMatchers;
@@ -30,7 +31,6 @@ import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import unit.area.AreaOf;
 import unit.color.RGBA;
-import unit.size.SizeOf;
 
 /**
  * Tests for the combined use of {@link BaseWindow} and {@link Rect}.
@@ -43,33 +43,24 @@ public final class WindowAndRectTest {
      * joop/src/main/java/resources/joop/window_and_shape/
      * blackRectAndWhiteWindow.png is used as the expected image of the inner
      * area.
-     * @throws Exception Because of Thread.sleep and Robot.
      */
     @Test
-    public void black() throws Exception {
-        // @checkstyle LocalFinalVariableName (6 lines)
+    public void black() {
+        // @checkstyle LocalFinalVariableName (4 lines)
         final var windowWidth = 500;
         final var windowHeight = 600;
-        final var rectX = 50;
-        final var rectY = 200;
-        final var rectWidth = 100;
-        final var rectHeight = 140;
-        new BaseWindow(
-            new AreaOf(
-                new SizeOf(windowWidth, windowHeight)
-            ),
-            new Rect(
-                new AreaOf(rectX, rectY, rectWidth, rectHeight)
-            )
-        ).show();
-        final long milliseconds = 350L;
-        Thread.sleep(milliseconds);
+        final var x = 50;
+        final var y = 200;
+        final var width = 100;
+        final var height = 140;
         MatcherAssert.assertThat(
-            new Robot().createScreenCapture(
-                new Rectangle(0, 0, windowWidth, windowHeight)
+            new Rect(
+                new AreaOf(x, y, width, height)
             ),
-            ImageComparisonMatchers.looksLike(
-                "window_and_rect/blackRectOnWhiteWindow.png"
+            new CorrectContent(
+                "window_and_rect/blackRectOnWhiteWindow.png",
+                windowWidth,
+                windowHeight
             )
         );
     }
@@ -93,9 +84,7 @@ public final class WindowAndRectTest {
         final var rectHeight = 140;
         final var red = 255;
         new BaseWindow(
-            new AreaOf(
-                new SizeOf(windowWidth, windowHeight)
-            ),
+            new AreaOf(windowWidth, windowHeight),
             new Rect(
                 new AreaOf(rectX, rectY, rectWidth, rectHeight),
                 new RGBA(red, 0, 0)

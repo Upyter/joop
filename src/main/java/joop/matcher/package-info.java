@@ -19,12 +19,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package joop.window_and_shape;
-
-import joop.window.BaseWindow;
-
 /**
- * Tests for the combined use of {@link BaseWindow} and {@link Text}.
- * @since 0.13
+ * Matchers to help testing the joop components.
+ * @since 0.14
  */
-public class WindowAndTextTest { }
+package joop.matcher;
