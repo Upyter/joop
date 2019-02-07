@@ -54,9 +54,7 @@ public final class WindowAndRectTest {
         final var width = 100;
         final var height = 140;
         MatcherAssert.assertThat(
-            new Rect(
-                new AreaOf(x, y, width, height)
-            ),
+            new Rect(x, y, width, height),
             new CorrectContent(
                 "window_and_rect/blackRectOnWhiteWindow.png",
                 windowWidth,

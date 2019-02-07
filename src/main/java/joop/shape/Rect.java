@@ -24,6 +24,7 @@ package joop.shape;
 import java.awt.Graphics;
 import java.util.Optional;
 import unit.area.Area;
+import unit.area.AreaOf;
 import unit.color.Black;
 import unit.color.Color;
 
@@ -45,6 +46,21 @@ public class Rect implements Shape {
      * The color of the rect.
      */
     private final Color color;
+
+    /**
+     * Ctor. Creates a black rect.
+     * @param x The x coordinate of the rect.
+     * @param y The y coordinate of the rect.
+     * @param width The width of the rect.
+     * @param height The height of the rect.
+     * @checkstyle ParameterName (4 lines)
+     * @checkstyle ParameterNumber (3 lines)
+     */
+    public Rect(
+        final int x, final int y, final int width, final int height
+    ) {
+        this(new AreaOf(x, y, width, height), new Black());
+    }
 
     /**
      * Ctor. Creates a black rect.
