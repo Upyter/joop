@@ -26,6 +26,7 @@ import java.util.Optional;
 import unit.color.Black;
 import unit.color.Color;
 import unit.pos.Pos;
+import unit.pos.PosOf;
 import unit.tuple.Tuple;
 
 /**
@@ -52,6 +53,17 @@ public class Line implements Shape {
      * The color of the line.
      */
     private final Color color;
+
+    /**
+     * Ctor. Creates a black line.
+     * @param fx first x coordinate.
+     * @param fy first y coordinate.
+     * @param sx second x coordinate.
+     * @param sy second y coordinate.
+     */
+    public Line(final int fx, final int fy, final int sx, final int sy) {
+        this(new PosOf(fx, fy), new PosOf(sx, sy));
+    }
 
     /**
      * Ctor. Creates a black line.
