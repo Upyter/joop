@@ -27,7 +27,7 @@
 
     <groupId>io.github.upyter</groupId>
     <artifactId>joop</artifactId>
-    <version>0.16.2</version>
+    <version>0.17</version>
     <packaging>jar</packaging>
     <name>joop</name>
     <description>Object oriented java 2d wrapper for shapes</description>
@@ -97,7 +97,7 @@
             <groupId>net.avh4.util</groupId>
             <artifactId>imagecomparison-swing</artifactId>
             <version>0.3.1</version>
-            <scope>runtime</scope>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

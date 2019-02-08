@@ -37,11 +37,6 @@ import unit.area.AreaOf;
 import unit.functional.Cached;
 import unit.functional.Lazy;
 
-/*
-IntelliJ seems to like throwing the imagecomparison dependency out. In this
-case, I just need to press ctrl + alt + shift + s -> modules -> dependencies
-and change the scope of the library to "compile". No idea why this happens
- */
 /**
  * A matcher to check whether a window has the expected content.
  * <p>This class is immutable and thread-safe (assuming that
@@ -134,6 +129,13 @@ public class CorrectContent extends TypeSafeDiagnosingMatcher<Shape> {
             new AreaOf(this.width, this.height),
             shape
         ).show();
+        try {
+            final var sleep = 250L;
+            Thread.sleep(sleep);
+        } catch (final InterruptedException exception) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException(exception);
+        }
         final boolean matches = this.matcher.value().matches(
             this.image.value()
         );

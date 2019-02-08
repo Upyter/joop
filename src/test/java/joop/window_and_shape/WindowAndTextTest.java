@@ -21,12 +21,69 @@
 
 package joop.window_and_shape;
 
+import joop.matcher.CorrectContent;
+import joop.shape.Text;
 import joop.window.BaseWindow;
+import org.hamcrest.MatcherAssert;
+import org.junit.Test;
+import unit.color.RGBA;
+import unit.pos.PosOf;
 
 /**
  * Tests for the combined use of {@link BaseWindow} and {@link Text}.
  * @since 0.13
  */
 public class WindowAndTextTest {
+    /**
+     * {@link BaseWindow#show()} must show a black text for {@link BaseWindow}
+     * with a black {@link Text} on it.
+     * joop/src/main/java/resources/joop/window_and_shape/
+     * blackTextAndWhiteWindow.png is used as the expected image of the inner
+     * area.
+     */
+    @Test
+    public void black() {
+        // @checkstyle LocalFinalVariableName (4 lines)
+        final var windowWidth = 330;
+        final var windowHeight = 150;
+        final var x = 120;
+        final var y = 50;
+        MatcherAssert.assertThat(
+            new Text("Some text", new PosOf(x, y)),
+            new CorrectContent(
+                "window_and_text/blackTextOnWhiteWindow.png",
+                windowWidth,
+                windowHeight
+            )
+        );
+    }
 
+    /**
+     * {@link BaseWindow#show()} must show a colored text for {@link BaseWindow}
+     * with a colored {@link Text} on it.
+     * joop/src/main/java/resources/joop/window_and_shape/
+     * coloredTextAndWhiteWindow.png is used as the expected image of the inner
+     * area.
+     */
+    @Test
+    public void colored() {
+        // @checkstyle LocalFinalVariableName (4 lines)
+        final var windowWidth = 400;
+        final var windowHeight = 200;
+        final var x = 140;
+        final var y = 160;
+        final var green = 255;
+        MatcherAssert.assertThat(
+            new Text(
+                "text",
+                new PosOf(x, y),
+                new RGBA(0, 0, green)
+            ),
+            new CorrectContent(
+                "window_and_text/coloredTextOnWhiteWindow.png",
+                windowWidth,
+                windowHeight
+            )
+        );
+    }
 }
