@@ -24,6 +24,7 @@ package joop.shape;
 import java.awt.Graphics;
 import java.util.Optional;
 import unit.area.Area;
+import unit.area.AreaOf;
 import unit.color.Black;
 import unit.color.Color;
 
@@ -45,6 +46,17 @@ public class Oval implements Shape {
      * The color of the oval.
      */
     private final Color color;
+
+    /**
+     * Ctor.
+     * @param x The x coordinate of the oval.
+     * @param y The y coordinate of the oval.
+     * @param width The width of the oval.
+     * @param height The height of the oval.
+     */
+    public Oval(final int x, final int y, final int width, final int height) {
+        this(new AreaOf(x, y, width, height));
+    }
 
     /**
      * Ctor.

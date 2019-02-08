@@ -21,16 +21,13 @@
 
 package joop.window_and_shape;
 
-import java.awt.Rectangle;
-import java.awt.Robot;
+import joop.matcher.CorrectContent;
 import joop.shape.Oval;
 import joop.window.BaseWindow;
-import net.avh4.util.imagecomparison.hamcrest.ImageComparisonMatchers;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import unit.area.AreaOf;
 import unit.color.RGBA;
-import unit.size.SizeOf;
 
 /**
  * Tests for the combined use of {@link BaseWindow} and {@link Oval}.
@@ -47,29 +44,19 @@ public final class WindowAndOvalTest {
      */
     @Test
     public void black() throws Exception {
-        // @checkstyle LocalFinalVariableName (6 lines)
+        // @checkstyle LocalFinalVariableName (4 lines)
         final var windowWidth = 300;
         final var windowHeight = 200;
-        final var ovalX = 10;
-        final var ovalY = 20;
-        final var ovalWidth = 100;
-        final var ovalHeight = 100;
-        new BaseWindow(
-            new AreaOf(
-                new SizeOf(windowWidth, windowHeight)
-            ),
-            new Oval(
-                new AreaOf(ovalX, ovalY, ovalWidth, ovalHeight)
-            )
-        ).show();
-        final long milliseconds = 350L;
-        Thread.sleep(milliseconds);
+        final var x = 10;
+        final var y = 20;
+        final var width = 100;
+        final var height = 100;
         MatcherAssert.assertThat(
-            new Robot().createScreenCapture(
-                new Rectangle(0, 0, windowWidth, windowHeight)
-            ),
-            ImageComparisonMatchers.looksLike(
-                "window_and_oval/blackOvalOnWhiteWindow.png"
+            new Oval(x, y, width, height),
+            new CorrectContent(
+                "window_and_oval/blackOvalOnWhiteWindow.png",
+                windowWidth,
+                windowHeight
             )
         );
     }
@@ -84,31 +71,23 @@ public final class WindowAndOvalTest {
      */
     @Test
     public void colored() throws Exception {
-        // @checkstyle LocalFinalVariableName (6 lines)
+        // @checkstyle LocalFinalVariableName (4 lines)
         final var windowWidth = 450;
         final var windowHeight = 300;
-        final var ovalX = 40;
-        final var ovalY = 30;
-        final var ovalWidth = 140;
-        final var ovalHeight = 150;
+        final var x = 40;
+        final var y = 30;
+        final var width = 140;
+        final var height = 150;
         final var blue = 255;
-        new BaseWindow(
-            new AreaOf(
-                new SizeOf(windowWidth, windowHeight)
-            ),
-            new Oval(
-                new AreaOf(ovalX, ovalY, ovalWidth, ovalHeight),
-                new RGBA(0, 0, blue)
-            )
-        ).show();
-        final long milliseconds = 350L;
-        Thread.sleep(milliseconds);
         MatcherAssert.assertThat(
-            new Robot().createScreenCapture(
-                new Rectangle(0, 0, windowWidth, windowHeight)
+            new Oval(
+                new AreaOf(x, y, width, height),
+                new RGBA(0, 0, blue)
             ),
-            ImageComparisonMatchers.looksLike(
-                "window_and_oval/coloredOvalOnWhiteWindow.png"
+            new CorrectContent(
+                "window_and_oval/coloredOvalOnWhiteWindow.png",
+                windowWidth,
+                windowHeight
             )
         );
     }

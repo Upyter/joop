@@ -51,10 +51,7 @@ public class WindowAndLineTest {
         final var sx = 200;
         final var sy = 130;
         MatcherAssert.assertThat(
-            new Line(
-                new PosOf(fx, fy),
-                new PosOf(sx, sy)
-            ),
+            new Line(fx, fy, sx, sy),
             new CorrectContent(
                 "window_and_line/blackLineOnWhiteWindow.png",
                 windowWidth,
