@@ -56,10 +56,12 @@ public class Line implements Shape {
 
     /**
      * Ctor. Creates a black line.
-     * @param fx first x coordinate.
-     * @param fy first y coordinate.
-     * @param sx second x coordinate.
-     * @param sy second y coordinate.
+     * @param fx First x coordinate.
+     * @param fy First y coordinate.
+     * @param sx Second x coordinate.
+     * @param sy Second y coordinate.
+     * @checkstyle ParameterNumber (3 lines)
+     * @checkstyle ParameterName (2 lines)
      */
     public Line(final int fx, final int fy, final int sx, final int sy) {
         this(new PosOf(fx, fy), new PosOf(sx, sy));
