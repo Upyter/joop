@@ -26,6 +26,7 @@ import joop.shape.Rect;
 import joop.window.BaseWindow;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
+import unit.area.Area;
 import unit.area.AreaOf;
 import unit.color.RGBA;
 
@@ -36,13 +37,13 @@ import unit.color.RGBA;
 public final class WindowAndRectTest {
     /**
      * {@link BaseWindow#show()} must show a black rect for {@link BaseWindow}
-     * with a black {@link Rect} on it.
+     * with a rect from {@link Rect#Rect(Area)} on it.
      * joop/src/main/java/resources/joop/window_and_shape/
      * blackRectAndWhiteWindow.png is used as the expected image of the inner
      * area.
      */
     @Test
-    public void black() {
+    public void plainConstructed() {
         // @checkstyle LocalFinalVariableName (4 lines)
         final var windowWidth = 500;
         final var windowHeight = 600;
@@ -52,6 +53,34 @@ public final class WindowAndRectTest {
         final var height = 140;
         MatcherAssert.assertThat(
             new Rect(x, y, width, height),
+            new CorrectContent(
+                "window_and_rect/blackRectOnWhiteWindow.png",
+                windowWidth,
+                windowHeight
+            )
+        );
+    }
+
+    /**
+     * {@link BaseWindow#show()} must show a black rect for {@link BaseWindow}
+     * with a rect from {@link Rect#Rect(int, int, int, int)} )} on it.
+     * joop/src/main/java/resources/joop/window_and_shape/
+     * blackRectAndWhiteWindow.png is used as the expected image of the inner
+     * area.
+     */
+    @Test
+    public void areaConstructed() {
+        // @checkstyle LocalFinalVariableName (4 lines)
+        final var windowWidth = 500;
+        final var windowHeight = 600;
+        final var x = 50;
+        final var y = 200;
+        final var width = 100;
+        final var height = 140;
+        MatcherAssert.assertThat(
+            new Rect(
+                new AreaOf(x, y, width, height)
+            ),
             new CorrectContent(
                 "window_and_rect/blackRectOnWhiteWindow.png",
                 windowWidth,
