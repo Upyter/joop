@@ -21,14 +21,11 @@
 
 package joop.window_and_shape;
 
-import java.awt.Rectangle;
-import java.awt.Robot;
+import joop.matcher.CorrectContent;
 import joop.shape.Line;
 import joop.window.BaseWindow;
-import net.avh4.util.imagecomparison.hamcrest.ImageComparisonMatchers;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
-import unit.area.AreaOf;
 import unit.color.RGBA;
 import unit.pos.PosOf;
 
@@ -43,10 +40,9 @@ public class WindowAndLineTest {
      * joop/src/main/java/resources/joop/window_and_shape/
      * blackLineAndWhiteWindow.png is used as the expected image of the inner
      * area.
-     * @throws Exception Because of Thread.sleep and Robot.
      */
     @Test
-    public void black() throws Exception {
+    public void black() {
         // @checkstyle LocalFinalVariableName (6 lines)
         final var windowWidth = 370;
         final var windowHeight = 140;
@@ -54,21 +50,15 @@ public class WindowAndLineTest {
         final var fy = 120;
         final var sx = 200;
         final var sy = 130;
-        new BaseWindow(
-            new AreaOf(windowWidth, windowHeight),
+        MatcherAssert.assertThat(
             new Line(
                 new PosOf(fx, fy),
                 new PosOf(sx, sy)
-            )
-        ).show();
-        final long milliseconds = 350L;
-        Thread.sleep(milliseconds);
-        MatcherAssert.assertThat(
-            new Robot().createScreenCapture(
-                new Rectangle(0, 0, windowWidth, windowHeight)
             ),
-            ImageComparisonMatchers.looksLike(
-                "window_and_line/blackLineOnWhiteWindow.png"
+            new CorrectContent(
+                "window_and_line/blackLineOnWhiteWindow.png",
+                windowWidth,
+                windowHeight
             )
         );
     }
@@ -79,10 +69,9 @@ public class WindowAndLineTest {
      * joop/src/main/java/resources/joop/window_and_shape/
      * coloredLineAndWhiteWindow.png is used as the expected image of the inner
      * area.
-     * @throws Exception Because of Thread.sleep and Robot.
      */
     @Test
-    public void colored() throws Exception {
+    public void colored() {
         // @checkstyle LocalFinalVariableName (6 lines)
         final var windowWidth = 450;
         final var windowHeight = 460;
@@ -91,22 +80,16 @@ public class WindowAndLineTest {
         final var sx = 250;
         final var sy = 400;
         final var green = 255;
-        new BaseWindow(
-            new AreaOf(windowWidth, windowHeight),
+        MatcherAssert.assertThat(
             new Line(
                 new PosOf(fx, fy),
                 new PosOf(sx, sy),
                 new RGBA(0, green, 0)
-            )
-        ).show();
-        final long milliseconds = 350L;
-        Thread.sleep(milliseconds);
-        MatcherAssert.assertThat(
-            new Robot().createScreenCapture(
-                new Rectangle(0, 0, windowWidth, windowHeight)
             ),
-            ImageComparisonMatchers.looksLike(
-                "window_and_line/coloredLineOnWhiteWindow.png"
+            new CorrectContent(
+                "window_and_line/coloredLineOnWhiteWindow.png",
+                windowWidth,
+                windowHeight
             )
         );
     }

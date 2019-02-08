@@ -27,4 +27,6 @@ import joop.window.BaseWindow;
  * Tests for the combined use of {@link BaseWindow} and {@link Text}.
  * @since 0.13
  */
-public class WindowAndTextTest { }
+public class WindowAndTextTest {
+
+}
