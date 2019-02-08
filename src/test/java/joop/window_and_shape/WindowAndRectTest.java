@@ -36,11 +36,14 @@ import unit.color.RGBA;
  */
 public final class WindowAndRectTest {
     /**
+     * The path to an image with a black rect on a window.
+     */
+    private static final String BLACK_RECT_PATH =
+        "window_and_rect/blackRectOnWhiteWindow.png";
+
+    /**
      * {@link BaseWindow#show()} must show a black rect for {@link BaseWindow}
      * with a rect from {@link Rect#Rect(Area)} on it.
-     * joop/src/main/java/resources/joop/window_and_shape/
-     * blackRectAndWhiteWindow.png is used as the expected image of the inner
-     * area.
      */
     @Test
     public void plainConstructed() {
@@ -54,7 +57,7 @@ public final class WindowAndRectTest {
         MatcherAssert.assertThat(
             new Rect(x, y, width, height),
             new CorrectContent(
-                "window_and_rect/blackRectOnWhiteWindow.png",
+                WindowAndRectTest.BLACK_RECT_PATH,
                 windowWidth,
                 windowHeight
             )
@@ -64,9 +67,6 @@ public final class WindowAndRectTest {
     /**
      * {@link BaseWindow#show()} must show a black rect for {@link BaseWindow}
      * with a rect from {@link Rect#Rect(int, int, int, int)} )} on it.
-     * joop/src/main/java/resources/joop/window_and_shape/
-     * blackRectAndWhiteWindow.png is used as the expected image of the inner
-     * area.
      */
     @Test
     public void areaConstructed() {
@@ -82,7 +82,7 @@ public final class WindowAndRectTest {
                 new AreaOf(x, y, width, height)
             ),
             new CorrectContent(
-                "window_and_rect/blackRectOnWhiteWindow.png",
+                WindowAndRectTest.BLACK_RECT_PATH,
                 windowWidth,
                 windowHeight
             )
