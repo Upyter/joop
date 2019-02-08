@@ -26,6 +26,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import joop.shape.Shape;
@@ -66,6 +67,20 @@ public class BaseWindow implements Showable {
      * @param shapes The shapes to put on the window.
      */
     public BaseWindow(final Area area, final Collection<Shape> shapes) {
+        this(area, shapes, it -> { });
+    }
+
+    /**
+     * Ctor.
+     * @param area The area of the window.
+     * @param shapes The shapes to put on the window.
+     * @param feature A feature to apply to the window for additional settings.
+     */
+    public BaseWindow(
+        final Area area,
+        final Collection<Shape> shapes,
+        final Consumer<JFrame> feature
+    ) {
         this(
             new Cached<>(
                 () -> {
@@ -98,6 +113,7 @@ public class BaseWindow implements Showable {
                             y - result.getInsets().top
                         )
                     );
+                    feature.accept(result);
                     return result;
                 }
             )
