@@ -33,7 +33,7 @@ import unit.pos.PosOf;
  * Tests for the combined use of {@link BaseWindow} and {@link Text}.
  * @since 0.13
  */
-public class WindowAndTextTest {
+public final class WindowAndTextTest {
     /**
      * {@link BaseWindow#show()} must show a black text for {@link BaseWindow}
      * with a black {@link Text} on it.
