@@ -53,6 +53,8 @@ public class Oval implements Shape {
      * @param y The y coordinate of the oval.
      * @param width The width of the oval.
      * @param height The height of the oval.
+     * @checkstyle ParameterNumber (3 lines)
+     * @checkstyle ParameterName (2 lines)
      */
     public Oval(final int x, final int y, final int width, final int height) {
         this(new AreaOf(x, y, width, height));
