@@ -24,11 +24,10 @@ package joop.window;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.util.Collection;
-import java.util.List;
 import java.util.function.Consumer;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import joop.shape.EmptyShape;
 import joop.shape.Shape;
 import unit.area.Area;
 import unit.functional.Cached;
@@ -55,31 +54,37 @@ public class BaseWindow implements Showable {
     /**
      * Ctor.
      * @param area The area of the window.
-     * @param shapes The shapes to put on the window.
      */
-    public BaseWindow(final Area area, final Shape... shapes) {
-        this(area, List.of(shapes));
+    public BaseWindow(final Area area) {
+        this(area, new EmptyShape());
     }
 
     /**
      * Ctor.
      * @param area The area of the window.
-     * @param shapes The shapes to put on the window.
+     * @param shape The shape to put on the window.
      */
-    public BaseWindow(final Area area, final Collection<Shape> shapes) {
-        this(area, shapes, it -> { });
+    public BaseWindow(final Area area, final Shape shape) {
+        this(area, it -> { }, shape);
     }
 
     /**
      * Ctor.
      * @param area The area of the window.
-     * @param shapes The shapes to put on the window.
+     * @param feature A feature to apply to the window for additional settings.
+     */
+    public BaseWindow(final Area area, final Consumer<JFrame> feature) {
+        this(area, feature, new EmptyShape());
+    }
+
+    /**
+     * Ctor.
+     * @param area The area of the window.
+     * @param shape The shape to put on the window.
      * @param feature A feature to apply to the window for additional settings.
      */
     public BaseWindow(
-        final Area area,
-        final Collection<Shape> shapes,
-        final Consumer<JFrame> feature
+        final Area area, final Consumer<JFrame> feature, final Shape shape
     ) {
         this(
             new Cached<>(
@@ -89,7 +94,7 @@ public class BaseWindow implements Showable {
                         @Override
                         protected void paintComponent(final Graphics graphics) {
                             super.paintComponent(graphics);
-                            shapes.forEach(it -> it.draw(graphics));
+                            shape.draw(graphics);
                         }
                     };
                     Tuple.applyOn(

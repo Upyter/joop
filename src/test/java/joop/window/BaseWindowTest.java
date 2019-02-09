@@ -25,9 +25,9 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
+import javax.swing.JFrame;
 import net.avh4.util.imagecomparison.hamcrest.ImageComparisonMatchers;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -63,12 +63,14 @@ public final class BaseWindowTest {
             new Robot().createScreenCapture(
                 new Rectangle(x, y, width, height)
             ),
-            ImageComparisonMatchers.looksLike("whiteWindow453_642.png")
+            ImageComparisonMatchers.looksLike(
+                "base_window/whiteWindow453_642.png"
+            )
         );
     }
 
     /**
-     * {@link BaseWindow#BaseWindow(Area, Collection, Consumer)} must give its
+     * {@link BaseWindow#BaseWindow(Area, Consumer)} must give its
      * frame to the given consumer.
      */
     @Test
@@ -78,8 +80,7 @@ public final class BaseWindowTest {
         final List<Dimension> sizes = new ArrayList<>(1);
         final var window = new BaseWindow(
             new AreaOf(width, height),
-            List.of(),
-            frame -> sizes.add(frame.getContentPane().getSize())
+            (JFrame frame) -> sizes.add(frame.getContentPane().getSize())
         );
         MatcherAssert.assertThat(
             sizes,

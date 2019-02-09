@@ -39,8 +39,7 @@ import unit.functional.Lazy;
 
 /**
  * A matcher to check whether a window has the expected content.
- * <p>This class is immutable and thread-safe (assuming that
- * the parent class {@link TypeSafeDiagnosingMatcher} is also immutable). </p>
+ * <p>This class is mutable and not thread-safe because of the used cache. </p>
  * @since 0.14
  */
 public class CorrectContent extends TypeSafeDiagnosingMatcher<Shape> {
