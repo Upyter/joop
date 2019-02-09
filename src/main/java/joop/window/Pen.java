@@ -19,44 +19,39 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package joop.window.feature;
+package joop.window;
 
-import java.awt.AWTException;
-import java.awt.Robot;
-import java.awt.image.BufferedImage;
 import java.util.function.Consumer;
 import javax.swing.JFrame;
+import joop.shape.Shape;
+import unit.area.Area;
 
 /**
- * An image of the window. It will be taken each time when
- * {@link #accept(JFrame)} is called.
- * <p>This class is immutable and thread-safe.</p>
- * @since 0.23
+ * A pen to create windows. It's necessary for classes that rely on data of
+ * other classes. Since most interfaces don't allow retrieving this information,
+ * one must take the information and create the instance by itself to bypass
+ * this problem. Example:
+ * <pre>{@code
+ * // normally:
+ * public void someMethod(Window window) {
+ *     window.area.result( ... ) // doesn't work, because window takes area but
+ *     // doesn't offer it in its interface.
+ * }
+ *
+ * // alternative:
+ * public void someMethod(window.Pen pen, Area area, ...) {
+ *     pen.window(area, ...);
+ *     area.result( ... );
+ * }
+ * }
+ * </pre>
+ * @since 0.24
  */
-public class Shot implements Consumer<JFrame> {
+@FunctionalInterface
+public interface Pen {
     /**
-     * The target that gets the shot.
+     * Returns a window that has the given settings.
+     * @return A window with the given settings.
      */
-    private final Consumer<BufferedImage> target;
-
-    /**
-     * Ctor.
-     * @param target The target that gets the shot.
-     */
-    public Shot(final Consumer<BufferedImage> target) {
-        this.target = target;
-    }
-
-    @Override
-    public final void accept(final JFrame frame) {
-        try {
-            this.target.accept(
-                new Robot().createScreenCapture(frame.getBounds())
-            );
-        } catch (final AWTException exception) {
-            throw new IllegalStateException(
-                "Couldn't create the screenshot", exception
-            );
-        }
-    }
+    Showable window(Area area, Consumer<JFrame> feature, Shape shape);
 }
