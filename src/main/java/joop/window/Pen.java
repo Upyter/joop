@@ -51,6 +51,9 @@ import unit.area.Area;
 public interface Pen {
     /**
      * Returns a window that has the given settings.
+     * @param area The area of the window to return.
+     * @param feature The feature that the window must have.
+     * @param shape The shape that the window must contain.
      * @return A window with the given settings.
      */
     Showable window(Area area, Consumer<JFrame> feature, Shape shape);
