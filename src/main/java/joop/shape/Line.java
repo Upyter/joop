@@ -30,7 +30,6 @@ import unit.pos.PosOf;
 import unit.tuple.Tuple;
 
 /**
- /**
  * A line.
  * <p>This class doesn't change its own state. Whether it is immutable or not,
  * depends on the given constructor arguments. Additionally whether this
