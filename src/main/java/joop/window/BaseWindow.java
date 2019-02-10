@@ -29,6 +29,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import joop.shape.EmptyShape;
 import joop.shape.Shape;
+import joop.shape.layout.Adjustment;
 import unit.area.Area;
 import unit.functional.Cached;
 import unit.functional.Lazy;
