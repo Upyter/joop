@@ -26,7 +26,8 @@ import unit.color.Color;
 
 /**
  * An adjustment to the drawing of shapes. This can be used by layouts (which
- * are also shapes) to adjust their contained shapes in the desired way.
+ * are also shapes) to adjust their contained shapes in the desired way. Whether
+ * a shape actually uses the adjustment is up to the shape.
  * @since 0.25
  */
 @FunctionalInterface

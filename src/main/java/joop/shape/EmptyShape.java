@@ -23,6 +23,7 @@ package joop.shape;
 
 import java.awt.Graphics;
 import java.util.Optional;
+import joop.shape.layout.Adjustment;
 
 /**
  * A shape that doesn't apply any action. It can be used instead of null.
@@ -31,7 +32,9 @@ import java.util.Optional;
  */
 public class EmptyShape implements Shape {
     @Override
-    public final Optional<Shape> draw(final Graphics graphics) {
+    public final Optional<Shape> draw(
+        final Graphics graphics, final Adjustment adjustment
+    ) {
         return Optional.of(this);
     }
 }

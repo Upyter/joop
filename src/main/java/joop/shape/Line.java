@@ -23,6 +23,7 @@ package joop.shape;
 
 import java.awt.Graphics;
 import java.util.Optional;
+import joop.shape.layout.Adjustment;
 import unit.color.Black;
 import unit.color.Color;
 import unit.pos.Pos;
@@ -86,7 +87,9 @@ public class Line implements Shape {
     }
 
     @Override
-    public final Optional<Shape> draw(final Graphics graphics) {
+    public final Optional<Shape> draw(
+        final Graphics graphics, final Adjustment adjustment
+    ) {
         graphics.setColor(this.color.result(java.awt.Color::new));
         Tuple.applyOn(
             this.first,

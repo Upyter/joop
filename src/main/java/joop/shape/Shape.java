@@ -23,6 +23,7 @@ package joop.shape;
 
 import java.awt.Graphics;
 import java.util.Optional;
+import joop.shape.layout.Adjustment;
 
 /**
  * A shape that can draw itself.
@@ -34,7 +35,9 @@ public interface Shape {
      * shape. This is used to register and unregister shapes from the
      * parent/window.
      * @param graphics The Graphics object to draw the shape.
+     * @param adjustment The adjustment of the drawing. This is used by layouts.
+     *  The shape has to decide whether it wants to use the adjustment.
      * @return The successor of this shape.
      */
-    Optional<Shape> draw(Graphics graphics);
+    Optional<Shape> draw(Graphics graphics, Adjustment adjustment);
 }

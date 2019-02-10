@@ -23,6 +23,7 @@ package joop.shape;
 
 import java.awt.Graphics;
 import java.util.Optional;
+import joop.shape.layout.Adjustment;
 import unit.area.Area;
 import unit.area.AreaOf;
 import unit.color.Black;
@@ -79,7 +80,9 @@ public class Rect implements Shape {
     }
 
     @Override
-    public final Optional<Shape> draw(final Graphics graphics) {
+    public final Optional<Shape> draw(
+        final Graphics graphics, final Adjustment adjustment
+    ) {
         graphics.setColor(this.color.result(java.awt.Color::new));
         Area.applyOn(this.area, graphics::fillRect);
         return Optional.of(this);

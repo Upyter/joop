@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Optional;
 import javax.imageio.ImageIO;
+import joop.shape.layout.Adjustment;
 import unit.functional.Cached;
 import unit.functional.Lazy;
 import unit.pos.Pos;
@@ -90,7 +91,9 @@ public class Image implements Shape {
     }
 
     @Override
-    public final Optional<Shape> draw(final Graphics graphics) {
+    public final Optional<Shape> draw(
+        final Graphics graphics, final Adjustment adjustment
+    ) {
         Tuple.applyOn(
             this.pos,
             // @checkstyle ParameterName (1 line)
