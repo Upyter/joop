@@ -23,22 +23,32 @@ package joop.shape.layout;
 
 import unit.area.Area;
 import unit.color.Color;
+import unit.functional.QuadConsumer;
 
 /**
- * An adjustment to the drawing of shapes. This can be used by layouts (which
- * are also shapes) to adjust their contained shapes in the desired way. Whether
- * a shape actually uses the adjustment is up to the shape.
+ * An adjustment to the area and the color of a shape. Whether a shape uses the
+ * adjustment, is up to the shape. This interface is meant to be used by
+ * interfaces to adjust their shapes.
  * @since 0.25
  */
-@FunctionalInterface
 public interface Adjustment {
     /**
-     * Applies the given drawing consumer to draw the shape with the intended
-     * adjustment.
+     * Applies the given area.
      * @param area The area of the shape to adjust.
-     * @param color The color of the shape to adjust.
-     * @param drawing The drawing operation that will get the adjusted area
-     *  and
+     * @param target The adjusted application of the area.
      */
-    void drawAdjusted(Area area, Color color, Drawing drawing);
+    void adjustedApply(
+        Area area,
+        QuadConsumer<Integer, Integer, Integer, Integer> target
+    );
+
+    /**
+     * Applies the given color.
+     * @param color The color of the shape to adjust.
+     * @param target The adjusted application of the color.
+     */
+    void adjustedApply(
+        Color color,
+        QuadConsumer<Integer, Integer, Integer, Integer> target
+    );
 }
