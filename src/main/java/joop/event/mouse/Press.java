@@ -21,10 +21,60 @@
 
 package joop.event.mouse;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.function.BiConsumer;
+import joop.event.Event;
+import unit.Overlap;
+import unit.functional.Action;
+
 /**
  * A mouse press bound on a component to apply some action on activation.
  * <p>This class is immutable and thread-safe..</p>
  * @since 0.32
  */
-public class Press {
+public class Press implements Event {
+    /**
+     * The target action to be applied with the x and y coordinates of the
+     * press.
+     */
+    private final BiConsumer<Integer, Integer> target;
+
+    /**
+     * Ctor.
+     * @param action The action to be applied when the press occurs.
+     */
+    public Press(final Action action) {
+        this(
+            // @checkstyle ParameterName (1 line)
+            (x, y) -> action.run()
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param target The target with the action, who gets the x and y
+     *  coordinates of the press.
+     */
+    public Press(final BiConsumer<Integer, Integer> target) {
+        this.target = target;
+    }
+
+    @Override
+    public final void registerFor(final Mouse source, final Overlap overlap) {
+        source.register(
+            (MouseListener) new MouseAdapter() {
+                @Override
+                public void mousePressed(final MouseEvent event) {
+                    // @checkstyle LocalFinalVariableName (2 lines)
+                    final int x = event.getX();
+                    final int y = event.getY();
+                    if (overlap.contains(x, y)) {
+                        Press.this.target.accept(x, y);
+                    }
+                }
+            }
+        );
+    }
 }
