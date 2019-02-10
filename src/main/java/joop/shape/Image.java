@@ -59,18 +59,28 @@ public class Image implements Shape {
      * @param path The path to the image.
      */
     public Image(final String path) {
+        this(new File(path));
+    }
+
+    /**
+     * Ctor. The position will be (0|0).
+     * @param file The image file.
+     */
+    public Image(final File file) {
         this(
             new Cached<>(
                 () -> {
                     try {
-                        return ImageIO.read(new File(path));
+                        return ImageIO.read(file);
                     } catch (final IOException exception) {
                         throw new UncheckedIOException(
                             String.join(
                                 "",
                                 "Couldn't load the image. The given path ",
-                                "to be wrong. Path: ",
-                                path
+                                "seems to be wrong. Absolute Path: ",
+                                file.getAbsolutePath(),
+                                " Relative path: ",
+                                file.getPath()
                             ),
                             exception
                         );
