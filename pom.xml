@@ -27,7 +27,7 @@
 
     <groupId>io.github.upyter</groupId>
     <artifactId>joop</artifactId>
-    <version>0.38</version>
+    <version>0.39</version>
     <packaging>jar</packaging>
     <name>joop</name>
     <description>Object oriented java 2d wrapper for shapes</description>
@@ -121,6 +121,7 @@
                 <version>0.18.2</version>
                 <configuration>
                     <excludes combine.children="append">
+                        <exclude>checkstyle:/src/main/resources/.*</exclude>
                         <exclude>findbugs:.*</exclude>
                         <exclude>duplicatefinder:.*</exclude>
                         <exclude>dependencies:.*</exclude>

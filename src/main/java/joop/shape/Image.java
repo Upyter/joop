@@ -26,6 +26,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.Objects;
 import java.util.Optional;
 import javax.imageio.ImageIO;
 import joop.event.mouse.Mouse;
@@ -71,7 +72,9 @@ public class Image implements Shape {
             new Cached<>(
                 () -> {
                     try {
-                        return ImageIO.read(file);
+                        return ImageIO.read(
+                            Objects.requireNonNull(file)
+                        );
                     } catch (final IOException exception) {
                         throw new UncheckedIOException(
                             String.join(
@@ -97,7 +100,7 @@ public class Image implements Shape {
      * @param pos The position of the image.
      */
     public Image(final Lazy<BufferedImage> loading, final Pos pos) {
-        this.loading = loading;
+        this.loading = Objects.requireNonNull(loading);
         this.pos = pos;
     }
 

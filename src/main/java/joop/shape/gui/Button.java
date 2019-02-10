@@ -49,6 +49,8 @@ public class Button implements Shape {
      * @param overlap The area of the button.
      * @param color The colors of the button.
      * @param action The action to be applied when the button is released.
+     * @param <T> The type of the area used by the pen to create the shape.
+     * @checkstyle ParameterNumber (2 lines)
      */
     public <T extends Overlap> Button(
         final Pen<T> pen,
