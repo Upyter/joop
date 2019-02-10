@@ -31,11 +31,11 @@ import java.util.Optional;
 import javax.imageio.ImageIO;
 import joop.event.mouse.Mouse;
 import joop.shape.layout.Adjustment;
+import unit.area.Area;
+import unit.area.AreaOf;
 import unit.functional.Cached;
 import unit.functional.Lazy;
 import unit.pos.Pos;
-import unit.pos.PosOf;
-import unit.tuple.Tuple;
 
 /**
  * An image. This class won't cache the result of the given {@link Lazy}
@@ -51,9 +51,9 @@ public class Image implements Shape {
     private final Lazy<BufferedImage> loading;
 
     /**
-     * The position of the image.
+     * The area of the image.
      */
-    private final Pos pos;
+    private final Area area;
 
     /**
      * Ctor. The position will be (0|0).
@@ -64,17 +64,33 @@ public class Image implements Shape {
     }
 
     /**
+     * Ctor.
+     * @param path The path to the image.
+     * @param area The area of the image.
+     */
+    public Image(final String path, final Area area) {
+        this(new File(path), area);
+    }
+
+    /**
      * Ctor. The position will be (0|0).
      * @param file The image file.
      */
     public Image(final File file) {
+        this(file, new AreaOf());
+    }
+
+    /**
+     * Ctor.
+     * @param file The image file.
+     * @param area The area of the image.
+     */
+    public Image(final File file, final Area area) {
         this(
             new Cached<>(
                 () -> {
                     try {
-                        return ImageIO.read(
-                            Objects.requireNonNull(file)
-                        );
+                        return ImageIO.read(Objects.requireNonNull(file));
                     } catch (final IOException exception) {
                         throw new UncheckedIOException(
                             String.join(
@@ -90,7 +106,7 @@ public class Image implements Shape {
                     }
                 }
             ),
-            new PosOf()
+            area
         );
     }
 
@@ -100,18 +116,29 @@ public class Image implements Shape {
      * @param pos The position of the image.
      */
     public Image(final Lazy<BufferedImage> loading, final Pos pos) {
+        this(loading, new AreaOf(pos));
+    }
+
+    /**
+     * Ctor.
+     * @param loading The loading of the image.
+     * @param area The area of the image.
+     */
+    public Image(final Lazy<BufferedImage> loading, final Area area) {
         this.loading = Objects.requireNonNull(loading);
-        this.pos = pos;
+        this.area = area;
     }
 
     @Override
     public final Optional<Shape> draw(
         final Graphics graphics, final Adjustment adjustment
     ) {
-        Tuple.applyOn(
-            this.pos,
+        Area.applyOn(
+            this.area,
             // @checkstyle ParameterName (1 line)
-            (x, y) -> graphics.drawImage(this.loading.value(), x, y, null)
+            (x, y, width, height) -> graphics.drawImage(
+                this.loading.value(), x, y, width, height, null
+            )
         );
         return Optional.of(this);
     }

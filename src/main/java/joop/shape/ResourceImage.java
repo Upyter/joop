@@ -22,6 +22,8 @@
 package joop.shape;
 
 import java.util.Objects;
+import unit.area.Area;
+import unit.area.AreaOf;
 
 /**
  * An image from the resources folder. This is a shortcut for:
@@ -34,13 +36,23 @@ public class ResourceImage extends Image {
      * @param path The path to the image (inside the resources folder).
      */
     public ResourceImage(final String path) {
+        this(path, new AreaOf());
+    }
+
+    /**
+     * Ctor.
+     * @param path The path to the image (inside the resources folder).
+     * @param area The area of the image.
+     */
+    public ResourceImage(final String path, final Area area) {
         super(
             Objects.requireNonNull(
                 Thread
                     .currentThread()
                     .getContextClassLoader()
                     .getResource(path)
-            ).getFile()
+            ).getFile(),
+            area
         );
     }
 }
