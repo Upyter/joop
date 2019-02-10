@@ -29,10 +29,13 @@ import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.Optional;
 import javax.imageio.ImageIO;
+import joop.event.Event;
 import joop.event.mouse.Mouse;
 import joop.shape.layout.Adjustment;
 import unit.area.Area;
 import unit.area.AreaOf;
+import unit.area.OverlapArea;
+import unit.area.OverlapAreaOf;
 import unit.functional.Cached;
 import unit.functional.Lazy;
 import unit.pos.Pos;
@@ -53,7 +56,12 @@ public class Image implements Shape {
     /**
      * The area of the image.
      */
-    private final Area area;
+    private final OverlapArea area;
+
+    /**
+     * The event of the image.
+     */
+    private final Event event;
 
     /**
      * Ctor. The position will be (0|0).
@@ -73,6 +81,26 @@ public class Image implements Shape {
     }
 
     /**
+     * Ctor.
+     * @param path The path to the image.
+     * @param area The area of the image.
+     * @param event The event of the image.
+     */
+    public Image(final String path, final Area area, final Event event) {
+        this(new File(path), area, event);
+    }
+
+    /**
+     * Ctor.
+     * @param path The path to the image.
+     * @param area The area of the image.
+     * @param event The event of the image.
+     */
+    public Image(final String path, final OverlapArea area, final Event event) {
+        this(new File(path), area, event);
+    }
+
+    /**
      * Ctor. The position will be (0|0).
      * @param file The image file.
      */
@@ -86,6 +114,31 @@ public class Image implements Shape {
      * @param area The area of the image.
      */
     public Image(final File file, final Area area) {
+        // @checkstyle ParameterName (1 line)
+        this(file, area, (x, y) -> { });
+    }
+
+    /**
+     * Ctor.
+     * @param file The image file.
+     * @param area The area of the image.
+     * @param event The event of the image.
+     */
+    public Image(final File file, final Area area, final Event event) {
+        this(
+            file,
+            new OverlapAreaOf(area),
+            event
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param file The image file.
+     * @param area The area of the image.
+     * @param event The event of the image.
+     */
+    public Image(final File file, final OverlapArea area, final Event event) {
         this(
             new Cached<>(
                 () -> {
@@ -106,7 +159,8 @@ public class Image implements Shape {
                     }
                 }
             ),
-            area
+            area,
+            event
         );
     }
 
@@ -125,8 +179,38 @@ public class Image implements Shape {
      * @param area The area of the image.
      */
     public Image(final Lazy<BufferedImage> loading, final Area area) {
+        // @checkstyle ParameterName (1 line)
+        this(loading, area, (x, y) -> { });
+    }
+
+    /**
+     * Ctor.
+     * @param loading The loading of the image.
+     * @param area The area of the image.
+     * @param event The event of the image.
+     */
+    public Image(
+        final Lazy<BufferedImage> loading,
+        final Area area,
+        final Event event
+    ) {
+        this(loading, new OverlapAreaOf(area), event);
+    }
+
+    /**
+     * Ctor.
+     * @param loading The loading of the image.
+     * @param area The area of the image.
+     * @param event The event of the image.
+     */
+    public Image(
+        final Lazy<BufferedImage> loading,
+        final OverlapArea area,
+        final Event event
+    ) {
         this.loading = Objects.requireNonNull(loading);
         this.area = area;
+        this.event = event;
     }
 
     @Override
@@ -145,6 +229,6 @@ public class Image implements Shape {
 
     @Override
     public final void registerFor(final Mouse mouse) {
-        // currently no implementation
+        this.event.registerFor(mouse, this.area);
     }
 }

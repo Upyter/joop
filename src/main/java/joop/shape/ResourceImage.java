@@ -22,8 +22,11 @@
 package joop.shape;
 
 import java.util.Objects;
+import joop.event.Event;
 import unit.area.Area;
 import unit.area.AreaOf;
+import unit.area.OverlapArea;
+import unit.area.OverlapAreaOf;
 
 /**
  * An image from the resources folder. This is a shortcut for:
@@ -45,6 +48,40 @@ public class ResourceImage extends Image {
      * @param area The area of the image.
      */
     public ResourceImage(final String path, final Area area) {
+        this(path, new OverlapAreaOf(area));
+    }
+
+    /**
+     * Ctor.
+     * @param path The path to the image (inside the resources folder).
+     * @param area The area of the image.
+     */
+    public ResourceImage(final String path, final OverlapArea area) {
+        // @checkstyle ParameterName (1 line)
+        this(path, area, (x, y) -> { });
+    }
+
+    /**
+     * Ctor.
+     * @param path The path to the image (inside the resources folder).
+     * @param area The area of the image.
+     * @param event The event of the image.
+     */
+    public ResourceImage(
+        final String path, final Area area, final Event event
+    ) {
+        this(path, new OverlapAreaOf(area), event);
+    }
+
+    /**
+     * Ctor.
+     * @param path The path to the image (inside the resources folder).
+     * @param area The area of the image.
+     * @param event The event of the image.
+     */
+    public ResourceImage(
+        final String path, final OverlapArea area, final Event event
+    ) {
         super(
             Objects.requireNonNull(
                 Thread
@@ -52,7 +89,8 @@ public class ResourceImage extends Image {
                     .getContextClassLoader()
                     .getResource(path)
             ).getFile(),
-            area
+            area,
+            event
         );
     }
 }
