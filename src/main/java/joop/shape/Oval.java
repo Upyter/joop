@@ -31,9 +31,7 @@ import unit.color.Color;
 /**
  * A filled oval.
  * <p>This class doesn't change its own state. Whether it is immutable or not,
- * depends on the given constructor arguments. Additionally whether this
- * class is thread-safe or not, depends on the given graphics instance for
- * {@link this#draw(Graphics)}.</p>
+ * depends on the given constructor arguments.</p>
  * @since 0.9
  */
 public class Oval implements Shape {
