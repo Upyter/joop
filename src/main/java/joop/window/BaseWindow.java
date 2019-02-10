@@ -27,6 +27,7 @@ import java.awt.Graphics;
 import java.util.function.Consumer;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import joop.event.mouse.DelegationMouse;
 import joop.shape.EmptyShape;
 import joop.shape.Shape;
 import joop.shape.layout.NoAdjustment;
@@ -120,6 +121,9 @@ public class BaseWindow implements Showable {
                         )
                     );
                     feature.accept(result);
+                    shape.registerFor(
+                        new DelegationMouse(result.getContentPane())
+                    );
                     return result;
                 }
             )
