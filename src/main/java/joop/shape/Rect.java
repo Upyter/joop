@@ -84,7 +84,7 @@ public class Rect implements Shape {
         final Graphics graphics, final Adjustment adjustment
     ) {
         graphics.setColor(this.color.result(java.awt.Color::new));
-        Area.applyOn(this.area, graphics::fillRect);
+        adjustment.adjustedApply(this.area, graphics::fillRect);
         return Optional.of(this);
     }
 }

@@ -60,6 +60,7 @@ public class Column implements Shape {
      */
     public Column(final Collection<Shape> shapes) {
         this.shapes = shapes;
+        this.heights = 0;
     }
 
     @Override
@@ -77,7 +78,7 @@ public class Column implements Shape {
                             target.accept(
                                 x, this.heights + y, width, height
                             );
-                            this.heights += y;
+                            this.heights += height;
                         }
                     );
                 }

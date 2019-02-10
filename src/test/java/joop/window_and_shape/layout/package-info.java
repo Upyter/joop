@@ -19,36 +19,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package joop.shape.layout;
-
-import unit.area.Area;
-import unit.color.Color;
-import unit.functional.QuadConsumer;
-
 /**
- * An implementation of adjustment to use when there is no adjustment.
- * @since 0.27
+ * Tests for the layouts that are using a window.
+ * @since 0.30
  */
-public class NoAdjustment implements Adjustment {
-    @Override
-    public final void adjustedApply(
-        final Area area,
-        final QuadConsumer<Integer, Integer, Integer, Integer> target
-    ) {
-        Area.applyOn(area, target);
-    }
-
-    @Override
-    public final void adjustedApply(
-        final Color color,
-        final QuadConsumer<Integer, Integer, Integer, Integer> target
-    ) {
-        color.result(
-            // @checkstyle ParameterName (1 line)
-            (r, g, b, a) -> {
-                target.accept(r, g, b, a);
-                return null;
-            }
-        );
-    }
-}
+package joop.window_and_shape.layout;
