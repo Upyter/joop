@@ -23,6 +23,7 @@ package joop.shape;
 
 import java.awt.Graphics;
 import java.util.Optional;
+import joop.event.mouse.Mouse;
 import joop.shape.layout.Adjustment;
 
 /**
@@ -40,4 +41,10 @@ public interface Shape {
      * @return The successor of this shape.
      */
     Optional<Shape> draw(Graphics graphics, Adjustment adjustment);
+
+    /**
+     * Registers itself on the mouse. This is necessary for shapes with events.
+     * @param mouse The mouse to register on.
+     */
+    void registerFor(Mouse mouse);
 }

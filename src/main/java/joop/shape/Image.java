@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Optional;
 import javax.imageio.ImageIO;
+import joop.event.mouse.Mouse;
 import joop.shape.layout.Adjustment;
 import unit.functional.Cached;
 import unit.functional.Lazy;
@@ -100,5 +101,10 @@ public class Image implements Shape {
             (x, y) -> graphics.drawImage(this.loading.value(), x, y, null)
         );
         return Optional.of(this);
+    }
+
+    @Override
+    public final void registerFor(final Mouse mouse) {
+        // currently no implementation
     }
 }

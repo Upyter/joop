@@ -23,9 +23,13 @@ package joop.shape;
 
 import java.awt.Graphics;
 import java.util.Optional;
+import joop.event.Event;
+import joop.event.mouse.Mouse;
 import joop.shape.layout.Adjustment;
 import unit.area.Area;
 import unit.area.AreaOf;
+import unit.area.OverlapArea;
+import unit.area.OverlapAreaOf;
 import unit.color.Black;
 import unit.color.Color;
 
@@ -39,12 +43,17 @@ public class Rect implements Shape {
     /**
      * The area of the rect.
      */
-    private final Area area;
+    private final OverlapArea area;
 
     /**
      * The color of the rect.
      */
     private final Color color;
+
+    /**
+     * The event of the rect.
+     */
+    private final Event event;
 
     /**
      * Ctor. Creates a black rect.
@@ -75,8 +84,29 @@ public class Rect implements Shape {
      * @param color The color of the rect.
      */
     public Rect(final Area area, final Color color) {
+        this(area, color, (mouse, overlap) -> { });
+    }
+
+    /**
+     * Ctor.
+     * @param area The area of the rect.
+     * @param color The color of the rect.
+     * @param event The event of the rect.
+     */
+    public Rect(final Area area, final Color color, final Event event) {
+        this(new OverlapAreaOf(area), color, event);
+    }
+
+    /**
+     * Ctor.
+     * @param area The area of the rect.
+     * @param color The color of the rect.
+     * @param event The event of the rect.
+     */
+    public Rect(final OverlapArea area, final Color color, final Event event) {
         this.area = area;
         this.color = color;
+        this.event = event;
     }
 
     @Override
@@ -86,5 +116,10 @@ public class Rect implements Shape {
         graphics.setColor(this.color.result(java.awt.Color::new));
         adjustment.adjustedApply(this.area, graphics::fillRect);
         return Optional.of(this);
+    }
+
+    @Override
+    public final void registerFor(final Mouse mouse) {
+        this.event.registerFor(mouse, this.area);
     }
 }

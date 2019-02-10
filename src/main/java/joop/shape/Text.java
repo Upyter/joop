@@ -23,6 +23,7 @@ package joop.shape;
 
 import java.awt.Graphics;
 import java.util.Optional;
+import joop.event.mouse.Mouse;
 import joop.shape.layout.Adjustment;
 import unit.color.Black;
 import unit.color.Color;
@@ -83,5 +84,10 @@ public class Text implements Shape {
             (x, y) -> graphics.drawString(this.content, x, y)
         );
         return Optional.of(this);
+    }
+
+    @Override
+    public final void registerFor(final Mouse mouse) {
+        // currently no implementation
     }
 }

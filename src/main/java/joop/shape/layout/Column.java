@@ -25,6 +25,7 @@ import java.awt.Graphics;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import joop.event.mouse.Mouse;
 import joop.shape.Shape;
 import unit.area.Area;
 
@@ -86,5 +87,10 @@ public class Column implements Shape {
         }
         this.heights = 0;
         return Optional.of(this);
+    }
+
+    @Override
+    public final void registerFor(final Mouse mouse) {
+        this.shapes.forEach(shape -> shape.registerFor(mouse));
     }
 }
