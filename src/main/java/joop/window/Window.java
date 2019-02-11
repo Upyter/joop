@@ -23,6 +23,7 @@ package joop.window;
 
 import javax.swing.JFrame;
 import joop.shape.Shape;
+import joop.shape.layout.AreaAdjustment;
 import unit.area.Area;
 import unit.area.AreaOf;
 import unit.size.Size;
@@ -35,6 +36,29 @@ import unit.size.Size;
  * @since 0.21
  */
 public class Window extends BaseWindow {
+    /**
+     * Ctor. The window will be centered and the size of the window will be
+     * equal to the first size of the given shape. This means, if the size
+     * changes, it doesn't affect the window. Only the first state of the shape
+     * will be used.
+     * @param shape The shape to put on the window.
+     */
+    public Window(final Shape shape) {
+        super(
+            new AreaOf(),
+            (JFrame frame) -> {
+                shape.draw(
+                    frame.getGraphics(),
+                    (AreaAdjustment) (area, drawing) -> Area.applyOn(
+                        area,
+                        (x, y, width, height) -> frame.setSize(width, height))
+                );
+                frame.setLocationRelativeTo(null);
+            },
+            shape
+        );
+    }
+
     /**
      * Ctor. The window will be centered.
      * @param size The size of the window.
