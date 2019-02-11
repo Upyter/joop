@@ -47,6 +47,8 @@ public class Column implements Shape {
      */
     private int heights;
 
+    private int current;
+
     /**
      * Ctor.
      * @param shapes The shapes to adjust.
@@ -62,6 +64,7 @@ public class Column implements Shape {
     public Column(final Collection<Shape> shapes) {
         this.shapes = shapes;
         this.heights = 0;
+        this.current = 0;
     }
 
     @Override
@@ -79,11 +82,13 @@ public class Column implements Shape {
                             target.accept(
                                 x, this.heights + y, width, height
                             );
-                            this.heights += height;
+                            this.current = height;
                         }
                     );
                 }
             );
+            this.heights += this.current;
+            this.current = 0;
         }
         this.heights = 0;
         return Optional.of(this);

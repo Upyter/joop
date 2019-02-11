@@ -33,9 +33,11 @@ import joop.shape.ToggleableShape;
 import joop.shape.layout.Adjustment;
 import unit.Overlap;
 import unit.area.Area;
+import unit.area.AreaOf;
 import unit.area.OverlapAreaOf;
 import unit.functional.Action;
 import unit.functional.Toggleable;
+import unit.size.Size;
 
 /**
  * A shape that has {@link PressRelease} event attached to it.
@@ -47,6 +49,18 @@ public class Button implements Shape {
      * The shape with the attached functionality to represent the button.
      */
     private final Shape shape;
+
+    /**
+     * Ctor. Uses two images for this button. The position will be (0|0).
+     * @param size The size of the button.
+     * @param action The action to be applied when the button is released.
+     */
+    public Button(final Size size, final Action action) {
+        this(
+            new AreaOf(size),
+            action
+        );
+    }
 
     /**
      * Ctor. Uses two images for this button.

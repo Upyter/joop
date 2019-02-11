@@ -21,13 +21,24 @@
 
 package joop.shape;
 
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
 import java.util.Optional;
+import java.util.function.IntSupplier;
+import java.util.function.Supplier;
 import joop.event.mouse.Mouse;
 import joop.shape.layout.Adjustment;
+import unit.area.Area;
+import unit.area.AreaOf;
 import unit.color.Black;
 import unit.color.Color;
 import unit.pos.Pos;
+import unit.pos.PosOf;
+import unit.size.SizeOf;
 import unit.tuple.Tuple;
 
 /**
@@ -40,7 +51,7 @@ public class Text implements Shape {
     /**
      * The area of the rect.
      */
-    private final String content;
+    private final Supplier<String> content;
 
     /**
      * The position of the text.
@@ -53,11 +64,42 @@ public class Text implements Shape {
     private final Color color;
 
     /**
+     * The area for adjustment.
+     */
+    private final Area adjusted;
+
+    /**
      * Ctor.
      * @param content The characters of the text.
      * @param pos The position of the text.
      */
     public Text(final String content, final Pos pos) {
+        this(() -> content, pos);
+    }
+
+    /**
+     * Ctor. Uses (0|0) as its position.
+     * @param content The characters of the text.
+     */
+    public Text(final IntSupplier content) {
+        this(content, new PosOf());
+    }
+
+    /**
+     * Ctor.
+     * @param content The characters of the text.
+     * @param pos The position of the text.
+     */
+    public Text(final IntSupplier content, final Pos pos) {
+        this(() -> Integer.toString(content.getAsInt()), pos, new Black());
+    }
+
+    /**
+     * Ctor.
+     * @param content The characters of the text.
+     * @param pos The position of the text.
+     */
+    public Text(final Supplier<String> content, final Pos pos) {
         this(content, pos, new Black());
     }
 
@@ -68,9 +110,26 @@ public class Text implements Shape {
      * @param color The color of the rect.
      */
     public Text(final String content, final Pos pos, final Color color) {
+        this(
+            () -> content,
+            pos,
+            color
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param content The characters of the text.
+     * @param pos The position of the text.
+     * @param color The color of the rect.
+     */
+    public Text(
+        final Supplier<String> content, final Pos pos, final Color color
+    ) {
         this.content = content;
         this.pos = pos;
         this.color = color;
+        this.adjusted = new AreaOf(this.pos);
     }
 
     @Override
@@ -78,12 +137,34 @@ public class Text implements Shape {
         final Graphics graphics, final Adjustment adjustment
     ) {
         graphics.setColor(this.color.result(java.awt.Color::new));
+        graphics.setFont(new Font("Arial", Font.PLAIN, 16));
+        final String current = this.content.get();
         Tuple.applyOn(
             this.pos,
-            // @checkstyle ParameterName (1 line)
-            (x, y) -> graphics.drawString(this.content, x, y)
+            (x1, y1) -> adjustment.adjustedApply(
+                new AreaOf(this.pos, new SizeOf(
+                    0,
+                    graphics.getFont().createGlyphVector(
+                        ((Graphics2D) graphics).getFontRenderContext(), current
+                    ).getPixelBounds(null, x1, y1).height
+                )),
+                // @checkstyle ParameterName (1 line)
+                (x, y, width, height) -> graphics.drawString(
+                    current,
+                    x,
+                    y + height
+                )
+            )
         );
         return Optional.of(this);
+    }
+
+    private Rectangle getStringBounds(Graphics2D g2, String str,
+        float x, float y)
+    {
+        FontRenderContext frc = g2.getFontRenderContext();
+        GlyphVector gv = g2.getFont().createGlyphVector(frc, str);
+        return gv.getPixelBounds(null, x, y);
     }
 
     @Override

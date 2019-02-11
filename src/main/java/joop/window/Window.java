@@ -24,6 +24,8 @@ package joop.window;
 import javax.swing.JFrame;
 import joop.shape.Shape;
 import unit.area.Area;
+import unit.area.AreaOf;
+import unit.size.Size;
 
 /**
  * A class to create a window with the most used features. Use
@@ -33,6 +35,28 @@ import unit.area.Area;
  * @since 0.21
  */
 public class Window extends BaseWindow {
+    /**
+     * Ctor. The window will be centered.
+     * @param size The size of the window.
+     * @param shape The shape to put on the window.
+     */
+    public Window(final Size size, final Shape shape) {
+        super(
+            new AreaOf(size),
+            (JFrame frame) -> frame.setLocationRelativeTo(null),
+            shape
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param area The area of the window.
+     * @param shape The shape to put on the window.
+     */
+    public Window(final Area area, final Shape shape) {
+        super(area, shape);
+    }
+
     /**
      * Ctor.
      * @param title The title of the window.

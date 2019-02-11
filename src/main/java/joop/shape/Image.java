@@ -217,7 +217,7 @@ public class Image implements Shape {
     public final Optional<Shape> draw(
         final Graphics graphics, final Adjustment adjustment
     ) {
-        Area.applyOn(
+        adjustment.adjustedApply(
             this.area,
             // @checkstyle ParameterName (1 line)
             (x, y, width, height) -> graphics.drawImage(
