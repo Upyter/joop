@@ -36,6 +36,8 @@ import unit.area.AreaOf;
  * @since 0.29
  */
 public class Column implements Shape {
+    private static final int DEFAULT_MARGIN = 5;
+
     /**
      * The shapes to adjust.
      */
@@ -52,12 +54,28 @@ public class Column implements Shape {
 
     private int max;
 
+    private final int margin;
+
     /**
      * Ctor.
+     * @param margin The space between the shapes. It will be applied around the
+     *  shapes, meaning that they will get that margin at top, left, right and
+     *  bottom.
      * @param shapes The shapes to adjust.
      */
     public Column(final Shape... shapes) {
-        this(List.of(shapes));
+        this(Column.DEFAULT_MARGIN, List.of(shapes));
+    }
+
+    /**
+     * Ctor.
+     * @param margin The space between the shapes. It will be applied around the
+     *  shapes, meaning that they will get that margin at top, left, right and
+     *  bottom.
+     * @param shapes The shapes to adjust.
+     */
+    public Column(final int margin, final Shape... shapes) {
+        this(margin, List.of(shapes));
     }
 
     /**
@@ -65,10 +83,22 @@ public class Column implements Shape {
      * @param shapes The shapes to adjust.
      */
     public Column(final Collection<Shape> shapes) {
+        this(Column.DEFAULT_MARGIN, shapes);
+    }
+
+    /**
+     * Ctor.
+     * @param margin The space between the shapes. It will be applied around the
+     *  shapes, meaning that they will get that margin at top, left, right and
+     *  bottom.
+     * @param shapes The shapes to adjust.
+     */
+    public Column(final int margin, final Collection<Shape> shapes) {
         this.shapes = shapes;
         this.heights = 0;
         this.current = 0;
         this.max = 0;
+        this.margin = margin;
     }
 
     @Override
@@ -84,10 +114,10 @@ public class Column implements Shape {
                         // @checkstyle ParameterName (1 line)
                         (x, y, width, height) -> {
                             target.accept(
-                                x, this.heights + y, width, height
+                                x + this.margin, this.heights + y + this.margin, width + this.margin, height + this.margin
                             );
-                            this.current = height;
-                            this.max = Math.max(this.max, width);
+                            this.current = height + this.margin * 2;
+                            this.max = Math.max(this.max, width + this.margin * 3);
                         }
                     );
                 }
@@ -96,7 +126,7 @@ public class Column implements Shape {
             this.current = 0;
         }
         adjustment.adjustedApply(
-            new AreaOf(0, 0, this.max, this.heights),
+            new AreaOf(0, 0, this.max, this.heights + this.margin),
             (x, y, w, h) -> {}
         );
         this.heights = 0;

@@ -34,6 +34,8 @@ import unit.area.Area;
 
 /**
  * A shape with an attached text.
+ * <p>This class doesn't mutate its state. Whether it is mutable or not depends
+ * on the constructor arguments.</p>
  * @since 0.42
  */
 public class Labeled implements Shape {

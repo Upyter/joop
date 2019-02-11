@@ -41,7 +41,8 @@ import unit.size.Size;
 
 /**
  * A shape that has {@link PressRelease} event attached to it.
- * <p>This class is mutable and not thread-safe, because it uses a</p>
+ * <p>This class is mutable and not thread-safe, because it uses a
+ * {@link Toggleable} to change between the pressed and released state.</p>
  * @since 0.38
  */
 public class Button implements Shape {
