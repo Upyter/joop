@@ -28,6 +28,7 @@ import java.util.Optional;
 import joop.event.mouse.Mouse;
 import joop.shape.Shape;
 import unit.area.Area;
+import unit.area.AreaOf;
 
 /**
  * A layout that adjust its shapes to be in a column
@@ -49,6 +50,8 @@ public class Column implements Shape {
 
     private int current;
 
+    private int max;
+
     /**
      * Ctor.
      * @param shapes The shapes to adjust.
@@ -65,6 +68,7 @@ public class Column implements Shape {
         this.shapes = shapes;
         this.heights = 0;
         this.current = 0;
+        this.max = 0;
     }
 
     @Override
@@ -83,6 +87,7 @@ public class Column implements Shape {
                                 x, this.heights + y, width, height
                             );
                             this.current = height;
+                            this.max = Math.max(this.max, width);
                         }
                     );
                 }
@@ -90,7 +95,12 @@ public class Column implements Shape {
             this.heights += this.current;
             this.current = 0;
         }
+        adjustment.adjustedApply(
+            new AreaOf(0, 0, this.max, this.heights),
+            (x, y, w, h) -> {}
+        );
         this.heights = 0;
+        this.max = 0;
         return Optional.of(this);
     }
 

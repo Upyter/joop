@@ -137,7 +137,7 @@ public class Text implements Shape {
         final Graphics graphics, final Adjustment adjustment
     ) {
         graphics.setColor(this.color.result(java.awt.Color::new));
-        graphics.setFont(new Font("Arial", Font.PLAIN, 16));
+        graphics.setFont(new Font("Times new Roman", Font.PLAIN, 25));
         final String current = this.content.get();
         Tuple.applyOn(
             this.pos,

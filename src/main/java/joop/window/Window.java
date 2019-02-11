@@ -21,6 +21,7 @@
 
 package joop.window;
 
+import java.awt.Dimension;
 import javax.swing.JFrame;
 import joop.shape.Shape;
 import joop.shape.layout.AreaAdjustment;
@@ -51,7 +52,13 @@ public class Window extends BaseWindow {
                     frame.getGraphics(),
                     (AreaAdjustment) (area, drawing) -> Area.applyOn(
                         area,
-                        (x, y, width, height) -> frame.setSize(width, height))
+                        (x, y, width, height) -> {
+                            frame.getContentPane().setPreferredSize(
+                                new Dimension(width, height)
+                            );
+                            frame.pack();
+                        }
+                    )
                 );
                 frame.setLocationRelativeTo(null);
             },

@@ -133,6 +133,7 @@ public class BaseWindow implements Showable {
                     final var timer = new Timer(25, e -> result.repaint());
                     timer.setRepeats(true);
                     timer.start();
+                    result.setResizable(false);
                     return result;
                 }
             )

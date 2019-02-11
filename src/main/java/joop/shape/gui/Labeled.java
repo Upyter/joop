@@ -22,8 +22,6 @@
 package joop.shape.gui;
 
 import java.awt.Graphics;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import joop.event.Event;
 import joop.event.mouse.Mouse;
@@ -33,7 +31,6 @@ import joop.shape.Text;
 import joop.shape.layout.Adjustment;
 import joop.shape.layout.AreaAdjustment;
 import unit.area.Area;
-import unit.area.AreaOf;
 
 /**
  * A shape with an attached text.
@@ -50,6 +47,8 @@ public class Labeled implements Shape {
      */
     private final Shape text;
 
+    private final Area area;
+
     /**
      * Ctor.
      * @param text The text to be add.
@@ -63,7 +62,8 @@ public class Labeled implements Shape {
     ) {
         this(
             pen.shape(area, ignored -> (x, y) -> { }),
-            area.result((pos, size) -> new Text(text, pos))
+            area.result((pos, size) -> new Text(text, pos)),
+            area
         );
     }
 
@@ -82,7 +82,8 @@ public class Labeled implements Shape {
     ) {
         this(
             pen.shape(area, ignored -> event),
-            area.result((pos, size) -> new Text(text, pos))
+            area.result((pos, size) -> new Text(text, pos)),
+            area
         );
     }
 
@@ -91,42 +92,33 @@ public class Labeled implements Shape {
      * @param shape The shape to be labeled.
      * @param text The text to be add on the shape.
      */
-    private Labeled(final Shape shape, final Shape text) {
+    private Labeled(final Shape shape, final Shape text, final Area area) {
         this.shape = shape;
         this.text = text;
+        this.area = area;
     }
 
     @Override
     public final Optional<Shape> draw(
         final Graphics graphics, final Adjustment adjustment
     ) {
-        final List<Integer> captured = new ArrayList<>(1);
-        final Adjustment first = (AreaAdjustment) (area, target) -> Area.applyOn(
-            area,
-            (x, y, width, height) -> {
-                adjustment.adjustedApply(
-                    new AreaOf(x, y, width, 0),
-                    (a, b, c, d) -> { }
+        adjustment.adjustedApply(
+            this.area,
+            (x, y, w, h) -> {
+                this.shape.draw(
+                    graphics,
+                    (AreaAdjustment) (area, drawing) -> drawing.accept(
+                        x, y, w, h
+                    )
                 );
-                captured.add(y);
-                captured.add(height);
-            }
-        );
-        first.adjustedApply(
-            new AreaOf(),
-            (a, b, c, d) -> { }
-        );
-        final Adjustment second = (AreaAdjustment) (area, target) -> Area.applyOn(
-            area,
-            (x, y, width, height) -> {
-                adjustment.adjustedApply(
-                    new AreaOf(x, captured.get(y), width, height),
-                    target
+                this.text.draw(
+                    graphics,
+                    (AreaAdjustment) (area, drawing) -> drawing.accept(
+                        x, y, w, h
+                    )
                 );
             }
         );
-        this.shape.draw(graphics, first);
-        this.text.draw(graphics, second);
         return Optional.of(this);
     }
 
