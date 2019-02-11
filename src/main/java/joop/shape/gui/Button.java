@@ -25,12 +25,17 @@ import java.awt.Graphics;
 import java.util.Optional;
 import joop.event.mouse.Mouse;
 import joop.event.mouse.PressRelease;
+import joop.shape.DualShape;
 import joop.shape.Pen;
+import joop.shape.ResourceImage;
 import joop.shape.Shape;
+import joop.shape.ToggleableShape;
 import joop.shape.layout.Adjustment;
 import unit.Overlap;
-import unit.color.DualColor;
+import unit.area.Area;
+import unit.area.OverlapAreaOf;
 import unit.functional.Action;
+import unit.functional.Toggleable;
 
 /**
  * A shape that has {@link PressRelease} event attached to it.
@@ -44,29 +49,80 @@ public class Button implements Shape {
     private final Shape shape;
 
     /**
+     * Ctor. Uses two images for this button.
+     * @param area The area of the button.
+     * @param action The action to be applied when the button is released.
+     */
+    public Button(final Area area, final Action action) {
+        this(
+            // @checkstyle ParameterName (1 line)
+            (area1, event) -> new DualShape(
+                toggleable -> new ResourceImage(
+                    "gui/button/releasedButtonImage.png",
+                    area1,
+                    event.apply(toggleable)
+                ),
+                toggleable -> new ResourceImage(
+                    "gui/button/pressedButtonImage.png",
+                    area1,
+                    event.apply(toggleable)
+                )
+            ),
+            new OverlapAreaOf(area),
+            action
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param pen The pen to create the shape (that must be toggleable) of the
+     *  button.
+     * @param overlap The area of the button.
+     * @param action The action to be applied when the button is released.
+     * @param <S> The type of the shape.
+     * @param <A> The type of the area used by the pen to create the shape.
+     */
+    private <S extends ToggleableShape, A extends Overlap> Button(
+        final Pen<S, A> pen, final A overlap, final Action action
+    ) {
+        this(
+            pen.shape(
+                overlap,
+                toggle -> new PressRelease(
+                    toggle::toggle,
+                    () -> {
+                        action.run();
+                        toggle.toggle();
+                    }
+                )
+            )
+        );
+    }
+
+    /**
      * Ctor.
      * @param pen The pen to create the shape of the button.
      * @param overlap The area of the button.
-     * @param color The colors of the button.
+     * @param toggleable The toggleing which will happen when the button is
+     *  pressed or released.
      * @param action The action to be applied when the button is released.
      * @param <T> The type of the area used by the pen to create the shape.
      * @checkstyle ParameterNumber (2 lines)
      */
     public <T extends Overlap> Button(
-        final Pen<T> pen,
+        final Pen<Shape, T> pen,
         final T overlap,
-        final DualColor color,
+        final Toggleable toggleable,
         final Action action
     ) {
         this(
             pen.shape(
                 overlap,
-                color,
-                new PressRelease(
-                    color::toggle,
+                ignored -> new PressRelease(
+                    toggleable::toggle,
                     () -> {
                         action.run();
-                        color.toggle();
+                        toggleable.toggle();
                     }
                 )
             )

@@ -21,8 +21,8 @@
 
 package joop.shape;
 
+import java.util.function.Function;
 import joop.event.Event;
-import unit.color.Color;
 
 /**
  * Gives instances of shapes. This is necessary for classes that need
@@ -34,23 +34,26 @@ import unit.color.Color;
  * public class Labeled implements Shape {
  *     public Labeled(Pen pen, Area area, String text) {
  *          shape = new Shapes(
- *              pen.shape(area, new Black()),
+ *              pen.shape(area, new NoEvent()),
  *              new Text(text, area)
  *          );
  *     }
  * }
  * }</pre>
- * @param <T> The type of the area. This is necessary because it depends on the
+ * @param <S> The type of the shape. This way it's possible to create shapes
+ *  with additional properties.
+ * @param <A> The type of the area. This is necessary because it depends on the
  *  shape to be created which area needs to be used.
+ * @see joop.shape.gui.Button
  * @since 0.38
  */
-public interface Pen<T> {
+public interface Pen<S extends Shape, A> {
     /**
      * Returns a shape.
      * @param area The area of the shape.
-     * @param color The color of the shape.
-     * @param targets The event of the shape.
+     * @param event The event function to create the event for the shape. It
+     *  takes the shape to make it possible to access the shape from the event.
      * @return The shape with the given properties.
      */
-    Shape shape(T area, Color color, Event targets);
+    S shape(A area, Function<S, Event> event);
 }

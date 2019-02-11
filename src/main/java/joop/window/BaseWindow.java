@@ -27,6 +27,8 @@ import java.awt.Graphics;
 import java.util.function.Consumer;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.Timer;
+import javax.swing.WindowConstants;
 import joop.event.mouse.DelegationMouse;
 import joop.shape.EmptyShape;
 import joop.shape.Shape;
@@ -45,6 +47,7 @@ import unit.tuple.Tuple;
  * <p>This class is mutable and not thread-safe, because it mutates its state
  * when {@link #show} is called.</p>
  * @since 0.3
+ * @checkstyle ClassDataAbstractionCoupling (2 lines)
  */
 public class BaseWindow implements Showable {
     /**
@@ -92,6 +95,9 @@ public class BaseWindow implements Showable {
             new Cached<>(
                 () -> {
                     final var result = new JFrame();
+                    result.setDefaultCloseOperation(
+                        WindowConstants.EXIT_ON_CLOSE
+                    );
                     final var panel = new JPanel() {
                         @Override
                         protected void paintComponent(final Graphics graphics) {
@@ -124,6 +130,9 @@ public class BaseWindow implements Showable {
                     shape.registerFor(
                         new DelegationMouse(result.getContentPane())
                     );
+                    final var timer = new Timer(25, e -> result.repaint());
+                    timer.setRepeats(true);
+                    timer.start();
                     return result;
                 }
             )
