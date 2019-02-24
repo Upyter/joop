@@ -104,7 +104,7 @@ public class Column implements Shape {
         for (final Shape shape : this.shapes) {
             shape.draw(
                 graphics,
-                (AreaAdjustment) (area, target) -> {
+                (area, target) -> {
                     Area.applyOn(
                         area,
                         // @checkstyle ParameterName (1 line)

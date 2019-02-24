@@ -22,7 +22,6 @@
 package joop.shape.layout;
 
 import unit.area.Area;
-import unit.color.Color;
 import unit.functional.QuadConsumer;
 
 /**
@@ -39,16 +38,6 @@ public interface Adjustment {
      */
     void adjustedApply(
         Area area,
-        QuadConsumer<Integer, Integer, Integer, Integer> target
-    );
-
-    /**
-     * Applies the given color.
-     * @param color The color of the shape to adjust.
-     * @param target The adjusted application of the color.
-     */
-    void adjustedApply(
-        Color color,
         QuadConsumer<Integer, Integer, Integer, Integer> target
     );
 }
