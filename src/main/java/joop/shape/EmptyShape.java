@@ -23,7 +23,6 @@ package joop.shape;
 
 import java.awt.Graphics;
 import joop.event.mouse.Mouse;
-import joop.shape.layout.Adjustment;
 
 /**
  * A shape that doesn't apply any action. It can be used instead of null.
@@ -32,9 +31,7 @@ import joop.shape.layout.Adjustment;
  */
 public class EmptyShape implements Shape {
     @Override
-    public final void draw(
-        final Graphics graphics, final Adjustment adjustment
-    ) {
+    public final void draw(final Graphics graphics) {
         // an empty shape doesn't have something to draw
     }
 

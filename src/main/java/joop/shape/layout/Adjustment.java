@@ -22,7 +22,6 @@
 package joop.shape.layout;
 
 import unit.area.Area;
-import unit.functional.QuadConsumer;
 
 /**
  * An adjustment to the area and the color of a shape. Whether a shape uses the
@@ -32,12 +31,9 @@ import unit.functional.QuadConsumer;
  */
 public interface Adjustment {
     /**
-     * Applies the given area.
+     * Adjust the given area.
      * @param area The area of the shape to adjust.
-     * @param target The adjusted application of the area.
+     * @return The result of the adjustment.
      */
-    void adjustedApply(
-        Area area,
-        QuadConsumer<Integer, Integer, Integer, Integer> target
-    );
+    Area adjust(Area area);
 }

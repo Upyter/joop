@@ -23,7 +23,6 @@ package joop.shape;
 
 import java.awt.Graphics;
 import joop.event.mouse.Mouse;
-import joop.shape.layout.Adjustment;
 import unit.area.Area;
 import unit.area.AreaOf;
 import unit.color.Black;
@@ -78,9 +77,7 @@ public class Oval implements Shape {
     }
 
     @Override
-    public final void draw(
-        final Graphics graphics, final Adjustment adjustment
-    ) {
+    public final void draw(final Graphics graphics) {
         graphics.setColor(this.color.result(java.awt.Color::new));
         Area.applyOn(this.area, graphics::fillOval);
     }

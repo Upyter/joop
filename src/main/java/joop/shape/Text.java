@@ -133,7 +133,7 @@ public class Text implements Shape {
 
     @Override
     public final void draw(
-        final Graphics graphics, final Adjustment adjustment
+        final Graphics graphics
     ) {
         graphics.setColor(this.color.result(java.awt.Color::new));
         graphics.setFont(new Font("Times new Roman", Font.PLAIN, 25));

@@ -29,7 +29,6 @@ import joop.shape.Pen;
 import joop.shape.ResourceImage;
 import joop.shape.Shape;
 import joop.shape.ToggleableShape;
-import joop.shape.layout.Adjustment;
 import unit.Overlap;
 import unit.area.Area;
 import unit.area.AreaOf;
@@ -153,10 +152,8 @@ public class Button implements Shape {
     }
 
     @Override
-    public final void draw(
-        final Graphics graphics, final Adjustment adjustment
-    ) {
-        this.shape.draw(graphics, adjustment);
+    public final void draw(final Graphics graphics) {
+        this.shape.draw(graphics);
     }
 
     @Override

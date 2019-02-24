@@ -24,7 +24,6 @@ package joop.shape;
 import java.awt.Graphics;
 import joop.event.Event;
 import joop.event.mouse.Mouse;
-import joop.shape.layout.Adjustment;
 import unit.area.Area;
 import unit.area.AreaOf;
 import unit.area.OverlapArea;
@@ -109,11 +108,9 @@ public class Rect implements Shape {
     }
 
     @Override
-    public final void draw(
-        final Graphics graphics, final Adjustment adjustment
-    ) {
+    public final void draw(final Graphics graphics) {
         graphics.setColor(this.color.result(java.awt.Color::new));
-        adjustment.adjustedApply(this.area, graphics::fillRect);
+        Area.applyOn(this.area, graphics::fillRect);
     }
 
     @Override

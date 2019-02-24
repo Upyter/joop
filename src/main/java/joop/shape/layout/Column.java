@@ -26,8 +26,6 @@ import java.util.Collection;
 import java.util.List;
 import joop.event.mouse.Mouse;
 import joop.shape.Shape;
-import unit.area.Area;
-import unit.area.AreaOf;
 
 /**
  * A layout that adjust its shapes to be in a column
@@ -39,17 +37,6 @@ public class Column implements Shape {
      * The shapes to adjust.
      */
     private final Collection<Shape> shapes;
-
-    /**
-     * The sum of the heights of the shapes. It is used during the drawing to
-     * add the heights of the previous shapes to the current. This field will
-     * be reset to 0 after each drawing.
-     */
-    private int heights;
-
-    private int current;
-
-    private int max;
 
     /**
      * Ctor.
@@ -65,41 +52,11 @@ public class Column implements Shape {
      */
     public Column(final Collection<Shape> shapes) {
         this.shapes = shapes;
-        this.heights = 0;
-        this.current = 0;
-        this.max = 0;
     }
 
     @Override
-    public final void draw(
-        final Graphics graphics, final Adjustment adjustment
-    ) {
-        for (final Shape shape : this.shapes) {
-            shape.draw(
-                graphics,
-                (area, target) -> {
-                    Area.applyOn(
-                        area,
-                        // @checkstyle ParameterName (1 line)
-                        (x, y, width, height) -> {
-                            target.accept(
-                                x, this.heights + y, width, height
-                            );
-                            this.current = height;
-                            this.max = Math.max(this.max, width);
-                        }
-                    );
-                }
-            );
-            this.heights += this.current;
-            this.current = 0;
-        }
-        adjustment.adjustedApply(
-            new AreaOf(0, 0, this.max, this.heights),
-            (x, y, w, h) -> {}
-        );
-        this.heights = 0;
-        this.max = 0;
+    public final void draw(final Graphics graphics) {
+
     }
 
     @Override

@@ -27,8 +27,6 @@ import joop.event.mouse.Mouse;
 import joop.shape.Pen;
 import joop.shape.Shape;
 import joop.shape.Text;
-import joop.shape.layout.Adjustment;
-import joop.shape.layout.AreaAdjustment;
 import unit.area.Area;
 
 /**
@@ -100,26 +98,9 @@ public class Labeled implements Shape {
     }
 
     @Override
-    public final void draw(
-        final Graphics graphics, final Adjustment adjustment
-    ) {
-        adjustment.adjustedApply(
-            this.area,
-            (x, y, w, h) -> {
-                this.shape.draw(
-                    graphics,
-                    (AreaAdjustment) (area, drawing) -> drawing.accept(
-                        x, y, w, h
-                    )
-                );
-                this.text.draw(
-                    graphics,
-                    (AreaAdjustment) (area, drawing) -> drawing.accept(
-                        x, y, w, h
-                    )
-                );
-            }
-        );
+    public final void draw(final Graphics graphics) {
+        this.shape.draw(graphics);
+        this.text.draw(graphics);
     }
 
     @Override

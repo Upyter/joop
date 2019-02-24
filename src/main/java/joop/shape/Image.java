@@ -30,7 +30,6 @@ import java.util.Objects;
 import javax.imageio.ImageIO;
 import joop.event.Event;
 import joop.event.mouse.Mouse;
-import joop.shape.layout.Adjustment;
 import unit.area.Area;
 import unit.area.AreaOf;
 import unit.area.OverlapArea;
@@ -213,10 +212,8 @@ public class Image implements Shape {
     }
 
     @Override
-    public final void draw(
-        final Graphics graphics, final Adjustment adjustment
-    ) {
-        adjustment.adjustedApply(
+    public final void draw(final Graphics graphics) {
+        Area.applyOn(
             this.area,
             // @checkstyle ParameterName (1 line)
             (x, y, width, height) -> graphics.drawImage(

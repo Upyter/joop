@@ -23,7 +23,6 @@ package joop.shape;
 
 import java.awt.Graphics;
 import joop.event.mouse.Mouse;
-import joop.shape.layout.Adjustment;
 
 /**
  * A shape that can draw itself.
@@ -33,10 +32,8 @@ public interface Shape {
     /**
      * Draws the shape.
      * @param graphics The Graphics object to draw the shape.
-     * @param adjustment The adjustment of the drawing. This is used by layouts.
-     *  The shape has to decide whether it wants to use the adjustment.
      */
-    void draw(Graphics graphics, Adjustment adjustment);
+    void draw(Graphics graphics);
 
     /**
      * Registers itself on the mouse. This is necessary for shapes with events.
