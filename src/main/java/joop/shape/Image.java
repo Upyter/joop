@@ -27,7 +27,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Objects;
-import java.util.Optional;
 import javax.imageio.ImageIO;
 import joop.event.Event;
 import joop.event.mouse.Mouse;
@@ -214,7 +213,7 @@ public class Image implements Shape {
     }
 
     @Override
-    public final Optional<Shape> draw(
+    public final void draw(
         final Graphics graphics, final Adjustment adjustment
     ) {
         adjustment.adjustedApply(
@@ -224,7 +223,6 @@ public class Image implements Shape {
                 this.loading.value(), x, y, width, height, null
             )
         );
-        return Optional.of(this);
     }
 
     @Override

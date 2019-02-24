@@ -24,7 +24,6 @@ package joop.shape.layout;
 import java.awt.Graphics;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import joop.event.mouse.Mouse;
 import joop.shape.Shape;
 import unit.area.Area;
@@ -58,9 +57,6 @@ public class Column implements Shape {
 
     /**
      * Ctor.
-     * @param margin The space between the shapes. It will be applied around the
-     *  shapes, meaning that they will get that margin at top, left, right and
-     *  bottom.
      * @param shapes The shapes to adjust.
      */
     public Column(final Shape... shapes) {
@@ -102,7 +98,7 @@ public class Column implements Shape {
     }
 
     @Override
-    public final Optional<Shape> draw(
+    public final void draw(
         final Graphics graphics, final Adjustment adjustment
     ) {
         for (final Shape shape : this.shapes) {
@@ -131,7 +127,6 @@ public class Column implements Shape {
         );
         this.heights = 0;
         this.max = 0;
-        return Optional.of(this);
     }
 
     @Override

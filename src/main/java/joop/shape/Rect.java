@@ -22,7 +22,6 @@
 package joop.shape;
 
 import java.awt.Graphics;
-import java.util.Optional;
 import joop.event.Event;
 import joop.event.mouse.Mouse;
 import joop.shape.layout.Adjustment;
@@ -110,12 +109,11 @@ public class Rect implements Shape {
     }
 
     @Override
-    public final Optional<Shape> draw(
+    public final void draw(
         final Graphics graphics, final Adjustment adjustment
     ) {
         graphics.setColor(this.color.result(java.awt.Color::new));
         adjustment.adjustedApply(this.area, graphics::fillRect);
-        return Optional.of(this);
     }
 
     @Override

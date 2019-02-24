@@ -22,7 +22,6 @@
 package joop.shape.gui;
 
 import java.awt.Graphics;
-import java.util.Optional;
 import joop.event.mouse.Mouse;
 import joop.event.mouse.PressRelease;
 import joop.shape.DualShape;
@@ -154,10 +153,10 @@ public class Button implements Shape {
     }
 
     @Override
-    public final Optional<Shape> draw(
+    public final void draw(
         final Graphics graphics, final Adjustment adjustment
     ) {
-        return this.shape.draw(graphics, adjustment);
+        this.shape.draw(graphics, adjustment);
     }
 
     @Override

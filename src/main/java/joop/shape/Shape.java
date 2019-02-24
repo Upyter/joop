@@ -22,7 +22,6 @@
 package joop.shape;
 
 import java.awt.Graphics;
-import java.util.Optional;
 import joop.event.mouse.Mouse;
 import joop.shape.layout.Adjustment;
 
@@ -32,15 +31,12 @@ import joop.shape.layout.Adjustment;
  */
 public interface Shape {
     /**
-     * Draws the shape and returns the next shape to take the place of this
-     * shape. This is used to register and unregister shapes from the
-     * parent/window.
+     * Draws the shape.
      * @param graphics The Graphics object to draw the shape.
      * @param adjustment The adjustment of the drawing. This is used by layouts.
      *  The shape has to decide whether it wants to use the adjustment.
-     * @return The successor of this shape.
      */
-    Optional<Shape> draw(Graphics graphics, Adjustment adjustment);
+    void draw(Graphics graphics, Adjustment adjustment);
 
     /**
      * Registers itself on the mouse. This is necessary for shapes with events.

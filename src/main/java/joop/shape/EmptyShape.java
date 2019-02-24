@@ -22,7 +22,6 @@
 package joop.shape;
 
 import java.awt.Graphics;
-import java.util.Optional;
 import joop.event.mouse.Mouse;
 import joop.shape.layout.Adjustment;
 
@@ -33,10 +32,10 @@ import joop.shape.layout.Adjustment;
  */
 public class EmptyShape implements Shape {
     @Override
-    public final Optional<Shape> draw(
+    public final void draw(
         final Graphics graphics, final Adjustment adjustment
     ) {
-        return Optional.of(this);
+        // an empty shape doesn't have something to draw
     }
 
     @Override

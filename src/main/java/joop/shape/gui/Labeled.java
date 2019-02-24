@@ -22,7 +22,6 @@
 package joop.shape.gui;
 
 import java.awt.Graphics;
-import java.util.Optional;
 import joop.event.Event;
 import joop.event.mouse.Mouse;
 import joop.shape.Pen;
@@ -101,7 +100,7 @@ public class Labeled implements Shape {
     }
 
     @Override
-    public final Optional<Shape> draw(
+    public final void draw(
         final Graphics graphics, final Adjustment adjustment
     ) {
         adjustment.adjustedApply(
@@ -121,7 +120,6 @@ public class Labeled implements Shape {
                 );
             }
         );
-        return Optional.of(this);
     }
 
     @Override

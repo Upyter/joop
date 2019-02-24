@@ -22,7 +22,6 @@
 package joop.shape;
 
 import java.awt.Graphics;
-import java.util.Optional;
 import joop.event.mouse.Mouse;
 import joop.shape.layout.Adjustment;
 import unit.color.Black;
@@ -88,7 +87,7 @@ public class Line implements Shape {
     }
 
     @Override
-    public final Optional<Shape> draw(
+    public final void draw(
         final Graphics graphics, final Adjustment adjustment
     ) {
         graphics.setColor(this.color.result(java.awt.Color::new));
@@ -101,7 +100,6 @@ public class Line implements Shape {
                 (sx, sy) -> graphics.drawLine(fx, fy, sx, sy)
             )
         );
-        return Optional.of(this);
     }
 
     @Override

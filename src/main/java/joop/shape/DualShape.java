@@ -22,7 +22,6 @@
 package joop.shape;
 
 import java.awt.Graphics;
-import java.util.Optional;
 import java.util.function.Function;
 import joop.event.mouse.Mouse;
 import joop.shape.layout.Adjustment;
@@ -76,10 +75,10 @@ public class DualShape implements ToggleableShape {
     }
 
     @Override
-    public final Optional<Shape> draw(
+    public final void draw(
         final Graphics graphics, final Adjustment adjustment
     ) {
-        return this.current.draw(graphics, adjustment);
+        this.current.draw(graphics, adjustment);
     }
 
     @Override

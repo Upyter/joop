@@ -27,7 +27,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
-import java.util.Optional;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 import joop.event.mouse.Mouse;
@@ -133,7 +132,7 @@ public class Text implements Shape {
     }
 
     @Override
-    public final Optional<Shape> draw(
+    public final void draw(
         final Graphics graphics, final Adjustment adjustment
     ) {
         graphics.setColor(this.color.result(java.awt.Color::new));
@@ -156,7 +155,6 @@ public class Text implements Shape {
                 )
             )
         );
-        return Optional.of(this);
     }
 
     private Rectangle getStringBounds(Graphics2D g2, String str,
