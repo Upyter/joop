@@ -19,34 +19,38 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package joop.shape;
+package joop.shape.layout;
 
-import java.awt.Graphics;
-import joop.event.mouse.Mouse;
-import joop.shape.layout.Adjustment;
+import java.util.function.Function;
 import unit.area.Area;
+import unit.area.AreaOf;
+import unit.pos.Pos;
 
 /**
- * A shape that can draw itself.
- * @since 0.6
+ * A convenience class to adjust the position of a shape.
+ * <p>This class is immutable and thread-safe.</p>
+ * @since 0.51
  */
-public interface Shape {
+public class PosAdjustment implements Adjustment {
     /**
-     * Draws the shape.
-     * @param graphics The Graphics object to draw the shape.
+     * The adjustment of the position.
      */
-    void draw(Graphics graphics);
+    private final Function<Pos, Pos> adjustment;
 
     /**
-     * Registers itself on the mouse. This is necessary for shapes with events.
-     * @param mouse The mouse to register on.
+     * Ctor.
+     * @param adjustment The adjustment of the position.
      */
-    void registerFor(Mouse mouse);
+    public PosAdjustment(final Function<Pos, Pos> adjustment) {
+        this.adjustment = adjustment;
+    }
 
-    /**
-     * Adjust the shape (eventually).
-     * @param adjustment The adjustment to make.
-     * @return The resulting area of the adjustment.
-     */
-    Area adjust(Adjustment adjustment);
+    @Override
+    public final Area adjust(final Area area) {
+        return area.result(
+            (pos, size) -> new AreaOf(
+                this.adjustment.apply(pos), size
+            )
+        );
+    }
 }

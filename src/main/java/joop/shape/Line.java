@@ -23,6 +23,8 @@ package joop.shape;
 
 import java.awt.Graphics;
 import joop.event.mouse.Mouse;
+import joop.shape.layout.Adjustment;
+import unit.area.Area;
 import unit.color.Black;
 import unit.color.Color;
 import unit.pos.Pos;
@@ -97,6 +99,11 @@ public class Line implements Shape {
                 (sx, sy) -> graphics.drawLine(fx, fy, sx, sy)
             )
         );
+    }
+
+    @Override
+    public final Area adjust(final Adjustment adjustment) {
+        throw new UnsupportedOperationException("To be implemented");
     }
 
     @Override

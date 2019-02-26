@@ -27,6 +27,7 @@ import joop.event.mouse.Mouse;
 import joop.shape.Pen;
 import joop.shape.Shape;
 import joop.shape.Text;
+import joop.shape.layout.Adjustment;
 import unit.area.Area;
 
 /**
@@ -106,5 +107,10 @@ public class Labeled implements Shape {
     @Override
     public final void registerFor(final Mouse mouse) {
         this.shape.registerFor(mouse);
+    }
+
+    @Override
+    public final Area adjust(final Adjustment adjustment) {
+        return this.area;
     }
 }

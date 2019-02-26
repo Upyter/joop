@@ -24,7 +24,7 @@ package joop.window;
 import java.awt.Dimension;
 import javax.swing.JFrame;
 import joop.shape.Shape;
-import joop.shape.layout.AreaAdjustment;
+import joop.shape.layout.NoAdjustment;
 import unit.area.Area;
 import unit.area.AreaOf;
 import unit.size.Size;
@@ -48,17 +48,14 @@ public class Window extends BaseWindow {
         super(
             new AreaOf(),
             (JFrame frame) -> {
-                shape.draw(
-                    frame.getGraphics(),
-                    (AreaAdjustment) (area, drawing) -> Area.applyOn(
-                        area,
-                        (x, y, width, height) -> {
-                            frame.getContentPane().setPreferredSize(
-                                new Dimension(width, height)
-                            );
-                            frame.pack();
-                        }
-                    )
+                Area.applyOn(
+                    shape.adjust(new NoAdjustment()),
+                    (x, y, width, height) -> {
+                        frame.getContentPane().setPreferredSize(
+                            new Dimension(width, height)
+                        );
+                        frame.pack();
+                    }
                 );
                 frame.setLocationRelativeTo(null);
             },

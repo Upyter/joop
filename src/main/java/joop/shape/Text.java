@@ -37,7 +37,6 @@ import unit.color.Black;
 import unit.color.Color;
 import unit.pos.Pos;
 import unit.pos.PosOf;
-import unit.size.SizeOf;
 import unit.tuple.Tuple;
 
 /**
@@ -140,20 +139,16 @@ public class Text implements Shape {
         final String current = this.content.get();
         Tuple.applyOn(
             this.pos,
-            (x1, y1) -> adjustment.adjustedApply(
-                new AreaOf(this.pos, new SizeOf(
-                    0,
-                    graphics.getFont().createGlyphVector(
-                        ((Graphics2D) graphics).getFontRenderContext(), current
-                    ).getPixelBounds(null, x1, y1).height
-                )),
-                // @checkstyle ParameterName (1 line)
-                (x, y, width, height) -> graphics.drawString(
+            (x, y) -> {
+                final var height = graphics.getFont().createGlyphVector(
+                    ((Graphics2D) graphics).getFontRenderContext(), current)
+                    .getPixelBounds(null, x, y).height;
+                graphics.drawString(
                     current,
                     x,
                     y + height
-                )
-            )
+                );
+            }
         );
     }
 
@@ -163,6 +158,11 @@ public class Text implements Shape {
         FontRenderContext frc = g2.getFontRenderContext();
         GlyphVector gv = g2.getFont().createGlyphVector(frc, str);
         return gv.getPixelBounds(null, x, y);
+    }
+
+    @Override
+    public final Area adjust(final Adjustment adjustment) {
+        throw new UnsupportedOperationException("To be implemented");
     }
 
     @Override

@@ -22,10 +22,15 @@
 package joop.shape.layout;
 
 import java.awt.Graphics;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import joop.event.mouse.Mouse;
 import joop.shape.Shape;
+import unit.area.Area;
+import unit.area.Covered;
+import unit.pos.PosOf;
+import unit.pos.Sum;
 
 /**
  * A layout that adjust its shapes to be in a column
@@ -37,6 +42,8 @@ public class Column implements Shape {
      * The shapes to adjust.
      */
     private final Collection<Shape> shapes;
+
+    private boolean adjusted = false;
 
     /**
      * Ctor.
@@ -56,7 +63,37 @@ public class Column implements Shape {
 
     @Override
     public final void draw(final Graphics graphics) {
+        this.shapes.forEach(it -> it.draw(graphics));
+    }
 
+    @Override
+    public final Area adjust(final Adjustment adjustment) {
+        final var areas = new ArrayList<Area>(this.shapes.size());
+        final var iterator = this.shapes.iterator();
+        if (iterator.hasNext()) {
+            Area previous = iterator.next().adjust(adjustment);
+            areas.add(previous);
+            while (iterator.hasNext()) {
+                final Area area = previous;
+                previous = iterator.next().adjust(
+                    new PosAdjustment(
+                        pos -> new Sum(
+                            pos,
+                            new PosOf(
+                                () -> 0,
+                                () -> Area.result(
+                                    area,
+                                    (x, y, width, height) -> y + height
+                                )
+                            )
+                        )
+                    )
+                );
+                System.out.println(previous);
+                areas.add(previous);
+            }
+        }
+        return new Covered(areas);
     }
 
     @Override

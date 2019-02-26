@@ -22,7 +22,6 @@
 package joop.shape.layout;
 
 import unit.area.Area;
-import unit.functional.QuadConsumer;
 
 /**
  * An implementation of adjustment to use when there is no adjustment.
@@ -30,10 +29,7 @@ import unit.functional.QuadConsumer;
  */
 public class NoAdjustment implements Adjustment {
     @Override
-    public final void adjustedApply(
-        final Area area,
-        final QuadConsumer<Integer, Integer, Integer, Integer> target
-    ) {
-        Area.applyOn(area, target);
+    public final Area adjust(final Area area) {
+        return area;
     }
 }

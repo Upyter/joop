@@ -23,6 +23,9 @@ package joop.shape;
 
 import java.awt.Graphics;
 import joop.event.mouse.Mouse;
+import joop.shape.layout.Adjustment;
+import unit.area.Area;
+import unit.area.AreaOf;
 
 /**
  * A shape that doesn't apply any action. It can be used instead of null.
@@ -33,6 +36,11 @@ public class EmptyShape implements Shape {
     @Override
     public final void draw(final Graphics graphics) {
         // an empty shape doesn't have something to draw
+    }
+
+    @Override
+    public final Area adjust(final Adjustment adjustment) {
+        return adjustment.adjust(new AreaOf());
     }
 
     @Override

@@ -24,6 +24,8 @@ package joop.shape;
 import java.awt.Graphics;
 import java.util.function.Function;
 import joop.event.mouse.Mouse;
+import joop.shape.layout.Adjustment;
+import unit.area.Area;
 
 /**
  * A shape that can switch between two shapes. It's similar to
@@ -76,6 +78,11 @@ public class DualShape implements ToggleableShape {
     @Override
     public final void draw(final Graphics graphics) {
         this.current.draw(graphics);
+    }
+
+    @Override
+    public final Area adjust(final Adjustment adjustment) {
+        return this.current.adjust(adjustment);
     }
 
     @Override

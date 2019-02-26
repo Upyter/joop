@@ -32,7 +32,6 @@ import javax.swing.WindowConstants;
 import joop.event.mouse.DelegationMouse;
 import joop.shape.EmptyShape;
 import joop.shape.Shape;
-import joop.shape.layout.NoAdjustment;
 import unit.area.Area;
 import unit.functional.Cached;
 import unit.functional.Lazy;
@@ -102,7 +101,7 @@ public class BaseWindow implements Showable {
                         @Override
                         protected void paintComponent(final Graphics graphics) {
                             super.paintComponent(graphics);
-                            shape.draw(graphics, new NoAdjustment());
+                            shape.draw(graphics);
                         }
                     };
                     Tuple.applyOn(
