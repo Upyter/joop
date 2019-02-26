@@ -55,7 +55,7 @@ public class Image implements Shape {
     /**
      * The area of the image.
      */
-    private final OverlapArea area;
+    private OverlapArea area;
 
     /**
      * The event of the image.
@@ -225,6 +225,7 @@ public class Image implements Shape {
 
     @Override
     public final Area adjust(final Adjustment adjustment) {
+        this.area = new OverlapAreaOf(adjustment.adjust(this.area));
         return this.area;
     }
 

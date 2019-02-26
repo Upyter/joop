@@ -33,25 +33,25 @@ import unit.pos.PosOf;
 import unit.pos.Sum;
 
 /**
- * A layout that adjust its shapes to be in a column
- * (like {@link javafx.scene.layout.VBox}).
- * @since 0.29
+ * A layout that adjust its shapes to be in a row
+ * (like {@link javafx.scene.layout.HBox}).
+ * @since 0.52
  */
-public class Column implements Shape {
+public class Row implements Shape {
     /**
      * The shapes to adjust.
      */
     private final Collection<Shape> shapes;
 
-    private Area area;
-
     private boolean adjusted = false;
+
+    private Area area;
 
     /**
      * Ctor.
      * @param shapes The shapes to adjust.
      */
-    public Column(final Shape... shapes) {
+    public Row(final Shape... shapes) {
         this(List.of(shapes));
     }
 
@@ -59,7 +59,7 @@ public class Column implements Shape {
      * Ctor.
      * @param shapes The shapes to adjust.
      */
-    public Column(final Collection<Shape> shapes) {
+    public Row(final Collection<Shape> shapes) {
         this.shapes = shapes;
     }
 
@@ -81,23 +81,26 @@ public class Column implements Shape {
                 Area previous = iterator.next().adjust(adjustment);
                 areas.add(previous);
                 while (iterator.hasNext()) {
+                    System.out.println("Row previous: " + previous);
                     final Area area = previous;
                     previous = iterator.next().adjust(
                         new PosAdjustment(
                             pos -> new Sum(
                                 pos,
                                 new PosOf(
-                                    () -> 0,
                                     () -> Area.result(
                                         area,
-                                        (x, y, width, height) -> y + height
-                                    )
+                                        (x, y, width, height) -> x + width
+                                    ),
+                                    () -> 0
                                 )
                             )
                         )
                     );
                     areas.add(previous);
                 }
+                System.out.println("Shapes: " + shapes.size());
+                System.out.println("Areas: " + areas.size());
             }
             this.area = new Covered(areas);
         }

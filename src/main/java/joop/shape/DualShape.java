@@ -82,7 +82,8 @@ public class DualShape implements ToggleableShape {
 
     @Override
     public final Area adjust(final Adjustment adjustment) {
-        return this.current.adjust(adjustment);
+        this.first.adjust(adjustment);
+        return this.second.adjust(adjustment);
     }
 
     @Override
