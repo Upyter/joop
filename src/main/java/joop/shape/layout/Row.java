@@ -28,6 +28,7 @@ import java.util.List;
 import joop.event.mouse.Mouse;
 import joop.shape.Shape;
 import unit.area.Area;
+import unit.area.AreaOf;
 import unit.area.Covered;
 import unit.pos.PosOf;
 import unit.pos.Sum;
@@ -81,7 +82,6 @@ public class Row implements Shape {
                 Area previous = iterator.next().adjust(adjustment);
                 areas.add(previous);
                 while (iterator.hasNext()) {
-                    System.out.println("Row previous: " + previous);
                     final Area area = previous;
                     previous = iterator.next().adjust(
                         new PosAdjustment(
@@ -92,18 +92,23 @@ public class Row implements Shape {
                                         area,
                                         (x, y, width, height) -> x + width
                                     ),
-                                    () -> 0
+                                    () -> Area.result(
+                                        area,
+                                        (x, y, width, height) -> y
+                                    )
                                 )
                             )
                         )
                     );
                     areas.add(previous);
                 }
-                System.out.println("Shapes: " + shapes.size());
-                System.out.println("Areas: " + areas.size());
             }
             this.area = new Covered(areas);
         }
+        Area.applyOn(
+            this.area,
+            (x, y, w, h) -> System.out.println("Row area: " + new AreaOf(x, y, w, h))
+        );
         return this.area;
     }
 

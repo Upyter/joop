@@ -28,6 +28,7 @@ import java.util.List;
 import joop.event.mouse.Mouse;
 import joop.shape.Shape;
 import unit.area.Area;
+import unit.area.AreaOf;
 import unit.area.Covered;
 import unit.pos.PosOf;
 import unit.pos.Sum;
@@ -101,6 +102,10 @@ public class Column implements Shape {
             }
             this.area = new Covered(areas);
         }
+        Area.applyOn(
+            this.area,
+            (x, y, w, h) -> System.out.println("Column area: " + new AreaOf(x, y, w, h))
+        );
         return this.area;
     }
 

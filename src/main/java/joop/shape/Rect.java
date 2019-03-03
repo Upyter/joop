@@ -22,6 +22,7 @@
 package joop.shape;
 
 import java.awt.Graphics;
+import java.util.function.BiFunction;
 import joop.event.Event;
 import joop.event.mouse.Mouse;
 import joop.shape.layout.Adjustment;
@@ -31,6 +32,8 @@ import unit.area.OverlapArea;
 import unit.area.OverlapAreaOf;
 import unit.color.Black;
 import unit.color.Color;
+import unit.pos.Pos;
+import unit.size.Size;
 
 /**
  * A filled rectangle.
@@ -42,7 +45,7 @@ public class Rect implements Shape {
     /**
      * The area of the rect.
      */
-    private OverlapArea area;
+    private Adjusted area;
 
     /**
      * The color of the rect.
@@ -103,7 +106,7 @@ public class Rect implements Shape {
      * @param event The event of the rect.
      */
     public Rect(final OverlapArea area, final Color color, final Event event) {
-        this.area = area;
+        this.area = new Adjusted(area);
         this.color = color;
         this.event = event;
     }
@@ -116,12 +119,34 @@ public class Rect implements Shape {
 
     @Override
     public final Area adjust(final Adjustment adjustment) {
-        this.area = new OverlapAreaOf(adjustment.adjust(this.area));
-        return this.area;
+        return this.area.adjusted(adjustment);
     }
 
     @Override
     public final void registerFor(final Mouse mouse) {
         this.event.registerFor(mouse, this.area);
+    }
+
+    private class Adjusted implements OverlapArea {
+        private OverlapArea area;
+
+        public Adjusted(OverlapArea area) {
+            this.area = area;
+        }
+
+        public final OverlapArea adjusted(Adjustment adjustment) {
+            this.area = new OverlapAreaOf(adjustment.adjust(this.area));
+            return this.area;
+        }
+
+        @Override
+        public final boolean contains(final int i, final int i1) {
+            return this.area.contains(i, i1);
+        }
+
+        @Override
+        public final <R> R result(final BiFunction<Pos, Size, R> biFunction) {
+            return this.area.result(biFunction);
+        }
     }
 }
