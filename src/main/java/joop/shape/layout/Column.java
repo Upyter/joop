@@ -30,9 +30,8 @@ import joop.shape.Shape;
 import unit.area.Adjustment;
 import unit.area.Area;
 import unit.area.Covered;
+import unit.area.NoAdjustment;
 import unit.area.YAdjustment;
-import unit.tuple.NoAdjustment;
-import unit.tuple.TupleAdjustment;
 
 /**
  * A layout that adjust its shapes to be in a column
@@ -69,23 +68,14 @@ public class Column implements Shape {
     public final void draw(final Graphics graphics) {
         this.shapes.forEach(it -> it.draw(graphics));
         if (!this.adjusted) {
-            this.adjustment(new Adjustment() {
-                @Override
-                public TupleAdjustment<Integer, Integer> posAdjustment() {
-                    return new NoAdjustment<>();
-                }
-
-                @Override
-                public TupleAdjustment<Integer, Integer> sizeAdjustment() {
-                    return new NoAdjustment<>();
-                }
-            });
+            this.adjustment(new NoAdjustment());
         }
     }
 
     @Override
     public final Area adjustment(final Adjustment adjustment) {
         if (!this.adjusted) {
+            this.adjusted = true;
             final var areas = new ArrayList<Area>(this.shapes.size());
             final var iterator = this.shapes.iterator();
             if (iterator.hasNext()) {
@@ -97,11 +87,15 @@ public class Column implements Shape {
                         new YAdjustment(
                             y -> Area.result(
                                 pre_area,
-                                (x1, y1, w1, h1) -> y + y1 + h1
+                                (x1, y1, w1, h1) -> {
+                                    //System.out.println(y + y1 + h1);
+                                    return y + y1 + h1;
+                                }
                             )
                         )
                     );
                     areas.add(previous);
+                    System.out.println("COLUMN ADJUSTMENT area: " + previous);
                 }
                 this.area = new Covered(areas);
             }

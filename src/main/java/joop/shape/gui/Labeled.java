@@ -29,6 +29,7 @@ import joop.shape.Shape;
 import joop.shape.Text;
 import unit.area.Adjustment;
 import unit.area.Area;
+import unit.pos.SoftPos;
 
 /**
  * A shape with an attached text.
@@ -62,7 +63,7 @@ public class Labeled implements Shape {
     ) {
         this(
             pen.shape(area, ignored -> (x, y) -> { }),
-            area.result((pos, size) -> new Text(text, pos)),
+            area.result((pos, size) -> new Text(text, new SoftPos(pos))),
             area
         );
     }
@@ -82,7 +83,7 @@ public class Labeled implements Shape {
     ) {
         this(
             pen.shape(area, ignored -> event),
-            area.result((pos, size) -> new Text(text, pos)),
+            area.result((pos, size) -> new Text(text, new SoftPos(pos))),
             area
         );
     }

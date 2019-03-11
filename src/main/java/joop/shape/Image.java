@@ -37,7 +37,7 @@ import unit.area.OverlapArea;
 import unit.area.OverlapAreaOf;
 import unit.functional.Cached;
 import unit.functional.Lazy;
-import unit.pos.Pos;
+import unit.pos.AdjustablePos;
 
 /**
  * An image. This class won't cache the result of the given {@link Lazy}
@@ -168,7 +168,7 @@ public class Image implements Shape {
      * @param loading The loading of the image.
      * @param pos The position of the image.
      */
-    public Image(final Lazy<BufferedImage> loading, final Pos pos) {
+    public Image(final Lazy<BufferedImage> loading, final AdjustablePos pos) {
         this(loading, new AreaOf(pos));
     }
 

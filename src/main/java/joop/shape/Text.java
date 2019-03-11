@@ -35,8 +35,8 @@ import unit.area.Area;
 import unit.area.AreaOf;
 import unit.color.Black;
 import unit.color.Color;
+import unit.pos.AdjustablePos;
 import unit.pos.FixPos;
-import unit.pos.Pos;
 import unit.tuple.Tuple;
 
 /**
@@ -54,7 +54,7 @@ public class Text implements Shape {
     /**
      * The position of the text.
      */
-    private final Pos pos;
+    private final AdjustablePos pos;
 
     /**
      * The color of the rect.
@@ -71,7 +71,7 @@ public class Text implements Shape {
      * @param content The characters of the text.
      * @param pos The position of the text.
      */
-    public Text(final String content, final Pos pos) {
+    public Text(final String content, final AdjustablePos pos) {
         this(() -> content, pos);
     }
 
@@ -88,7 +88,7 @@ public class Text implements Shape {
      * @param content The characters of the text.
      * @param pos The position of the text.
      */
-    public Text(final IntSupplier content, final Pos pos) {
+    public Text(final IntSupplier content, final AdjustablePos pos) {
         this(() -> Integer.toString(content.getAsInt()), pos, new Black());
     }
 
@@ -97,7 +97,7 @@ public class Text implements Shape {
      * @param content The characters of the text.
      * @param pos The position of the text.
      */
-    public Text(final Supplier<String> content, final Pos pos) {
+    public Text(final Supplier<String> content, final AdjustablePos pos) {
         this(content, pos, new Black());
     }
 
@@ -107,7 +107,7 @@ public class Text implements Shape {
      * @param pos The position of the text.
      * @param color The color of the rect.
      */
-    public Text(final String content, final Pos pos, final Color color) {
+    public Text(final String content, final AdjustablePos pos, final Color color) {
         this(
             () -> content,
             pos,
@@ -122,7 +122,7 @@ public class Text implements Shape {
      * @param color The color of the rect.
      */
     public Text(
-        final Supplier<String> content, final Pos pos, final Color color
+        final Supplier<String> content, final AdjustablePos pos, final Color color
     ) {
         this.content = content;
         this.pos = pos;
