@@ -23,7 +23,7 @@ package joop.shape;
 
 import java.awt.Graphics;
 import joop.event.mouse.Mouse;
-import joop.shape.layout.Adjustment;
+import unit.area.Adjustment;
 import unit.area.Area;
 import unit.area.AreaOf;
 
@@ -39,8 +39,8 @@ public class EmptyShape implements Shape {
     }
 
     @Override
-    public final Area adjust(final Adjustment adjustment) {
-        return adjustment.adjust(new AreaOf());
+    public final Area adjustment(final Adjustment adjustment) {
+        return new AreaOf();
     }
 
     @Override

@@ -29,14 +29,14 @@ import joop.shape.Pen;
 import joop.shape.ResourceImage;
 import joop.shape.Shape;
 import joop.shape.ToggleableShape;
-import joop.shape.layout.Adjustment;
 import unit.Overlap;
+import unit.area.Adjustment;
 import unit.area.Area;
 import unit.area.AreaOf;
 import unit.area.OverlapAreaOf;
 import unit.functional.Action;
 import unit.functional.Toggleable;
-import unit.size.Size;
+import unit.size.AdjustableSize;
 
 /**
  * A shape that has {@link PressRelease} event attached to it.
@@ -55,7 +55,7 @@ public class Button implements Shape {
      * @param size The size of the button.
      * @param action The action to be applied when the button is released.
      */
-    public Button(final Size size, final Action action) {
+    public Button(final AdjustableSize size, final Action action) {
         this(
             new AreaOf(size),
             action
@@ -163,7 +163,7 @@ public class Button implements Shape {
     }
 
     @Override
-    public final Area adjust(final Adjustment adjustment) {
-        return this.shape.adjust(adjustment);
+    public final Area adjustment(final Adjustment adjustment) {
+        return this.shape.adjustment(adjustment);
     }
 }

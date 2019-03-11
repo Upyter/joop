@@ -32,10 +32,13 @@ import javax.swing.WindowConstants;
 import joop.event.mouse.DelegationMouse;
 import joop.shape.EmptyShape;
 import joop.shape.Shape;
+import unit.area.Adjustment;
 import unit.area.Area;
+import unit.area.AreaOf;
 import unit.functional.Cached;
 import unit.functional.Lazy;
 import unit.tuple.Tuple;
+import unit.tuple.TupleAdjustment;
 
 /**
  * Represents a simple window. To apply some settings on this window,
@@ -54,6 +57,62 @@ public class BaseWindow implements Showable {
      * JFrame will probably be lazily constructed.
      */
     private final Lazy<JFrame> frame;
+
+    /**
+     * Ctor.
+     * @param area The area of the window.
+     */
+    public BaseWindow(final Shape shape) {
+        this(
+            new AreaOf(),
+            (JFrame frame) -> {
+                    Area.applyOn(
+                        shape.adjustment(
+                            new Adjustment() {
+                                @Override
+                                public TupleAdjustment<Integer, Integer> posAdjustment() {
+                                    return new TupleAdjustment<>() {
+                                        @Override
+                                        public Integer adjustedFirst(final Integer integer) {
+                                            return integer;
+                                        }
+
+                                        @Override
+                                        public Integer adjustedSecond(final Integer integer) {
+                                            return integer;
+                                        }
+                                    };
+                                }
+
+                                @Override
+                                public TupleAdjustment<Integer, Integer> sizeAdjustment() {
+                                    return new TupleAdjustment<>() {
+                                        @Override
+                                        public Integer adjustedFirst(final Integer integer) {
+                                            return frame.getWidth();
+                                        }
+
+                                        @Override
+                                        public Integer adjustedSecond(final Integer integer) {
+                                            return frame.getHeight();
+                                        }
+                                    };
+                                }
+                            }
+                        ),
+                        (x, y, width, height) -> {
+                            frame.getContentPane().setPreferredSize(
+                                new Dimension(width, height)
+                            );
+                            frame.pack();
+                        }
+                        );
+                frame.setResizable(true);
+                frame.setLocationRelativeTo(null);
+            },
+            shape
+        );
+    }
 
     /**
      * Ctor.
@@ -117,6 +176,7 @@ public class BaseWindow implements Showable {
                     result.add(panel);
                     result.pack();
                     result.setVisible(true);
+                    result.setResizable(false);
                     Area.applyOn(
                         area,
                         // @checkstyle ParameterName (1 line)
@@ -132,7 +192,6 @@ public class BaseWindow implements Showable {
                     final var timer = new Timer(25, e -> result.repaint());
                     timer.setRepeats(true);
                     timer.start();
-                    result.setResizable(false);
                     return result;
                 }
             )

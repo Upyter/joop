@@ -90,7 +90,7 @@
         <dependency>
             <groupId>com.github.Upyter</groupId>
             <artifactId>unit</artifactId>
-            <version>adjust-SNAPSHOT</version>
+            <version>512c5d41b3</version>
         </dependency>
         <!-- to compare swing drawing with expectation images -->
         <dependency>

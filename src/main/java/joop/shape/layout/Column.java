@@ -27,11 +27,12 @@ import java.util.Collection;
 import java.util.List;
 import joop.event.mouse.Mouse;
 import joop.shape.Shape;
+import unit.area.Adjustment;
 import unit.area.Area;
-import unit.area.AreaOf;
 import unit.area.Covered;
-import unit.pos.PosOf;
-import unit.pos.Sum;
+import unit.area.YAdjustment;
+import unit.tuple.NoAdjustment;
+import unit.tuple.TupleAdjustment;
 
 /**
  * A layout that adjust its shapes to be in a column
@@ -67,45 +68,44 @@ public class Column implements Shape {
     @Override
     public final void draw(final Graphics graphics) {
         this.shapes.forEach(it -> it.draw(graphics));
-        if (!adjusted) {
-            adjust(new NoAdjustment());
+        if (!this.adjusted) {
+            this.adjustment(new Adjustment() {
+                @Override
+                public TupleAdjustment<Integer, Integer> posAdjustment() {
+                    return new NoAdjustment<>();
+                }
+
+                @Override
+                public TupleAdjustment<Integer, Integer> sizeAdjustment() {
+                    return new NoAdjustment<>();
+                }
+            });
         }
     }
 
     @Override
-    public final Area adjust(final Adjustment adjustment) {
-        if (!adjusted) {
-            adjusted = true;
+    public final Area adjustment(final Adjustment adjustment) {
+        if (!this.adjusted) {
             final var areas = new ArrayList<Area>(this.shapes.size());
             final var iterator = this.shapes.iterator();
             if (iterator.hasNext()) {
-                Area previous = iterator.next().adjust(adjustment);
+                Area previous = iterator.next().adjustment(adjustment);
                 areas.add(previous);
                 while (iterator.hasNext()) {
-                    final Area area = previous;
-                    previous = iterator.next().adjust(
-                        new PosAdjustment(
-                            pos -> new Sum(
-                                pos,
-                                new PosOf(
-                                    () -> 0,
-                                    () -> Area.result(
-                                        area,
-                                        (x, y, width, height) -> y + height
-                                    )
-                                )
+                    final Area pre_area = previous;
+                    previous = iterator.next().adjustment(
+                        new YAdjustment(
+                            y -> Area.result(
+                                pre_area,
+                                (x1, y1, w1, h1) -> y + y1 + h1
                             )
                         )
                     );
                     areas.add(previous);
                 }
+                this.area = new Covered(areas);
             }
-            this.area = new Covered(areas);
         }
-        Area.applyOn(
-            this.area,
-            (x, y, w, h) -> System.out.println("Column area: " + new AreaOf(x, y, w, h))
-        );
         return this.area;
     }
 

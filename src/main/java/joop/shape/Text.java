@@ -30,13 +30,13 @@ import java.awt.font.GlyphVector;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 import joop.event.mouse.Mouse;
-import joop.shape.layout.Adjustment;
+import unit.area.Adjustment;
 import unit.area.Area;
 import unit.area.AreaOf;
 import unit.color.Black;
 import unit.color.Color;
+import unit.pos.FixPos;
 import unit.pos.Pos;
-import unit.pos.PosOf;
 import unit.tuple.Tuple;
 
 /**
@@ -80,7 +80,7 @@ public class Text implements Shape {
      * @param content The characters of the text.
      */
     public Text(final IntSupplier content) {
-        this(content, new PosOf());
+        this(content, new FixPos());
     }
 
     /**
@@ -161,7 +161,7 @@ public class Text implements Shape {
     }
 
     @Override
-    public final Area adjust(final Adjustment adjustment) {
+    public final Area adjustment(final Adjustment adjustment) {
         throw new UnsupportedOperationException("To be implemented");
     }
 

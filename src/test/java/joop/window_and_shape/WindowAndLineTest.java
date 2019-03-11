@@ -27,7 +27,7 @@ import joop.window.BaseWindow;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import unit.color.RGBA;
-import unit.pos.PosOf;
+import unit.pos.FixPos;
 
 /**
  * Tests for the combined use of {@link BaseWindow} and {@link Line}.
@@ -79,8 +79,8 @@ public class WindowAndLineTest {
         final var green = 255;
         MatcherAssert.assertThat(
             new Line(
-                new PosOf(fx, fy),
-                new PosOf(sx, sy),
+                new FixPos(fx, fy),
+                new FixPos(sx, sy),
                 new RGBA(0, green, 0)
             ),
             new CorrectContent(

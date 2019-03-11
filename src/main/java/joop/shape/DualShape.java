@@ -24,7 +24,7 @@ package joop.shape;
 import java.awt.Graphics;
 import java.util.function.Function;
 import joop.event.mouse.Mouse;
-import joop.shape.layout.Adjustment;
+import unit.area.Adjustment;
 import unit.area.Area;
 
 /**
@@ -81,9 +81,9 @@ public class DualShape implements ToggleableShape {
     }
 
     @Override
-    public final Area adjust(final Adjustment adjustment) {
-        this.first.adjust(adjustment);
-        return this.second.adjust(adjustment);
+    public final Area adjustment(final Adjustment adjustment) {
+        this.first.adjustment(adjustment);
+        return this.second.adjustment(adjustment);
     }
 
     @Override

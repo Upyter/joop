@@ -24,10 +24,12 @@ package joop.window;
 import java.awt.Dimension;
 import javax.swing.JFrame;
 import joop.shape.Shape;
-import joop.shape.layout.NoAdjustment;
+import unit.area.Adjustment;
 import unit.area.Area;
 import unit.area.AreaOf;
-import unit.size.Size;
+import unit.size.AdjustableSize;
+import unit.tuple.NoAdjustment;
+import unit.tuple.TupleAdjustment;
 
 /**
  * A class to create a window with the most used features. Use
@@ -49,7 +51,19 @@ public class Window extends BaseWindow {
             new AreaOf(),
             (JFrame frame) -> {
                 Area.applyOn(
-                    shape.adjust(new NoAdjustment()),
+                    shape.adjustment(
+                        new Adjustment() {
+                            @Override
+                            public TupleAdjustment<Integer, Integer> posAdjustment() {
+                                return new NoAdjustment<>();
+                            }
+
+                            @Override
+                            public TupleAdjustment<Integer, Integer> sizeAdjustment() {
+                                return new NoAdjustment<>();
+                            }
+                        }
+                    ),
                     (x, y, width, height) -> {
                         frame.getContentPane().setPreferredSize(
                             new Dimension(width, height)
@@ -68,7 +82,7 @@ public class Window extends BaseWindow {
      * @param size The size of the window.
      * @param shape The shape to put on the window.
      */
-    public Window(final Size size, final Shape shape) {
+    public Window(final AdjustableSize size, final Shape shape) {
         super(
             new AreaOf(size),
             (JFrame frame) -> frame.setLocationRelativeTo(null),

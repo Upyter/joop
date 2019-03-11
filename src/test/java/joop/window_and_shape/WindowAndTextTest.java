@@ -27,7 +27,7 @@ import joop.window.BaseWindow;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import unit.color.RGBA;
-import unit.pos.PosOf;
+import unit.pos.FixPos;
 
 /**
  * Tests for the combined use of {@link BaseWindow} and {@link Text}.
@@ -49,7 +49,7 @@ public final class WindowAndTextTest {
         final var x = 120;
         final var y = 50;
         MatcherAssert.assertThat(
-            new Text("Some text", new PosOf(x, y)),
+            new Text("Some text", new FixPos(x, y)),
             new CorrectContent(
                 "window_and_text/blackTextOnWhiteWindow.png",
                 windowWidth,
@@ -76,7 +76,7 @@ public final class WindowAndTextTest {
         MatcherAssert.assertThat(
             new Text(
                 "text",
-                new PosOf(x, y),
+                new FixPos(x, y),
                 new RGBA(0, 0, green)
             ),
             new CorrectContent(

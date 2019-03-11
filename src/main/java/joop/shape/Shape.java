@@ -23,7 +23,7 @@ package joop.shape;
 
 import java.awt.Graphics;
 import joop.event.mouse.Mouse;
-import joop.shape.layout.Adjustment;
+import unit.area.Adjustment;
 import unit.area.Area;
 
 /**
@@ -48,5 +48,5 @@ public interface Shape {
      * @param adjustment The adjustment to make.
      * @return The resulting area of the adjustment.
      */
-    Area adjust(Adjustment adjustment);
+    Area adjustment(Adjustment adjustment);
 }

@@ -23,12 +23,12 @@ package joop.shape;
 
 import java.awt.Graphics;
 import joop.event.mouse.Mouse;
-import joop.shape.layout.Adjustment;
+import unit.area.Adjustment;
 import unit.area.Area;
 import unit.color.Black;
 import unit.color.Color;
+import unit.pos.FixPos;
 import unit.pos.Pos;
-import unit.pos.PosOf;
 import unit.tuple.Tuple;
 
 /**
@@ -63,7 +63,7 @@ public class Line implements Shape {
      * @checkstyle ParameterName (2 lines)
      */
     public Line(final int fx, final int fy, final int sx, final int sy) {
-        this(new PosOf(fx, fy), new PosOf(sx, sy));
+        this(new FixPos(fx, fy), new FixPos(sx, sy));
     }
 
     /**
@@ -102,7 +102,7 @@ public class Line implements Shape {
     }
 
     @Override
-    public final Area adjust(final Adjustment adjustment) {
+    public final Area adjustment(final Adjustment adjustment) {
         throw new UnsupportedOperationException("To be implemented");
     }
 
