@@ -23,15 +23,24 @@ package joop.shape.layout;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import joop.event.mouse.Mouse;
 import joop.shape.Shape;
 import unit.area.Adjustment;
 import unit.area.Area;
+import unit.area.AreaOf;
 import unit.area.Covered;
-import unit.area.NoAdjustment;
-import unit.area.YAdjustment;
+import unit.area.Sizeless;
+import unit.area.adjustment.NoAdjustment;
+import unit.area.adjustment.Short;
+import unit.area.supplier.Height;
+import unit.area.supplier.HeightSum;
+import unit.area.supplier.Width;
+import unit.functional.Cached;
+import unit.functional.Lazy;
+import unit.pos.SoftPos;
+import unit.pos.YAdjustment;
+import unit.size.SoftSize;
 
 /**
  * A layout that adjust its shapes to be in a column
@@ -42,9 +51,9 @@ public class Column implements Shape {
     /**
      * The shapes to adjust.
      */
-    private final Collection<Shape> shapes;
+    private final List<Shape> shapes;
 
-    private Area area;
+    private Lazy<Area> area;
 
     private boolean adjusted = false;
 
@@ -60,47 +69,55 @@ public class Column implements Shape {
      * Ctor.
      * @param shapes The shapes to adjust.
      */
-    public Column(final Collection<Shape> shapes) {
+    public Column(final List<Shape> shapes) {
         this.shapes = shapes;
+        this.area = new Cached<>(
+            () -> {
+                final var areas = new ArrayList<Area>(this.shapes.size());
+                this.shapes.forEach(shape -> areas.add(shape.adjustment(new NoAdjustment())));
+                return Area.result(
+                    new Covered(areas),
+                    (x, y, w, h) -> new AreaOf(
+                        new SoftPos(x, y),
+                        new SoftSize(w, h)
+                    )
+                );
+            }
+        );
     }
 
     @Override
     public final void draw(final Graphics graphics) {
         this.shapes.forEach(it -> it.draw(graphics));
-        if (!this.adjusted) {
-            this.adjustment(new NoAdjustment());
-        }
     }
 
     @Override
     public final Area adjustment(final Adjustment adjustment) {
-        if (!this.adjusted) {
-            this.adjusted = true;
-            final var areas = new ArrayList<Area>(this.shapes.size());
-            final var iterator = this.shapes.iterator();
-            if (iterator.hasNext()) {
-                Area previous = iterator.next().adjustment(adjustment);
-                areas.add(previous);
-                while (iterator.hasNext()) {
-                    final Area pre_area = previous;
-                    previous = iterator.next().adjustment(
-                        new YAdjustment(
-                            y -> Area.result(
-                                pre_area,
-                                (x1, y1, w1, h1) -> {
-                                    //System.out.println(y + y1 + h1);
-                                    return y + y1 + h1;
-                                }
-                            )
+        final var areas = new ArrayList<Area>(this.shapes.size());
+        this.shapes.forEach(shape -> areas.add(shape.adjustment(new NoAdjustment())));
+        this.area.value().adjustment(adjustment);
+        Area previous = new Sizeless(this.area.value());
+        for (Shape shape : shapes) {
+            final Area pre_area = previous;
+            previous = shape.adjustment(
+                new Short(
+                    new YAdjustment(
+                        y -> Area.result(
+                            pre_area,
+                            (x1, y1, w1, h1) -> y + y1 + h1
                         )
-                    );
-                    areas.add(previous);
-                    System.out.println("COLUMN ADJUSTMENT area: " + previous);
-                }
-                this.area = new Covered(areas);
-            }
+                    ),
+                    new unit.tuple.adjustment.Short<>(
+                        width -> new Width(this.area.value()).get(),
+                        integer -> {
+                            final double heights = new HeightSum(areas).get();
+                            return (int) (integer / heights * new Height(this.area.value()).get());
+                        }
+                    )
+                )
+            );
         }
-        return this.area;
+        return this.area.value();
     }
 
     @Override

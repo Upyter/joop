@@ -90,7 +90,7 @@
         <dependency>
             <groupId>com.github.Upyter</groupId>
             <artifactId>unit</artifactId>
-            <version>94669e1855</version>
+            <version>0c6bb3c855</version>
         </dependency>
         <!-- to compare swing drawing with expectation images -->
         <dependency>
@@ -98,6 +98,12 @@
             <artifactId>imagecomparison-swing</artifactId>
             <version>0.3.1</version>
             <scope>compile</scope>
+        </dependency>
+        <!-- functional programming -->
+        <dependency>
+            <groupId>io.vavr</groupId>
+            <artifactId>vavr</artifactId>
+            <version>1.0.0-alpha-2</version>
         </dependency>
     </dependencies>
 

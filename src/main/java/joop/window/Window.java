@@ -28,8 +28,8 @@ import unit.area.Adjustment;
 import unit.area.Area;
 import unit.area.AreaOf;
 import unit.size.AdjustableSize;
-import unit.tuple.NoAdjustment;
-import unit.tuple.TupleAdjustment;
+import unit.tuple.adjustment.NoAdjustment;
+import unit.tuple.adjustment.TupleAdjustment;
 
 /**
  * A class to create a window with the most used features. Use

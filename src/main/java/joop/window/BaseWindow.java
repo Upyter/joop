@@ -38,7 +38,7 @@ import unit.area.AreaOf;
 import unit.functional.Cached;
 import unit.functional.Lazy;
 import unit.tuple.Tuple;
-import unit.tuple.TupleAdjustment;
+import unit.tuple.adjustment.TupleAdjustment;
 
 /**
  * Represents a simple window. To apply some settings on this window,
@@ -66,47 +66,46 @@ public class BaseWindow implements Showable {
         this(
             new AreaOf(),
             (JFrame frame) -> {
-                    Area.applyOn(
-                        shape.adjustment(
-                            new Adjustment() {
-                                @Override
-                                public TupleAdjustment<Integer, Integer> posAdjustment() {
-                                    return new TupleAdjustment<>() {
-                                        @Override
-                                        public Integer adjustedFirst(final Integer integer) {
-                                            return integer;
-                                        }
+                Area.applyOn(
+                    shape.adjustment(
+                        new Adjustment() {
+                            @Override
+                            public TupleAdjustment<Integer, Integer> posAdjustment() {
+                                return new TupleAdjustment<>() {
 
-                                        @Override
-                                        public Integer adjustedSecond(final Integer integer) {
-                                            return integer;
-                                        }
-                                    };
-                                }
-
-                                @Override
-                                public TupleAdjustment<Integer, Integer> sizeAdjustment() {
-                                    return new TupleAdjustment<>() {
-                                        @Override
-                                        public Integer adjustedFirst(final Integer integer) {
-                                            return frame.getWidth();
-                                        }
-
-                                        @Override
-                                        public Integer adjustedSecond(final Integer integer) {
-                                            return frame.getHeight();
-                                        }
-                                    };
-                                }
+                                    @Override
+                                    public Integer adjustedFirst(final Integer integer) {
+                                        return integer;
+                                    }
+                                    @Override
+                                    public Integer adjustedSecond(final Integer integer) {
+                                        return integer;
+                                    }
+                                };
                             }
-                        ),
-                        (x, y, width, height) -> {
-                            frame.getContentPane().setPreferredSize(
-                                new Dimension(width, height)
-                            );
-                            frame.pack();
+
+                            @Override
+                            public TupleAdjustment<Integer, Integer> sizeAdjustment() {
+                                return new TupleAdjustment<>() {
+                                    @Override
+                                    public Integer adjustedFirst(final Integer integer) {
+                                        return frame.getContentPane().getWidth();
+                                    }
+                                    @Override
+                                    public Integer adjustedSecond(final Integer integer) {
+                                        return frame.getContentPane().getHeight();
+                                    }
+                                };
+                            }
                         }
+                    ),
+                    (x, y, width, height) -> {
+                        frame.getContentPane().setPreferredSize(
+                            new Dimension(width, height)
                         );
+                        frame.pack();
+                    }
+                    );
                 frame.setResizable(true);
                 frame.setLocationRelativeTo(null);
             },

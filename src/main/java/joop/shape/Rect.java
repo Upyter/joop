@@ -117,7 +117,6 @@ public class Rect implements Shape {
     @Override
     public final Area adjustment(final Adjustment adjustment) {
         this.area.adjustment(adjustment);
-        System.out.println("RECT ADJUSTMENT");
         return this.area;
     }
 
