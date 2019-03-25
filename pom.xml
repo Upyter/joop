@@ -90,7 +90,7 @@
         <dependency>
             <groupId>com.github.Upyter</groupId>
             <artifactId>unit</artifactId>
-            <version>c4ccc8b6c8</version>
+            <version>b9c9c0b16d</version>
         </dependency>
         <!-- to compare swing drawing with expectation images -->
         <dependency>
@@ -103,7 +103,7 @@
         <dependency>
             <groupId>io.vavr</groupId>
             <artifactId>vavr</artifactId>
-            <version>1.0.0-alpha-2</version>
+            <version>0.10.0</version>
         </dependency>
     </dependencies>
 

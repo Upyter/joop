@@ -21,9 +21,10 @@
 
 package joop.shape.layout;
 
+import io.vavr.collection.List;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.function.Supplier;
 import joop.event.mouse.Mouse;
 import joop.shape.Shape;
 import unit.area.Adjustment;
@@ -33,8 +34,9 @@ import unit.area.Covered;
 import unit.area.Sizeless;
 import unit.area.adjustment.NoAdjustment;
 import unit.area.adjustment.Short;
+import unit.area.supplier.CleanHeight;
 import unit.area.supplier.Height;
-import unit.area.supplier.HeightSum;
+import unit.area.supplier.UnavailableHeight;
 import unit.area.supplier.Width;
 import unit.functional.Cached;
 import unit.pos.SoftPos;
@@ -111,37 +113,31 @@ public class Column implements Shape {
 
     @Override
     public final Area adjustment(final Adjustment adjustment) {
-        final var areas = new ArrayList<Area>(this.shapes.size());
-        this.shapes.forEach(shape -> areas.add(shape.adjustment(new NoAdjustment())));
+        final var areas = this.shapes.map(
+            shape -> shape.adjustment(new NoAdjustment())
+        );
+        final Supplier<Integer> heights = new CleanHeight(areas);
+        final int unavailable = new UnavailableHeight(areas).get();
+        final Supplier<Integer> height = new Height(this.area);
+        final var sizeAdjustment = new unit.tuple.adjustment.Short<Integer, Integer>(
+            width -> new Width(this.area).get(),
+            integer -> integer / heights.get() * Math.max(0, height.get() - unavailable)
+        );
         this.area.adjustment(adjustment);
-        Area previous = new Sizeless(this.area);
-        for (Shape shape : shapes) {
-            final Area pre_area = previous;
-            previous = shape.adjustment(
+        this.shapes.foldLeft(
+            (Area) new Sizeless(this.area),
+            (previous, shape) -> shape.adjustment(
                 new Short(
                     new YAdjustment(
                         y -> Area.result(
-                            pre_area,
+                            previous,
                             (x1, y1, w1, h1) -> y + y1 + Math.max(0, h1)
                         )
                     ),
-                    new unit.tuple.adjustment.Short<>(
-                        width -> new Width(this.area).get(),
-                        integer -> {
-                            final double heights = new HeightSum(areas).get();
-                            int unavailableHeight = 0;
-                            for (Area a : areas) {
-                                if (a.result((pos, size) -> size.cleanResult((w, h) -> h == 0))) {
-                                    unavailableHeight += a.result((pos, size) -> size.result((w, h) -> h));
-                                }
-                            }
-                            unavailableHeight = Math.max(0, unavailableHeight);
-                            return (int) (integer / heights * (new Height(this.area).get() - unavailableHeight));
-                        }
-                    )
+                    sizeAdjustment
                 )
-            );
-        }
+            )
+        );
         return this.area;
     }
 
