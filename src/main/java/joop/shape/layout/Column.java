@@ -37,9 +37,9 @@ import unit.area.supplier.Height;
 import unit.area.supplier.HeightSum;
 import unit.area.supplier.Width;
 import unit.functional.Cached;
-import unit.functional.Lazy;
 import unit.pos.SoftPos;
 import unit.pos.YAdjustment;
+import unit.size.AdjustableSize;
 import unit.size.SoftSize;
 
 /**
@@ -53,7 +53,7 @@ public class Column implements Shape {
      */
     private final List<Shape> shapes;
 
-    private Lazy<Area> area;
+    private Area area;
 
     private boolean adjusted = false;
 
@@ -70,20 +70,38 @@ public class Column implements Shape {
      * @param shapes The shapes to adjust.
      */
     public Column(final List<Shape> shapes) {
-        this.shapes = shapes;
-        this.area = new Cached<>(
-            () -> {
-                final var areas = new ArrayList<Area>(this.shapes.size());
-                this.shapes.forEach(shape -> areas.add(shape.adjustment(new NoAdjustment())));
-                return Area.result(
-                    new Covered(areas),
-                    (x, y, w, h) -> new AreaOf(
-                        new SoftPos(x, y),
-                        new SoftSize(w, h)
-                    )
-                );
-            }
+        this(
+            new Cached<>(
+                () -> {
+                    final var areas = new ArrayList<Area>(shapes.size());
+                    shapes.forEach(shape -> areas.add(shape.adjustment(new NoAdjustment())));
+                    return Area.result(
+                        new Covered(areas),
+                        (x, y, w, h) -> new SoftSize(w, h)
+                    );
+                }
+            ).value(),
+            shapes
         );
+    }
+
+    public Column(final AdjustableSize size, final Shape... shapes) {
+        this(
+            new AreaOf(new SoftPos(), size),
+            List.of(shapes)
+        );
+    }
+
+    public Column(final AdjustableSize size, final List<Shape> shapes) {
+        this(
+            new AreaOf(new SoftPos(), size),
+            shapes
+        );
+    }
+
+    public Column(final Area area, final List<Shape> shapes) {
+        this.area = area;
+        this.shapes = shapes;
     }
 
     @Override
@@ -95,8 +113,8 @@ public class Column implements Shape {
     public final Area adjustment(final Adjustment adjustment) {
         final var areas = new ArrayList<Area>(this.shapes.size());
         this.shapes.forEach(shape -> areas.add(shape.adjustment(new NoAdjustment())));
-        this.area.value().adjustment(adjustment);
-        Area previous = new Sizeless(this.area.value());
+        this.area.adjustment(adjustment);
+        Area previous = new Sizeless(this.area);
         for (Shape shape : shapes) {
             final Area pre_area = previous;
             previous = shape.adjustment(
@@ -104,20 +122,27 @@ public class Column implements Shape {
                     new YAdjustment(
                         y -> Area.result(
                             pre_area,
-                            (x1, y1, w1, h1) -> y + y1 + h1
+                            (x1, y1, w1, h1) -> y + y1 + Math.max(0, h1)
                         )
                     ),
                     new unit.tuple.adjustment.Short<>(
-                        width -> new Width(this.area.value()).get(),
+                        width -> new Width(this.area).get(),
                         integer -> {
                             final double heights = new HeightSum(areas).get();
-                            return (int) (integer / heights * new Height(this.area.value()).get());
+                            int unavailableHeight = 0;
+                            for (Area a : areas) {
+                                if (a.result((pos, size) -> size.cleanResult((w, h) -> h == 0))) {
+                                    unavailableHeight += a.result((pos, size) -> size.result((w, h) -> h));
+                                }
+                            }
+                            unavailableHeight = Math.max(0, unavailableHeight);
+                            return (int) (integer / heights * (new Height(this.area).get() - unavailableHeight));
                         }
                     )
                 )
             );
         }
-        return this.area.value();
+        return this.area;
     }
 
     @Override

@@ -32,13 +32,12 @@ import javax.swing.WindowConstants;
 import joop.event.mouse.DelegationMouse;
 import joop.shape.EmptyShape;
 import joop.shape.Shape;
-import unit.area.Adjustment;
 import unit.area.Area;
-import unit.area.AreaOf;
 import unit.functional.Cached;
 import unit.functional.Lazy;
 import unit.tuple.Tuple;
-import unit.tuple.adjustment.TupleAdjustment;
+import unit.tuple.adjustment.NoAdjustment;
+import unit.tuple.adjustment.Short;
 
 /**
  * Represents a simple window. To apply some settings on this window,
@@ -64,48 +63,24 @@ public class BaseWindow implements Showable {
      */
     public BaseWindow(final Shape shape) {
         this(
-            new AreaOf(),
+            shape.adjustment(new unit.area.adjustment.NoAdjustment()),
             (JFrame frame) -> {
                 Area.applyOn(
                     shape.adjustment(
-                        new Adjustment() {
-                            @Override
-                            public TupleAdjustment<Integer, Integer> posAdjustment() {
-                                return new TupleAdjustment<>() {
-
-                                    @Override
-                                    public Integer adjustedFirst(final Integer integer) {
-                                        return integer;
-                                    }
-                                    @Override
-                                    public Integer adjustedSecond(final Integer integer) {
-                                        return integer;
-                                    }
-                                };
-                            }
-
-                            @Override
-                            public TupleAdjustment<Integer, Integer> sizeAdjustment() {
-                                return new TupleAdjustment<>() {
-                                    @Override
-                                    public Integer adjustedFirst(final Integer integer) {
-                                        return frame.getContentPane().getWidth();
-                                    }
-                                    @Override
-                                    public Integer adjustedSecond(final Integer integer) {
-                                        return frame.getContentPane().getHeight();
-                                    }
-                                };
-                            }
-                        }
+                        new unit.area.adjustment.Short(
+                            new NoAdjustment<>(),
+                            new Short<>(
+                                width -> frame.getContentPane().getWidth(),
+                                height -> frame.getContentPane().getHeight()
+                            )
+                        )
                     ),
                     (x, y, width, height) -> {
                         frame.getContentPane().setPreferredSize(
                             new Dimension(width, height)
                         );
                         frame.pack();
-                    }
-                    );
+                    });
                 frame.setResizable(true);
                 frame.setLocationRelativeTo(null);
             },
