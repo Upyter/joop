@@ -31,6 +31,8 @@ import unit.area.OverlapArea;
 import unit.area.OverlapAreaOf;
 import unit.color.Black;
 import unit.color.Color;
+import unit.pos.SoftPos;
+import unit.size.SoftSize;
 
 /**
  * A filled rectangle.
@@ -53,6 +55,25 @@ public class Rect implements Shape {
      * The event of the rect.
      */
     private final Event event;
+
+    /**
+     * Ctor. Creates a black rect with x = 0, y = 0, width = 0 and height = 0.
+     * This is useful in layouts because they may handle the position
+     * and size.
+     */
+    public Rect() {
+        this(0, 0, 0, 0);
+    }
+
+    /**
+     * Ctor. Creates a rect with x = 0, y = 0, width = 0 and height = 0.
+     * This is useful in layouts because they may handle the position
+     * and size.
+     * @param color The color of the rect.
+     */
+    public Rect(final Color color) {
+        this(new AreaOf(new SoftPos(), new SoftSize()), color);
+    }
 
     /**
      * Ctor. Creates a black rect.
