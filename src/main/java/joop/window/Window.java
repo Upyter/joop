@@ -25,8 +25,8 @@ import java.awt.Dimension;
 import java.util.function.Consumer;
 import javax.swing.JFrame;
 import joop.shape.Shape;
-import joop.window.feature.Centered;
 import joop.window.feature.Features;
+import joop.window.feature.FoundArea;
 import unit.area.Area;
 import unit.area.AreaOf;
 import unit.area.adjustment.NoAdjustment;
@@ -98,7 +98,7 @@ public class Window extends BaseWindow {
             title,
             new AreaOf(),
             shape,
-            new Centered()
+            new FoundArea(shape)
         );
     }
 

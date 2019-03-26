@@ -21,19 +21,44 @@
 
 package joop.window.feature;
 
+import java.awt.Dimension;
 import java.util.function.Consumer;
 import javax.swing.JFrame;
+import joop.shape.Shape;
+import unit.area.Adjustment;
+import unit.area.Area;
+import unit.area.adjustment.NoAdjustment;
 
 /**
- * To position a window at the centre of the window. Note that this feature
- * should must be used after the window got the correct size because it uses
- * the size of the window to center it.
- * <p>This class is immutable and thread-safe.</p>
- * @since 0.55
+ * Used to give a window the size of the given shape.
+ * <p>This class is mutable and not thread-safe because
+ * {@link Shape#adjustment(Adjustment)} is used.</p>
+ * @since 0.56
  */
-public class Centered implements Consumer<JFrame> {
+public class ShapeSized implements Consumer<JFrame> {
+    /**
+     * The shape to use the size from.
+     */
+    private final Shape shape;
+
+    /**
+     * Ctor.
+     * @param shape The shape to use the size from.
+     */
+    public ShapeSized(final Shape shape) {
+        this.shape = shape;
+    }
+
     @Override
     public final void accept(final JFrame frame) {
-        frame.setLocationRelativeTo(null);
+        Area.applyOn(
+            this.shape.adjustment(NoAdjustment.cached()),
+            (x, y, width, height) -> {
+                frame.getContentPane().setPreferredSize(
+                    new Dimension(width, height)
+                );
+                frame.pack();
+            }
+        );
     }
 }
