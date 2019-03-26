@@ -28,12 +28,14 @@ import joop.window.feature.Centered;
 import joop.window.feature.Features;
 import joop.window.feature.FoundArea;
 import joop.window.feature.NoFeature;
+import joop.window.feature.Resizability;
 import joop.window.feature.ShapeSized;
 import unit.area.Area;
 import unit.area.AreaOf;
 import unit.area.adjustment.Short;
 import unit.pos.AdjustablePos;
 import unit.size.AdjustableSize;
+import unit.size.SoftSize;
 import unit.tuple.adjustment.NoAdjustment;
 
 /**
@@ -115,7 +117,7 @@ public class ScaleWindow extends Window {
     ) {
         this(
             title,
-            new AreaOf(pos),
+            new AreaOf(pos, new SoftSize()),
             shape,
             new ShapeSized(shape)
         );
@@ -164,7 +166,7 @@ public class ScaleWindow extends Window {
     public ScaleWindow(final String title, final Shape shape) {
         this(
             title,
-            new AreaOf(),
+            new AreaOf(new SoftSize()),
             shape,
             new FoundArea(shape)
         );
@@ -207,7 +209,8 @@ public class ScaleWindow extends Window {
                             height -> frame.getHeight()
                         )
                     )
-                )
+                ),
+                new Resizability(area)
             )
         );
     }
