@@ -121,12 +121,9 @@ public class Column implements Shape {
             width -> new Width(this.area).get(),
             integer -> {
                 if (heights.get() == 0) {
-                    int empties = 0;
-                    for (final Area a : areas) {
-                        if (a.result((pos, size) -> !size.isFix())) {
-                            empties++;
-                        }
-                    }
+                    final int empties = areas.count(
+                        a -> a.result((pos, size) -> !size.isFix())
+                    );
                     return (height.get() - unavailable) / empties;
                 } else {
                     return (int) (integer / (double) heights.get() * Math.max(0, height.get() - unavailable));
