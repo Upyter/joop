@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.github.Upyter:unit:eff25c1bef">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/Upyter/unit/eff25c1bef/unit-eff25c1bef.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/Upyter/unit/eff25c1bef/unit-eff25c1bef-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/Upyter/unit/eff25c1bef/unit-eff25c1bef-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

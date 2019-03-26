@@ -57,8 +57,6 @@ public class Column implements Shape {
 
     private Area area;
 
-    private boolean adjusted = false;
-
     /**
      * Ctor.
      * @param shapes The shapes to adjust.
@@ -121,7 +119,19 @@ public class Column implements Shape {
         final Supplier<Integer> height = new Height(this.area);
         final var sizeAdjustment = new unit.tuple.adjustment.Short<Integer, Integer>(
             width -> new Width(this.area).get(),
-            integer -> integer / heights.get() * Math.max(0, height.get() - unavailable)
+            integer -> {
+                if (heights.get() == 0) {
+                    int empties = 0;
+                    for (final Area a : areas) {
+                        if (a.result((pos, size) -> !size.isFix())) {
+                            empties++;
+                        }
+                    }
+                    return (height.get() - unavailable) / empties;
+                } else {
+                    return (int) (integer / (double) heights.get() * Math.max(0, height.get() - unavailable));
+                }
+            }
         );
         this.area.adjustment(adjustment);
         this.shapes.foldLeft(
