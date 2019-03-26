@@ -22,14 +22,15 @@
 package joop.window;
 
 import java.awt.Dimension;
+import java.util.function.Consumer;
 import javax.swing.JFrame;
 import joop.shape.Shape;
-import unit.area.Adjustment;
+import joop.window.feature.Centered;
+import joop.window.feature.Features;
 import unit.area.Area;
 import unit.area.AreaOf;
+import unit.area.adjustment.NoAdjustment;
 import unit.size.AdjustableSize;
-import unit.tuple.adjustment.NoAdjustment;
-import unit.tuple.adjustment.TupleAdjustment;
 
 /**
  * A class to create a window with the most used features. Use
@@ -51,19 +52,7 @@ public class Window extends BaseWindow {
             new AreaOf(),
             (JFrame frame) -> {
                 Area.applyOn(
-                    shape.adjustment(
-                        new Adjustment() {
-                            @Override
-                            public TupleAdjustment<Integer, Integer> posAdjustment() {
-                                return new NoAdjustment<>();
-                            }
-
-                            @Override
-                            public TupleAdjustment<Integer, Integer> sizeAdjustment() {
-                                return new NoAdjustment<>();
-                            }
-                        }
-                    ),
+                    shape.adjustment(NoAdjustment.cached()),
                     (x, y, width, height) -> {
                         frame.getContentPane().setPreferredSize(
                             new Dimension(width, height)
@@ -102,10 +91,51 @@ public class Window extends BaseWindow {
     /**
      * Ctor.
      * @param title The title of the window.
+     * @param shape The shape to put on the window.
+     */
+    public Window(final String title, final Shape shape) {
+        this(
+            title,
+            new AreaOf(),
+            shape,
+            new Centered()
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param title The title of the window.
      * @param area The area of the window.
      * @param shape The shape to put on the window.
      */
     public Window(final String title, final Area area, final Shape shape) {
-        super(area, (JFrame frame) -> frame.setTitle(title), shape);
+        this(
+            title,
+            area,
+            shape,
+            frame -> {}
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param title The title of the window.
+     * @param area The area of the window.
+     * @param shape The shape to put on the window.
+     */
+    public Window(
+        final String title,
+        final Area area,
+        final Shape shape,
+        final Consumer<JFrame> feature
+    ) {
+        super(
+            area,
+            new Features(
+                (JFrame frame) -> frame.setTitle(title),
+                feature
+            ),
+            shape
+        );
     }
 }

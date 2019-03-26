@@ -21,45 +21,17 @@
 
 package joop.window.feature;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.function.Consumer;
 import javax.swing.JFrame;
 
 /**
- * A collection of features. This can be used for a class that takes only one
- * feature. This class has the interface of a single feature, but spreads the
- * calls to all the features contained by it.
+ * To position a window at the centre of the window.
  * <p>This class is immutable and thread-safe.</p>
- * @since 0.44
+ * @since 0.55
  */
-public class Features implements Consumer<JFrame> {
-    /**
-     * The feature collection.
-     */
-    private final Collection<Consumer<JFrame>> collection;
-
-    /**
-     * Ctor.
-     * @param collection The collection of features.
-     */
-    @SafeVarargs
-    public Features(final Consumer<JFrame>... collection) {
-        this(List.of(collection));
-    }
-
-    /**
-     * Ctor.
-     * @param collection The collection of features.
-     */
-    public Features(final Collection<Consumer<JFrame>> collection) {
-        this.collection = collection;
-    }
-
+public class Centered implements Consumer<JFrame> {
     @Override
     public final void accept(final JFrame frame) {
-        this.collection.forEach(
-            feature -> feature.accept(frame)
-        );
+        frame.setLocationRelativeTo(null);
     }
 }
