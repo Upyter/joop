@@ -28,11 +28,13 @@ import joop.window.feature.Centered;
 import joop.window.feature.Features;
 import joop.window.feature.FoundArea;
 import joop.window.feature.NoFeature;
+import joop.window.feature.Resizability;
 import joop.window.feature.ShapeSized;
 import unit.area.Area;
 import unit.area.AreaOf;
 import unit.pos.AdjustablePos;
 import unit.size.AdjustableSize;
+import unit.size.SoftSize;
 
 /**
  * A class to create a window with the most used features. Use
@@ -120,7 +122,7 @@ public class Window extends BaseWindow {
     ) {
         this(
             title,
-            new AreaOf(pos),
+            new AreaOf(pos, new SoftSize()),
             shape,
             new ShapeSized(shape)
         );
@@ -180,7 +182,7 @@ public class Window extends BaseWindow {
     public Window(final String title, final Shape shape) {
         this(
             title,
-            new AreaOf(),
+            new AreaOf(new SoftSize()),
             shape,
             new FoundArea(shape)
         );
@@ -217,6 +219,7 @@ public class Window extends BaseWindow {
             area,
             new Features(
                 (JFrame frame) -> frame.setTitle(title),
+                new Resizability(area),
                 feature
             ),
             shape
