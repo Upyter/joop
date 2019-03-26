@@ -27,6 +27,7 @@ import javax.swing.JFrame;
 import joop.shape.Shape;
 import joop.window.feature.Features;
 import joop.window.feature.FoundArea;
+import joop.window.feature.NoFeature;
 import unit.area.Area;
 import unit.area.AreaOf;
 import unit.area.adjustment.NoAdjustment;
@@ -113,7 +114,7 @@ public class Window extends BaseWindow {
             title,
             area,
             shape,
-            frame -> {}
+            NoFeature.cached()
         );
     }
 
