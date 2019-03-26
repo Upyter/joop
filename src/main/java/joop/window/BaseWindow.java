@@ -33,11 +33,10 @@ import joop.event.mouse.DelegationMouse;
 import joop.shape.EmptyShape;
 import joop.shape.Shape;
 import unit.area.Area;
+import unit.area.adjustment.NoAdjustment;
 import unit.functional.Cached;
 import unit.functional.Lazy;
 import unit.tuple.Tuple;
-import unit.tuple.adjustment.NoAdjustment;
-import unit.tuple.adjustment.Short;
 
 /**
  * Represents a simple window. To apply some settings on this window,
@@ -56,37 +55,6 @@ public class BaseWindow implements Showable {
      * JFrame will probably be lazily constructed.
      */
     private final Lazy<JFrame> frame;
-
-    /**
-     * Ctor.
-     * @param area The area of the window.
-     */
-    public BaseWindow(final Shape shape) {
-        this(
-            shape.adjustment(new unit.area.adjustment.NoAdjustment()),
-            (JFrame frame) -> {
-                Area.applyOn(
-                    shape.adjustment(
-                        new unit.area.adjustment.Short(
-                            new NoAdjustment<>(),
-                            new Short<>(
-                                width -> frame.getContentPane().getWidth(),
-                                height -> frame.getContentPane().getHeight()
-                            )
-                        )
-                    ),
-                    (x, y, width, height) -> {
-                        frame.getContentPane().setPreferredSize(
-                            new Dimension(width, height)
-                        );
-                        frame.pack();
-                    });
-                frame.setResizable(true);
-                frame.setLocationRelativeTo(null);
-            },
-            shape
-        );
-    }
 
     /**
      * Ctor.
@@ -127,6 +95,7 @@ public class BaseWindow implements Showable {
             new Cached<>(
                 () -> {
                     final var result = new JFrame();
+                    shape.adjustment(NoAdjustment.cached());
                     result.setDefaultCloseOperation(
                         WindowConstants.EXIT_ON_CLOSE
                     );

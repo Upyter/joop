@@ -21,16 +21,17 @@
 
 package joop.window;
 
-import java.awt.Dimension;
 import java.util.function.Consumer;
 import javax.swing.JFrame;
 import joop.shape.Shape;
+import joop.window.feature.Centered;
 import joop.window.feature.Features;
 import joop.window.feature.FoundArea;
 import joop.window.feature.NoFeature;
+import joop.window.feature.ShapeSized;
 import unit.area.Area;
 import unit.area.AreaOf;
-import unit.area.adjustment.NoAdjustment;
+import unit.pos.AdjustablePos;
 import unit.size.AdjustableSize;
 
 /**
@@ -42,27 +43,35 @@ import unit.size.AdjustableSize;
  */
 public class Window extends BaseWindow {
     /**
-     * Ctor. The window will be centered and the size of the window will be
-     * equal to the first size of the given shape. This means, if the size
-     * changes, it doesn't affect the window. Only the first state of the shape
-     * will be used.
+     * Ctor. The window will get the size of the shape.
+     * @param pos The position of the window.
      * @param shape The shape to put on the window.
      */
-    public Window(final Shape shape) {
-        super(
-            new AreaOf(),
-            (JFrame frame) -> {
-                Area.applyOn(
-                    shape.adjustment(NoAdjustment.cached()),
-                    (x, y, width, height) -> {
-                        frame.getContentPane().setPreferredSize(
-                            new Dimension(width, height)
-                        );
-                        frame.pack();
-                    }
-                );
-                frame.setLocationRelativeTo(null);
-            },
+    public Window(
+        final AdjustablePos pos,
+        final Shape shape
+    ) {
+        this(
+            "",
+            pos,
+            shape
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param pos The position of the window.
+     * @param size The size of the window.
+     * @param shape The shape to put on the window.
+     */
+    public Window(
+        final AdjustablePos pos,
+        final AdjustableSize size,
+        final Shape shape
+    ) {
+        this(
+            "",
+            new AreaOf(pos, size),
             shape
         );
     }
@@ -73,9 +82,66 @@ public class Window extends BaseWindow {
      * @param shape The shape to put on the window.
      */
     public Window(final AdjustableSize size, final Shape shape) {
-        super(
+        this(
+            "",
             new AreaOf(size),
-            (JFrame frame) -> frame.setLocationRelativeTo(null),
+            shape,
+            new Centered()
+        );
+    }
+
+    /**
+     * Ctor. The window will be centered.
+     * @param title The title of the window.
+     * @param size The size of the window.
+     * @param shape The shape to put on the window.
+     */
+    public Window(
+        final String title, final AdjustableSize size, final Shape shape
+    ) {
+        this(
+            title,
+            new AreaOf(size),
+            shape,
+            new Centered()
+        );
+    }
+
+    /**
+     * Ctor. The window will get the size of the shape.
+     * @param title The title of the window.
+     * @param pos The position of the window.
+     * @param shape The shape to put on the window.
+     */
+    public Window(
+        final String title,
+        final AdjustablePos pos,
+        final Shape shape
+    ) {
+        this(
+            title,
+            new AreaOf(pos),
+            shape,
+            new ShapeSized(shape)
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param title The title of the window.
+     * @param pos The position of the window.
+     * @param size The size of the window.
+     * @param shape The shape to put on the window.
+     */
+    public Window(
+        final String title,
+        final AdjustablePos pos,
+        final AdjustableSize size,
+        final Shape shape
+    ) {
+        this(
+            title,
+            new AreaOf(pos, size),
             shape
         );
     }
@@ -90,7 +156,24 @@ public class Window extends BaseWindow {
     }
 
     /**
-     * Ctor.
+     * Ctor. The window will be centered and the size of the window will be
+     * equal to the first size of the given shape. This means, if the size
+     * changes, it doesn't affect the window. Only the first state of the shape
+     * will be used.
+     * @param shape The shape to put on the window.
+     */
+    public Window(final Shape shape) {
+        this(
+            "",
+            shape
+        );
+    }
+
+    /**
+     * Ctor. The window will be centered and the size of the window will be
+     * equal to the first size of the given shape. This means, if the size
+     * changes, it doesn't affect the window. Only the first state of the shape
+     * will be used.
      * @param title The title of the window.
      * @param shape The shape to put on the window.
      */
