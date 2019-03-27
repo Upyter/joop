@@ -21,12 +21,10 @@
 
 package joop.shape;
 
+import java.awt.Canvas;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.font.FontRenderContext;
-import java.awt.font.GlyphVector;
+import java.util.function.BiFunction;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 import joop.event.mouse.Mouse;
@@ -35,9 +33,12 @@ import unit.area.Area;
 import unit.area.AreaOf;
 import unit.color.Black;
 import unit.color.Color;
+import unit.functional.Cached;
+import unit.functional.Lazy;
 import unit.pos.AdjustablePos;
-import unit.pos.FixPos;
-import unit.tuple.Tuple;
+import unit.pos.SoftPos;
+import unit.size.FixSize;
+import unit.tuple.adjustment.TupleAdjustment;
 
 /**
  * A text.
@@ -52,19 +53,14 @@ public class Text implements Shape {
     private final Supplier<String> content;
 
     /**
-     * The position of the text.
+     * The area of the text.
      */
-    private final AdjustablePos pos;
+    private final Lazy<Area> area;
 
     /**
      * The color of the rect.
      */
     private final Color color;
-
-    /**
-     * The area for adjustment.
-     */
-    private final Area adjusted;
 
     /**
      * Ctor.
@@ -77,10 +73,18 @@ public class Text implements Shape {
 
     /**
      * Ctor. Uses (0|0) as its position.
-     * @param content The characters of the text.
+     * @param content The source of the text.
      */
     public Text(final IntSupplier content) {
-        this(content, new FixPos());
+        this(content, new SoftPos());
+    }
+
+    /**
+     * Ctor. Uses (0|0) as its position.
+     * @param content The characters of the text.
+     */
+    public Text(final String content) {
+        this(() -> content, new SoftPos());
     }
 
     /**
@@ -122,51 +126,90 @@ public class Text implements Shape {
      * @param color The color of the rect.
      */
     public Text(
-        final Supplier<String> content, final AdjustablePos pos, final Color color
+        final Supplier<String> content,
+        final AdjustablePos pos,
+        final Color color
+    ) {
+        this(
+            content,
+            new Cached<>(
+                () -> {
+                    Font font = new Font("Times new Roman",Font.PLAIN,25);
+                    final var bounds = pos.result(
+                        (x, y) -> font.createGlyphVector(
+                            new Canvas()
+                                .getFontMetrics(font)
+                                .getFontRenderContext(),
+                            content.get()
+                        ).getPixelBounds(null, x, y)
+                    );
+                    return new AreaOf(
+                        new LoggingPos(pos),
+                        new FixSize(bounds.width, bounds.height)
+                    );
+                }
+            ),
+            color
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param content The characters of the text.
+     * @param area The area of the text.
+     * @param color The color of the rect.
+     */
+    private Text(
+        final Supplier<String> content,
+        final Lazy<Area> area,
+        final Color color
     ) {
         this.content = content;
-        this.pos = pos;
+        this.area = area;
         this.color = color;
-        this.adjusted = new AreaOf(this.pos);
     }
 
     @Override
-    public final void draw(
-        final Graphics graphics
-    ) {
+    public final void draw(final Graphics graphics) {
         graphics.setColor(this.color.result(java.awt.Color::new));
         graphics.setFont(new Font("Times new Roman", Font.PLAIN, 25));
-        final String current = this.content.get();
-        Tuple.applyOn(
-            this.pos,
-            (x, y) -> {
-                final var height = graphics.getFont().createGlyphVector(
-                    ((Graphics2D) graphics).getFontRenderContext(), current)
-                    .getPixelBounds(null, x, y).height;
-                graphics.drawString(
-                    current,
-                    x,
-                    y + height
-                );
+        Area.applyOn(
+            this.area.value(),
+            (x, y, w, h) -> {
+                graphics.drawString(this.content.get(), x, y + h);
+                graphics.drawRect(x, y, w, h);
             }
         );
     }
 
-    private Rectangle getStringBounds(Graphics2D g2, String str,
-        float x, float y)
-    {
-        FontRenderContext frc = g2.getFontRenderContext();
-        GlyphVector gv = g2.getFont().createGlyphVector(frc, str);
-        return gv.getPixelBounds(null, x, y);
-    }
-
     @Override
     public final Area adjustment(final Adjustment adjustment) {
-        throw new UnsupportedOperationException("To be implemented");
+        this.area.value().adjustment(adjustment);
+        return this.area.value();
     }
 
     @Override
     public final void registerFor(final Mouse mouse) {
         // currently no implementation
+    }
+
+    private static class LoggingPos implements AdjustablePos {
+        private final AdjustablePos pos;
+
+        public LoggingPos(final AdjustablePos pos) {
+            this.pos = pos;
+        }
+
+
+        @Override
+        public final <R> R result(final BiFunction<Integer, Integer, R> biFunction) {
+            return this.pos.result(biFunction);
+        }
+
+        @Override
+        public final void adjustment(final TupleAdjustment<Integer, Integer> adjustment) {
+            System.out.println(this.pos);
+            this.pos.adjustment(adjustment);
+        }
     }
 }

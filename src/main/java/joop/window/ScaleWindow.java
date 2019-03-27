@@ -205,8 +205,8 @@ public class ScaleWindow extends Window {
                     new Short(
                         NoAdjustment.cached(),
                         new unit.tuple.adjustment.Short<>(
-                            width -> frame.getWidth(),
-                            height -> frame.getHeight()
+                            width -> frame.getContentPane().getWidth(),
+                            height -> frame.getContentPane().getHeight()
                         )
                     )
                 ),

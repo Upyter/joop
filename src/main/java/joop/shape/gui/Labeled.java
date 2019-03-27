@@ -48,8 +48,6 @@ public class Labeled implements Shape {
      */
     private final Shape text;
 
-    private final Area area;
-
     /**
      * Ctor.
      * @param text The text to be add.
@@ -63,8 +61,7 @@ public class Labeled implements Shape {
     ) {
         this(
             pen.shape(area, ignored -> (x, y) -> { }),
-            area.result((pos, size) -> new Text(text, new SoftPos(pos))),
-            area
+            area.result((pos, size) -> new Text(text, new SoftPos(pos)))
         );
     }
 
@@ -83,8 +80,7 @@ public class Labeled implements Shape {
     ) {
         this(
             pen.shape(area, ignored -> event),
-            area.result((pos, size) -> new Text(text, new SoftPos(pos))),
-            area
+            area.result((pos, size) -> new Text(text, new SoftPos(pos)))
         );
     }
 
@@ -93,10 +89,9 @@ public class Labeled implements Shape {
      * @param shape The shape to be labeled.
      * @param text The text to be add on the shape.
      */
-    private Labeled(final Shape shape, final Shape text, final Area area) {
+    private Labeled(final Shape shape, final Shape text) {
         this.shape = shape;
         this.text = text;
-        this.area = area;
     }
 
     @Override
