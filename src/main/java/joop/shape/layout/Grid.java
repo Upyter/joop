@@ -22,47 +22,88 @@
 package joop.shape.layout;
 
 import io.vavr.collection.List;
-import java.awt.Graphics;
-import joop.event.mouse.Mouse;
 import joop.shape.Shape;
-import unit.area.Adjustment;
 import unit.area.Area;
-import unit.area.AreaOf;
+import unit.size.AdjustableSize;
 
 /**
  * A grid of shapes.
  * <p>This class is mutable and thread-safe due to adjustments.</p>
  * @since 0.62
  */
-public class Grid implements Shape {
-    private final Area area;
-    private final List<List<Shape>> shapes;
+public class Grid extends Column {
+    /**
+     * Ctor.
+     * @param size The size of the grid.
+     * @param shapes The shapes for the grid. The array represents the
+     *  columns and the inner the rows of the grid.
+     */
+    public Grid(final AdjustableSize size, final List<Shape>... shapes) {
+        this(size, List.of(shapes));
+    }
 
+    /**
+     * Ctor.
+     * @param size The size of the grid.
+     * @param shapes The shapes for the grid. The outer list represents the
+     *  columns and the inner the rows of the grid.
+     */
+    public Grid(final AdjustableSize size, final List<List<Shape>> shapes) {
+        super(size, shapes.map(Row::new));
+    }
+
+    /**
+     * Ctor.
+     * @param shapes The shapes for the grid. The array represents the
+     *  columns and the inner the rows of the grid.
+     */
+    public Grid(final List<Shape>... shapes) {
+        this(List.of(shapes));
+    }
+
+    /**
+     * Ctor.
+     * @param shapes The shapes for the grid. The outer list represents the
+     *  columns and the inner the rows of the grid.
+     */
+    public Grid(final List<List<Shape>> shapes) {
+        super(shapes.map(Row::new));
+    }
+
+    /**
+     * Ctor.
+     * @param area The area of the grid.
+     * @param shapes The shapes for the grid. The outer list represents the
+     *  columns and the inner the rows of the grid.
+     */
+    public Grid(
+        final int rows,
+        final Area area,
+        final Shape... shapes
+    ) {
+        this(
+            area,
+            List.of(shapes).grouped(shapes.length / rows).toList()
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param area The area of the grid.
+     * @param shapes The shapes for the grid. The array represents the
+     *  columns and the inner the rows of the grid.
+     */
+    public Grid(final Area area, final List<Shape>... shapes) {
+        this(area, List.of(shapes));
+    }
+
+    /**
+     * Ctor.
+     * @param area The area of the grid.
+     * @param shapes The shapes for the grid. The outer list represents the
+     *  columns and the inner the rows of the grid.
+     */
     public Grid(final Area area, final List<List<Shape>> shapes) {
-        this.area = area;
-        this.shapes = shapes;
-    }
-
-    @Override
-    public final void draw(final Graphics graphics) {
-        this.shapes.forEach(
-            list -> list.forEach(
-                shape -> shape.draw(graphics)
-            )
-        );
-    }
-
-    @Override
-    public final void registerFor(final Mouse mouse) {
-        this.shapes.forEach(
-            list -> list.forEach(
-                shape -> shape.registerFor(mouse)
-            )
-        );
-    }
-
-    @Override
-    public final Area adjustment(final Adjustment adjustment) {
-        return new AreaOf();
+        super(area, shapes.map(Row::new));
     }
 }

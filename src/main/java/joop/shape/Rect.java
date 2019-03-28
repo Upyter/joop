@@ -32,6 +32,7 @@ import unit.area.OverlapAreaOf;
 import unit.color.Black;
 import unit.color.Color;
 import unit.pos.SoftPos;
+import unit.size.AdjustableSize;
 import unit.size.SoftSize;
 
 /**
@@ -88,6 +89,14 @@ public class Rect implements Shape {
         final int x, final int y, final int width, final int height
     ) {
         this(new AreaOf(x, y, width, height), new Black());
+    }
+
+    /**
+     * Ctor. The position will be 0|0 (soft).
+     * @param size The size of the rect.
+     */
+    public Rect(final AdjustableSize size, final Color color) {
+        this(new AreaOf(new SoftPos(), size), color);
     }
 
     /**

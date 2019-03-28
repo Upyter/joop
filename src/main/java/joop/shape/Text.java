@@ -175,10 +175,7 @@ public class Text implements Shape {
         graphics.setFont(new Font("Times new Roman", Font.PLAIN, 25));
         Area.applyOn(
             this.area.value(),
-            (x, y, w, h) -> {
-                graphics.drawString(this.content.get(), x, y + h);
-                graphics.drawRect(x, y, w, h);
-            }
+            (x, y, w, h) -> graphics.drawString(this.content.get(), x, y + h)
         );
     }
 
