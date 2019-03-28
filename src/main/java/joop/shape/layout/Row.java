@@ -40,7 +40,6 @@ import unit.area.supplier.UnavailableWidth;
 import unit.area.supplier.Width;
 import unit.functional.Cached;
 import unit.pos.SoftPos;
-import unit.pos.XAdjustment;
 import unit.size.AdjustableSize;
 import unit.size.SoftSize;
 
@@ -135,11 +134,12 @@ public class Row implements Shape {
             (Area) new Sizeless(this.area),
             (previous, shape) -> shape.adjustment(
                 new Short(
-                    new XAdjustment(
+                    new unit.tuple.adjustment.Short<>(
                         x -> Area.result(
                             previous,
                             (x1, y1, w1, h1) -> x + x1 + Math.max(0, w1)
-                        )
+                        ),
+                        y -> adjustment.posAdjustment().adjustedSecond(y)
                     ),
                     sizeAdjustment
                 )

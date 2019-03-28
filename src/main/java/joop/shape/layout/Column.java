@@ -40,7 +40,6 @@ import unit.area.supplier.UnavailableHeight;
 import unit.area.supplier.Width;
 import unit.functional.Cached;
 import unit.pos.SoftPos;
-import unit.pos.YAdjustment;
 import unit.size.AdjustableSize;
 import unit.size.SoftSize;
 
@@ -135,7 +134,8 @@ public class Column implements Shape {
             (Area) new Sizeless(this.area),
             (previous, shape) -> shape.adjustment(
                 new Short(
-                    new YAdjustment(
+                    new unit.tuple.adjustment.Short<>(
+                        x -> adjustment.posAdjustment().adjustedFirst(x),
                         y -> Area.result(
                             previous,
                             (x1, y1, w1, h1) -> y + y1 + Math.max(0, h1)
