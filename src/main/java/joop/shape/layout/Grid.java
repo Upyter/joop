@@ -57,6 +57,7 @@ public class Grid extends Column {
      * @param shapes The shapes for the grid. The array represents the
      *  columns and the inner the rows of the grid.
      */
+    @SafeVarargs
     public Grid(final List<Shape>... shapes) {
         this(List.of(shapes));
     }

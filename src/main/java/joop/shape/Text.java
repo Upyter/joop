@@ -24,7 +24,6 @@ package joop.shape;
 import java.awt.Canvas;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.util.function.BiFunction;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 import joop.event.mouse.Mouse;
@@ -38,7 +37,6 @@ import unit.functional.Lazy;
 import unit.pos.AdjustablePos;
 import unit.pos.SoftPos;
 import unit.size.FixSize;
-import unit.tuple.adjustment.TupleAdjustment;
 
 /**
  * A text.
@@ -60,7 +58,7 @@ public class Text implements Shape {
     /**
      * The color of the rect.
      */
-    private final Color color;
+    private final java.awt.Color color;
 
     /**
      * Ctor.
@@ -134,7 +132,7 @@ public class Text implements Shape {
             content,
             new Cached<>(
                 () -> {
-                    Font font = new Font("Times new Roman",Font.PLAIN,25);
+                    Font font = new Font("Times new Roman", Font.PLAIN, 25);
                     final var bounds = pos.result(
                         (x, y) -> font.createGlyphVector(
                             new Canvas()
@@ -144,7 +142,7 @@ public class Text implements Shape {
                         ).getPixelBounds(null, x, y)
                     );
                     return new AreaOf(
-                        new LoggingPos(pos),
+                        pos,
                         new FixSize(bounds.width, bounds.height)
                     );
                 }
@@ -166,12 +164,12 @@ public class Text implements Shape {
     ) {
         this.content = content;
         this.area = area;
-        this.color = color;
+        this.color = color.result(java.awt.Color::new);
     }
 
     @Override
     public final void draw(final Graphics graphics) {
-        graphics.setColor(this.color.result(java.awt.Color::new));
+        graphics.setColor(this.color);
         graphics.setFont(new Font("Times new Roman", Font.PLAIN, 25));
         Area.applyOn(
             this.area.value(),
@@ -188,25 +186,5 @@ public class Text implements Shape {
     @Override
     public final void registerFor(final Mouse mouse) {
         // currently no implementation
-    }
-
-    private static class LoggingPos implements AdjustablePos {
-        private final AdjustablePos pos;
-
-        public LoggingPos(final AdjustablePos pos) {
-            this.pos = pos;
-        }
-
-
-        @Override
-        public final <R> R result(final BiFunction<Integer, Integer, R> biFunction) {
-            return this.pos.result(biFunction);
-        }
-
-        @Override
-        public final void adjustment(final TupleAdjustment<Integer, Integer> adjustment) {
-            System.out.println(this.pos);
-            this.pos.adjustment(adjustment);
-        }
     }
 }
