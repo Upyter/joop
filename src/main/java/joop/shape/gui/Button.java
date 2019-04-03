@@ -25,18 +25,21 @@ import java.awt.Graphics;
 import joop.event.mouse.Mouse;
 import joop.event.mouse.PressRelease;
 import joop.shape.DualShape;
-import joop.shape.Pen;
 import joop.shape.ResourceImage;
 import joop.shape.Shape;
-import joop.shape.ToggleableShape;
+import joop.shape.pen.Pen;
+import org.apache.commons.lang3.mutable.MutableBoolean;
 import unit.Overlap;
 import unit.area.Adjustment;
 import unit.area.Area;
 import unit.area.AreaOf;
 import unit.area.OverlapAreaOf;
+import unit.color.White;
 import unit.functional.Action;
 import unit.functional.Toggleable;
+import unit.pos.SoftPos;
 import unit.size.AdjustableSize;
+import unit.size.SoftSize;
 
 /**
  * A shape that has {@link PressRelease} event attached to it.
@@ -51,13 +54,25 @@ public class Button implements Shape {
     private final Shape shape;
 
     /**
+     * Ctor. Uses two images for this button. The position and size will be
+     * (0|0).
+     * @param action The action to be applied when the button is released.
+     */
+    public Button(final Action action) {
+        this(
+            new SoftSize(),
+            action
+        );
+    }
+
+    /**
      * Ctor. Uses two images for this button. The position will be (0|0).
      * @param size The size of the button.
      * @param action The action to be applied when the button is released.
      */
     public Button(final AdjustableSize size, final Action action) {
         this(
-            new AreaOf(size),
+            new AreaOf(new SoftPos(), size),
             action
         );
     }
@@ -69,47 +84,41 @@ public class Button implements Shape {
      */
     public Button(final Area area, final Action action) {
         this(
-            // @checkstyle ParameterName (1 line)
-            (area1, event) -> new DualShape(
-                toggleable -> new ResourceImage(
-                    "gui/button/releasedButtonImage.png",
-                    area1,
-                    event.apply(toggleable)
-                ),
-                toggleable -> new ResourceImage(
-                    "gui/button/pressedButtonImage.png",
-                    area1,
-                    event.apply(toggleable)
-                )
-            ),
             new OverlapAreaOf(area),
-            action
+            action,
+            new MutableBoolean()
         );
     }
 
     /**
-     * Ctor.
-     * @param pen The pen to create the shape (that must be toggleable) of the
-     *  button.
-     * @param overlap The area of the button.
+     * Ctor. Uses two images for this button.
+     * @param area The area of the button.
      * @param action The action to be applied when the button is released.
-     * @param <S> The type of the shape.
-     * @param <A> The type of the area used by the pen to create the shape.
+     * @param toggle The toggle for the images to switch.
      */
-    private <S extends ToggleableShape, A extends Overlap> Button(
-        final Pen<S, A> pen, final A overlap, final Action action
+    private Button(
+        final Area area,
+        final Action action,
+        final MutableBoolean toggle
     ) {
         this(
-            pen.shape(
-                overlap,
-                toggle -> new PressRelease(
-                    toggle::toggle,
-                    () -> {
-                        action.run();
-                        toggle.toggle();
-                    }
-                )
-            )
+            // @checkstyle ParameterName (1 line)
+            (area1, color, event) -> new DualShape(
+                new ResourceImage(
+                    "gui/button/releasedButtonImage.png",
+                    area1,
+                    event
+                ),
+                new ResourceImage(
+                    "gui/button/pressedButtonImage.png",
+                    area1,
+                    event
+                ),
+                toggle
+            ),
+            new OverlapAreaOf(area),
+            () -> toggle.setValue(!toggle.booleanValue()),
+            action
         );
     }
 
@@ -123,7 +132,7 @@ public class Button implements Shape {
      * @param <T> The type of the area used by the pen to create the shape.
      * @checkstyle ParameterNumber (2 lines)
      */
-    public <T extends Overlap> Button(
+    private <T extends Overlap> Button(
         final Pen<Shape, T> pen,
         final T overlap,
         final Toggleable toggleable,
@@ -132,7 +141,8 @@ public class Button implements Shape {
         this(
             pen.shape(
                 overlap,
-                ignored -> new PressRelease(
+                new White(),
+                new PressRelease(
                     toggleable::toggle,
                     () -> {
                         action.run();

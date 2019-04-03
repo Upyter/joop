@@ -24,11 +24,12 @@ package joop.shape.gui;
 import java.awt.Graphics;
 import joop.event.Event;
 import joop.event.mouse.Mouse;
-import joop.shape.Pen;
 import joop.shape.Shape;
 import joop.shape.Text;
+import joop.shape.pen.Pen;
 import unit.area.Adjustment;
 import unit.area.Area;
+import unit.color.White;
 import unit.pos.SoftPos;
 
 /**
@@ -60,7 +61,7 @@ public class Labeled implements Shape {
         final Pen<Shape, Area> pen
     ) {
         this(
-            pen.shape(area, ignored -> (x, y) -> { }),
+            pen.shape(area, new White(), (x, y) -> { }),
             area.result((pos, size) -> new Text(text, new SoftPos(pos)))
         );
     }
@@ -79,7 +80,7 @@ public class Labeled implements Shape {
         final Event event
     ) {
         this(
-            pen.shape(area, ignored -> event),
+            pen.shape(area, new White(), event),
             area.result((pos, size) -> new Text(text, new SoftPos(pos)))
         );
     }

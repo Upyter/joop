@@ -19,10 +19,11 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package joop.shape;
+package joop.shape.pen;
 
-import java.util.function.Function;
 import joop.event.Event;
+import joop.shape.Shape;
+import unit.color.Color;
 
 /**
  * Gives instances of shapes. This is necessary for classes that need
@@ -51,9 +52,9 @@ public interface Pen<S extends Shape, A> {
     /**
      * Returns a shape.
      * @param area The area of the shape.
-     * @param event The event function to create the event for the shape. It
-     *  takes the shape to make it possible to access the shape from the event.
+     * @param color The color of the shape.
+     * @param event The event for the shape.
      * @return The shape with the given properties.
      */
-    S shape(A area, Function<S, Event> event);
+    S shape(A area, Color color, Event event);
 }

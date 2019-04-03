@@ -22,8 +22,8 @@
 package joop.shape;
 
 import java.awt.Graphics;
-import java.util.function.Function;
 import joop.event.mouse.Mouse;
+import org.apache.commons.lang3.mutable.MutableBoolean;
 import unit.area.Adjustment;
 import unit.area.Area;
 
@@ -33,7 +33,7 @@ import unit.area.Area;
  * <p>This class is mutable and not thread-safe due to the shape switching.</p>
  * @since 0.42
  */
-public class DualShape implements ToggleableShape {
+public class DualShape implements Shape {
     /**
      * The first shape.
      */
@@ -45,39 +45,35 @@ public class DualShape implements ToggleableShape {
     private final Shape second;
 
     /**
-     * The currently chosen shape.
+     * The toggle for the currently chosen shape. True means the first shape
+     * will be shown.
      */
-    private Shape current;
+    private MutableBoolean current;
 
     /**
      * Ctor.
      * @param first The first shape.
      * @param second The second shape.
-     */
-    public DualShape(final Shape first, final Shape second) {
-        this(
-            toggleable -> first,
-            toggleable -> second
-        );
-    }
-
-    /**
-     * Ctor.
-     * @param first The first shape.
-     * @param second The second shape.
+     * @param current The toggle for the currently chosen shape. True means the
+     *  first shape will be shown.
      */
     public DualShape(
-        final Function<ToggleableShape, Shape> first,
-        final Function<ToggleableShape, Shape> second
+        final Shape first,
+        final Shape second,
+        final MutableBoolean current
     ) {
-        this.first = first.apply(this);
-        this.second = second.apply(this);
-        this.current = this.first;
+        this.first = first;
+        this.second = second;
+        this.current = current;
     }
 
     @Override
     public final void draw(final Graphics graphics) {
-        this.current.draw(graphics);
+        if (this.current.isFalse()) {
+            this.first.draw(graphics);
+        } else {
+            this.second.draw(graphics);
+        }
     }
 
     @Override
@@ -88,28 +84,6 @@ public class DualShape implements ToggleableShape {
 
     @Override
     public final void registerFor(final Mouse mouse) {
-        this.current.registerFor(mouse);
-    }
-
-    @Override
-    public final void toggle() {
-        if (this.current == this.first) {
-            this.current = this.second;
-        } else if (this.current == this.second) {
-            this.current = this.first;
-        } else {
-            throw new IllegalStateException(
-                String.join(
-                    "",
-                    "Current shape got a shape that it shouldn't be able to ",
-                    " reach. Current: ",
-                    this.current.toString(),
-                    ", first: ",
-                    this.first.toString(),
-                    ", second: ",
-                    this.second.toString()
-                )
-            );
-        }
+        this.first.registerFor(mouse);
     }
 }

@@ -23,6 +23,7 @@ package joop.event.mouse;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import joop.event.Event;
+import org.apache.commons.lang3.mutable.MutableBoolean;
 import unit.Overlap;
 import unit.functional.Action;
 
@@ -55,7 +56,7 @@ public class PressRelease implements Event {
     public PressRelease(final Action press, final Action release) {
         this(
             press,
-            new AtomicBoolean(false),
+            new MutableBoolean(false),
             release
         );
     }
@@ -69,20 +70,20 @@ public class PressRelease implements Event {
      * @param release The action that shall be applied on release.
      */
     private PressRelease(
-        final Action press, final AtomicBoolean pressed, final Action release
+        final Action press, final MutableBoolean pressed, final Action release
     ) {
         this(
             new Press(
                 () -> {
                     press.run();
-                    pressed.set(true);
+                    pressed.setValue(true);
                 }
             ),
             new Release(
                 () -> {
-                    if (pressed.get()) {
+                    if (pressed.getValue()) {
                         release.run();
-                        pressed.set(false);
+                        pressed.setValue(false);
                     }
                 }
             )

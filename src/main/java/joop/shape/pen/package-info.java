@@ -19,33 +19,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package joop.shape.gui;
-
-import unit.area.Area;
-import unit.functional.Action;
-
 /**
- * A labeled button.
- * <p>This class is mutable and not thread-safe because of the button
- * that is also mutable.</p>
- * @see Button
- * @see Labeled
- * @since 0.46
+ * Pens and components for it.
+ * @since 0.65
  */
-public class TextButton extends Labeled {
-    /**
-     * Ctor.
-     * @param text The text of the button.
-     * @param area The area of the button
-     * @param action The action to be run when the button is released.
-     */
-    public TextButton(
-        final String text, final Area area, final Action action
-    ) {
-        super(
-            text,
-            area,
-            (area1, color, ignored) -> new Button(area1, action)
-        );
-    }
-}
+package joop.shape.pen;
