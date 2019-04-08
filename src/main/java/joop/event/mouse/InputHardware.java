@@ -21,6 +21,7 @@
 
 package joop.event.mouse;
 
+import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
@@ -30,7 +31,7 @@ import java.awt.event.MouseWheelListener;
  * event classes.
  * @since 0.31
  */
-public interface Mouse {
+public interface InputHardware {
     /**
      * Registers a MouseListener.
      * @param target The MouseListener who will get the events.
@@ -48,4 +49,10 @@ public interface Mouse {
      * @param target The MouseWheelListener who will get the events.
      */
     void register(MouseWheelListener target);
+
+    /**
+     * Registers a KeyListener.
+     * @param target The KeyListener who will get the events.
+     */
+    void register(KeyListener target);
 }

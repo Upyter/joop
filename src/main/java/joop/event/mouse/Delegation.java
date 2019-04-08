@@ -22,6 +22,7 @@
 package joop.event.mouse;
 
 import java.awt.Component;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
@@ -30,10 +31,10 @@ import java.awt.event.MouseWheelListener;
  * Just registers and delegates the events to the event classes.
  * <p>This class is by itself immutable, but since it takes a mutable
  * {@link Component} and mutates it by registering the listeners, it is mutable
- * and not thread-safe.
+ * and not thread-safe.</p>
  * @since 0.34
  */
-public class DelegationMouse implements Mouse {
+public class Delegation implements InputHardware {
     /**
      * The component who will get the listeners.
      */
@@ -43,7 +44,7 @@ public class DelegationMouse implements Mouse {
      * Ctor.
      * @param component The component to register the events for.
      */
-    public DelegationMouse(final Component component) {
+    public Delegation(final Component component) {
         this.component = component;
     }
 
@@ -60,5 +61,10 @@ public class DelegationMouse implements Mouse {
     @Override
     public final void register(final MouseWheelListener target) {
         this.component.addMouseWheelListener(target);
+    }
+
+    @Override
+    public final void register(final KeyListener target) {
+        this.component.addKeyListener(target);
     }
 }

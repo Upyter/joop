@@ -22,7 +22,7 @@
 package joop.shape;
 
 import java.awt.Graphics;
-import joop.event.mouse.Mouse;
+import joop.event.mouse.InputHardware;
 import unit.area.Adjustment;
 import unit.area.Area;
 import unit.area.AreaOf;
@@ -89,7 +89,7 @@ public class Oval implements Shape {
     }
 
     @Override
-    public final void registerFor(final Mouse mouse) {
+    public final void registerFor(final InputHardware source) {
         // currently no implementation
     }
 }

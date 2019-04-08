@@ -62,7 +62,9 @@ public class Press implements Event {
     }
 
     @Override
-    public final void registerFor(final Mouse source, final Overlap overlap) {
+    public final void registerFor(
+        final InputHardware source, final Overlap overlap
+    ) {
         source.register(
             (MouseListener) new MouseAdapter() {
                 @Override

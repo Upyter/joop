@@ -29,7 +29,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.WindowConstants;
-import joop.event.mouse.DelegationMouse;
+import joop.event.mouse.Delegation;
 import joop.shape.EmptyShape;
 import joop.shape.Shape;
 import unit.area.Area;
@@ -129,9 +129,7 @@ public class BaseWindow implements Showable {
                         )
                     );
                     feature.accept(result);
-                    shape.registerFor(
-                        new DelegationMouse(result.getContentPane())
-                    );
+                    shape.registerFor(new Delegation(result.getContentPane()));
                     final var timer = new Timer(25, e -> result.repaint());
                     timer.setRepeats(true);
                     timer.start();

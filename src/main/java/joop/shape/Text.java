@@ -26,7 +26,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
-import joop.event.mouse.Mouse;
+import joop.event.mouse.InputHardware;
 import unit.area.Adjustment;
 import unit.area.Area;
 import unit.area.AreaOf;
@@ -184,7 +184,7 @@ public class Text implements Shape {
     }
 
     @Override
-    public final void registerFor(final Mouse mouse) {
+    public final void registerFor(final InputHardware source) {
         // currently no implementation
     }
 }

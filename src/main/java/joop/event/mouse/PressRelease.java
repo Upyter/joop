@@ -101,7 +101,9 @@ public class PressRelease implements Event {
     }
 
     @Override
-    public final void registerFor(final Mouse source, final Overlap overlap) {
+    public final void registerFor(
+        final InputHardware source, final Overlap overlap
+    ) {
         this.press.registerFor(source, overlap);
         this.release.registerFor(source, overlap);
     }

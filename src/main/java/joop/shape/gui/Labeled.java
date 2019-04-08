@@ -23,7 +23,7 @@ package joop.shape.gui;
 
 import java.awt.Graphics;
 import joop.event.Event;
-import joop.event.mouse.Mouse;
+import joop.event.mouse.InputHardware;
 import joop.shape.Shape;
 import joop.shape.Text;
 import joop.shape.pen.Pen;
@@ -102,8 +102,8 @@ public class Labeled implements Shape {
     }
 
     @Override
-    public final void registerFor(final Mouse mouse) {
-        this.shape.registerFor(mouse);
+    public final void registerFor(final InputHardware source) {
+        this.shape.registerFor(source);
     }
 
     @Override

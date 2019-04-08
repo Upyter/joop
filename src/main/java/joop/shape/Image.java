@@ -29,7 +29,7 @@ import java.io.UncheckedIOException;
 import java.util.Objects;
 import javax.imageio.ImageIO;
 import joop.event.Event;
-import joop.event.mouse.Mouse;
+import joop.event.mouse.InputHardware;
 import unit.area.Adjustment;
 import unit.area.Area;
 import unit.area.AreaOf;
@@ -230,7 +230,7 @@ public class Image implements Shape {
     }
 
     @Override
-    public final void registerFor(final Mouse mouse) {
-        this.event.registerFor(mouse, this.area);
+    public final void registerFor(final InputHardware source) {
+        this.event.registerFor(source, this.area);
     }
 }

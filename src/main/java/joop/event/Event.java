@@ -21,7 +21,7 @@
 
 package joop.event;
 
-import joop.event.mouse.Mouse;
+import joop.event.mouse.InputHardware;
 import unit.Overlap;
 
 /**
@@ -30,13 +30,14 @@ import unit.Overlap;
  */
 public interface Event {
     /**
-     * Registers itself for the necessary raw event from the mouse. "Raw" means
-     * that the event is global. For example the user may click on the window
-     * and then all the events that registered themselves get the click event.
-     * Now it's up to the events to check whether it belongs to the shape.
-     * @param mouse The mouse to get the raw event from.
+     * Registers itself for the necessary raw event from the event source. "Raw"
+     * means that the event is global. For example the user may click on the
+     * window and then all the events that registered themselves get the click
+     * event. Now it's up to the events to check whether it belongs to the
+     * shape.
+     * @param source The source to get the raw event from.
      * @param overlap The overlap needed to detect whether the mouse hit the
      *  shape.
      */
-    void registerFor(Mouse mouse, Overlap overlap);
+    void registerFor(InputHardware source, Overlap overlap);
 }

@@ -22,7 +22,7 @@
 package joop.shape;
 
 import java.awt.Graphics;
-import joop.event.mouse.Mouse;
+import joop.event.mouse.InputHardware;
 import unit.area.Adjustment;
 import unit.area.Area;
 
@@ -38,10 +38,11 @@ public interface Shape {
     void draw(Graphics graphics);
 
     /**
-     * Registers itself on the mouse. This is necessary for shapes with events.
-     * @param mouse The mouse to register on.
+     * Registers itself on the event source. This is necessary for shapes with
+     * events.
+     * @param source The source to register on.
      */
-    void registerFor(Mouse mouse);
+    void registerFor(InputHardware source);
 
     /**
      * Adjust the shape (eventually).

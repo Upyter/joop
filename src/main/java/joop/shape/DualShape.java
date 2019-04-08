@@ -22,7 +22,7 @@
 package joop.shape;
 
 import java.awt.Graphics;
-import joop.event.mouse.Mouse;
+import joop.event.mouse.InputHardware;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import unit.area.Adjustment;
 import unit.area.Area;
@@ -83,7 +83,7 @@ public class DualShape implements Shape {
     }
 
     @Override
-    public final void registerFor(final Mouse mouse) {
-        this.first.registerFor(mouse);
+    public final void registerFor(final InputHardware source) {
+        this.first.registerFor(source);
     }
 }

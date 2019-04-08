@@ -22,7 +22,7 @@
 package joop.shape.gui;
 
 import java.awt.Graphics;
-import joop.event.mouse.Mouse;
+import joop.event.mouse.InputHardware;
 import joop.event.mouse.PressRelease;
 import joop.shape.DualShape;
 import joop.shape.ResourceImage;
@@ -168,8 +168,8 @@ public class Button implements Shape {
     }
 
     @Override
-    public final void registerFor(final Mouse mouse) {
-        this.shape.registerFor(mouse);
+    public final void registerFor(final InputHardware source) {
+        this.shape.registerFor(source);
     }
 
     @Override

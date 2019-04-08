@@ -25,7 +25,7 @@ import io.vavr.collection.List;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.function.Supplier;
-import joop.event.mouse.Mouse;
+import joop.event.mouse.InputHardware;
 import joop.shape.Shape;
 import unit.area.Adjustment;
 import unit.area.Area;
@@ -86,7 +86,7 @@ public class Column implements Shape {
 
     public Column(final AdjustableSize size, final Shape... shapes) {
         this(
-            new AreaOf(new SoftPos(), size),
+            size,
             List.of(shapes)
         );
     }
@@ -98,7 +98,10 @@ public class Column implements Shape {
         );
     }
 
-    public Column(final Area area, final List<Shape> shapes) {
+    public Column(
+        final Area area,
+        final List<Shape> shapes
+    ) {
         this.area = area;
         this.shapes = shapes;
     }
@@ -149,7 +152,7 @@ public class Column implements Shape {
     }
 
     @Override
-    public final void registerFor(final Mouse mouse) {
-        this.shapes.forEach(shape -> shape.registerFor(mouse));
+    public final void registerFor(final InputHardware source) {
+        this.shapes.forEach(shape -> shape.registerFor(source));
     }
 }
