@@ -129,7 +129,7 @@ public class BaseWindow implements Showable {
                         )
                     );
                     feature.accept(result);
-                    shape.registerFor(new Delegation(result.getContentPane()));
+                    shape.registerFor(new Delegation(result));
                     final var timer = new Timer(25, e -> result.repaint());
                     timer.setRepeats(true);
                     timer.start();

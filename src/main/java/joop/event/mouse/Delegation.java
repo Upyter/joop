@@ -26,6 +26,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
+import javax.swing.JFrame;
 
 /**
  * Just registers and delegates the events to the event classes.
@@ -36,35 +37,35 @@ import java.awt.event.MouseWheelListener;
  */
 public class Delegation implements InputHardware {
     /**
-     * The component who will get the listeners.
+     * The frame who will get the listeners.
      */
-    private final Component component;
+    private final JFrame frame;
 
     /**
      * Ctor.
-     * @param component The component to register the events for.
+     * @param frame The frame to register the events for.
      */
-    public Delegation(final Component component) {
-        this.component = component;
+    public Delegation(final JFrame frame) {
+        this.frame = frame;
     }
 
     @Override
     public final void register(final MouseListener target) {
-        this.component.addMouseListener(target);
+        this.frame.getContentPane().addMouseListener(target);
     }
 
     @Override
     public final void register(final MouseMotionListener target) {
-        this.component.addMouseMotionListener(target);
+        this.frame.getContentPane().addMouseMotionListener(target);
     }
 
     @Override
     public final void register(final MouseWheelListener target) {
-        this.component.addMouseWheelListener(target);
+        this.frame.getContentPane().addMouseWheelListener(target);
     }
 
     @Override
     public final void register(final KeyListener target) {
-        this.component.addKeyListener(target);
+        this.frame.addKeyListener(target);
     }
 }
