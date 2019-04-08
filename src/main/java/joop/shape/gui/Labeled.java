@@ -22,6 +22,7 @@
 package joop.shape.gui;
 
 import java.awt.Graphics;
+import java.util.function.Supplier;
 import joop.event.Event;
 import joop.event.mouse.InputHardware;
 import joop.shape.Shape;
@@ -49,6 +50,8 @@ public class Labeled implements Shape {
      */
     private final Shape text;
 
+    private final Area area;
+
     /**
      * Ctor.
      * @param text The text to be add.
@@ -62,7 +65,8 @@ public class Labeled implements Shape {
     ) {
         this(
             pen.shape(area, new White(), (x, y) -> { }),
-            area.result((pos, size) -> new Text(text, new SoftPos(pos)))
+            area.result((pos, size) -> new Text(text, new SoftPos(pos))),
+            area
         );
     }
 
@@ -81,7 +85,28 @@ public class Labeled implements Shape {
     ) {
         this(
             pen.shape(area, new White(), event),
-            area.result((pos, size) -> new Text(text, new SoftPos(pos)))
+            area.result((pos, size) -> new Text(text, new SoftPos(pos))),
+            area
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param text The text to be add.
+     * @param area The area of the shape.
+     * @param pen The pen to create the shape.
+     * @param event The event for the shape created by the pen.
+     */
+    public Labeled(
+        final Supplier<String> text,
+        final Area area,
+        final Pen<Shape, Area> pen,
+        final Event event
+    ) {
+        this(
+            pen.shape(area, new White(), event),
+            area.result((pos, size) -> new Text(text, new SoftPos(pos))),
+            area
         );
     }
 
@@ -90,13 +115,15 @@ public class Labeled implements Shape {
      * @param shape The shape to be labeled.
      * @param text The text to be add on the shape.
      */
-    private Labeled(final Shape shape, final Shape text) {
+    private Labeled(final Shape shape, final Shape text, final Area area) {
         this.shape = shape;
         this.text = text;
+        this.area = area;
     }
 
     @Override
     public final void draw(final Graphics graphics) {
+        Area.applyOn(this.area, graphics::setClip);
         this.shape.draw(graphics);
         this.text.draw(graphics);
     }
