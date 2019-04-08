@@ -22,6 +22,7 @@
 package joop.shape.gui;
 
 import java.awt.Graphics;
+import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 import joop.event.Event;
 import joop.event.mouse.InputHardware;
@@ -59,6 +60,24 @@ public class Labeled implements Shape {
      * @param pen The pen to create the shape.
      */
     public Labeled(
+        final int text,
+        final Area area,
+        final Pen<Shape, Area> pen
+    ) {
+        this(
+            pen.shape(area, new White(), (x, y) -> { }),
+            area.result((pos, size) -> new Text(text, new SoftPos(pos))),
+            area
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param text The text to be add.
+     * @param area The area of the shape.
+     * @param pen The pen to create the shape.
+     */
+    public Labeled(
         final String text,
         final Area area,
         final Pen<Shape, Area> pen
@@ -78,7 +97,47 @@ public class Labeled implements Shape {
      * @param event The event for the shape created by the pen.
      */
     public Labeled(
+        final int text,
+        final Area area,
+        final Pen<Shape, Area> pen,
+        final Event event
+    ) {
+        this(
+            pen.shape(area, new White(), event),
+            area.result((pos, size) -> new Text(text, new SoftPos(pos))),
+            area
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param text The text to be add.
+     * @param area The area of the shape.
+     * @param pen The pen to create the shape.
+     * @param event The event for the shape created by the pen.
+     */
+    public Labeled(
         final String text,
+        final Area area,
+        final Pen<Shape, Area> pen,
+        final Event event
+    ) {
+        this(
+            pen.shape(area, new White(), event),
+            area.result((pos, size) -> new Text(text, new SoftPos(pos))),
+            area
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param text The text to be add.
+     * @param area The area of the shape.
+     * @param pen The pen to create the shape.
+     * @param event The event for the shape created by the pen.
+     */
+    public Labeled(
+        final IntSupplier text,
         final Area area,
         final Pen<Shape, Area> pen,
         final Event event
@@ -123,9 +182,11 @@ public class Labeled implements Shape {
 
     @Override
     public final void draw(final Graphics graphics) {
+        final var backup = graphics.getClip();
         Area.applyOn(this.area, graphics::setClip);
         this.shape.draw(graphics);
         this.text.draw(graphics);
+        graphics.setClip(backup);
     }
 
     @Override

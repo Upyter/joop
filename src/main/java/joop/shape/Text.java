@@ -90,6 +90,15 @@ public class Text implements Shape {
      * @param content The characters of the text.
      * @param pos The position of the text.
      */
+    public Text(final int content, final AdjustablePos pos) {
+        this(() -> Integer.toString(content), pos, new Black());
+    }
+
+    /**
+     * Ctor.
+     * @param content The characters of the text.
+     * @param pos The position of the text.
+     */
     public Text(final IntSupplier content, final AdjustablePos pos) {
         this(() -> Integer.toString(content.getAsInt()), pos, new Black());
     }

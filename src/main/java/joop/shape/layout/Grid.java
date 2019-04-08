@@ -83,8 +83,26 @@ public class Grid extends Column {
         final Shape... shapes
     ) {
         this(
+            rows,
             area,
-            List.of(shapes).grouped(shapes.length / rows).toList()
+            List.of(shapes)
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param area The area of the grid.
+     * @param shapes The shapes for the grid. The outer list represents the
+     *  columns and the inner the rows of the grid.
+     */
+    public Grid(
+        final int rows,
+        final Area area,
+        final List<Shape> shapes
+    ) {
+        this(
+            area,
+            shapes.grouped(shapes.size() / rows).toList()
         );
     }
 

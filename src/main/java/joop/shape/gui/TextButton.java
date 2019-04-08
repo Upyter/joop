@@ -22,7 +22,10 @@
 package joop.shape.gui;
 
 import unit.area.Area;
+import unit.area.AreaOf;
 import unit.functional.Action;
+import unit.pos.SoftPos;
+import unit.size.SoftSize;
 
 /**
  * A labeled button.
@@ -33,6 +36,60 @@ import unit.functional.Action;
  * @since 0.46
  */
 public class TextButton extends Labeled {
+    /**
+     * Ctor. An area of x = 0, y = 0, width = 0 and height = 0 will be taken
+     * (useful in combination with layouts).
+     * @param text The text of the button.
+     * @param action The action to be run when the button is released.
+     */
+    public TextButton(
+        final int text, final Action action
+    ) {
+        super(
+            text,
+            new AreaOf(
+                new SoftPos(),
+                new SoftSize()
+            ),
+            (area1, color, ignored) -> new Button(area1, action)
+        );
+    }
+
+    /**
+     * Ctor. An area of x = 0, y = 0, width = 0 and height = 0 will be taken
+     * (useful in combination with layouts).
+     * @param text The text of the button.
+     * @param action The action to be run when the button is released.
+     */
+    public TextButton(
+        final String text, final Action action
+    ) {
+        super(
+            text,
+            new AreaOf(
+                new SoftPos(),
+                new SoftSize()
+            ),
+            (area1, color, ignored) -> new Button(area1, action)
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param text The text of the button.
+     * @param area The area of the button
+     * @param action The action to be run when the button is released.
+     */
+    public TextButton(
+        final int text, final Area area, final Action action
+    ) {
+        super(
+            text,
+            area,
+            (area1, color, ignored) -> new Button(area1, action)
+        );
+    }
+
     /**
      * Ctor.
      * @param text The text of the button.
