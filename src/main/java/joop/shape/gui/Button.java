@@ -22,10 +22,14 @@
 package joop.shape.gui;
 
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import joop.event.mouse.InputHardware;
 import joop.event.mouse.PressRelease;
 import joop.shape.DualShape;
-import joop.shape.ResourceImage;
+import joop.shape.Image;
+import joop.shape.ResourceFile;
 import joop.shape.Shape;
 import joop.shape.pen.Pen;
 import org.apache.commons.lang3.mutable.MutableBoolean;
@@ -48,6 +52,46 @@ import unit.size.SoftSize;
  * @since 0.38
  */
 public class Button implements Shape {
+    /**
+     * The path to the image of a released button relative to the resources
+     * folder.
+     */
+    private static final String RELEASED_PATH =
+        "gui/button/releasedButtonImage.png";
+
+    /**
+     * The path to the image of a pressed button relative to the resources
+     * folder.
+     */
+    private static final String PRESSED_PATH =
+        "gui/button/pressedButtonImage.png";
+
+    /**
+     * The image file of a released button.
+     */
+    private static final BufferedImage RELEASED_FILE;
+
+    static {
+        try {
+            RELEASED_FILE = ImageIO.read(new ResourceFile(Button.RELEASED_PATH).get());
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    /**
+     * The image file of a pressed button.
+     */
+    private static final BufferedImage PRESSED_FILE;
+
+    static {
+        try {
+            PRESSED_FILE = ImageIO.read(new ResourceFile(Button.PRESSED_PATH).get());
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     /**
      * The shape with the attached functionality to represent the button.
      */
@@ -104,13 +148,13 @@ public class Button implements Shape {
         this(
             // @checkstyle ParameterName (1 line)
             (area1, color, event) -> new DualShape(
-                new ResourceImage(
-                    "gui/button/releasedButtonImage.png",
+                new Image(
+                    Button.RELEASED_FILE,
                     area1,
                     event
                 ),
-                new ResourceImage(
-                    "gui/button/pressedButtonImage.png",
+                new Image(
+                    Button.PRESSED_FILE,
                     area1,
                     event
                 ),

@@ -168,8 +168,27 @@ public class Image implements Shape {
      * @param loading The loading of the image.
      * @param pos The position of the image.
      */
+    public Image(final BufferedImage loading, final AdjustablePos pos) {
+        this(loading, new AreaOf(pos));
+    }
+
+    /**
+     * Ctor.
+     * @param loading The loading of the image.
+     * @param pos The position of the image.
+     */
     public Image(final Lazy<BufferedImage> loading, final AdjustablePos pos) {
         this(loading, new AreaOf(pos));
+    }
+
+    /**
+     * Ctor.
+     * @param loading The loading of the image.
+     * @param area The area of the image.
+     */
+    public Image(final BufferedImage loading, final Area area) {
+        // @checkstyle ParameterName (1 line)
+        this(loading, area, (x, y) -> { });
     }
 
     /**
@@ -189,11 +208,39 @@ public class Image implements Shape {
      * @param event The event of the image.
      */
     public Image(
+        final BufferedImage loading,
+        final Area area,
+        final Event event
+    ) {
+        this(loading, new OverlapAreaOf(area), event);
+    }
+
+    /**
+     * Ctor.
+     * @param loading The loading of the image.
+     * @param area The area of the image.
+     * @param event The event of the image.
+     */
+    public Image(
         final Lazy<BufferedImage> loading,
         final Area area,
         final Event event
     ) {
         this(loading, new OverlapAreaOf(area), event);
+    }
+
+    /**
+     * Ctor.
+     * @param loading The loading of the image.
+     * @param area The area of the image.
+     * @param event The event of the image.
+     */
+    public Image(
+        final BufferedImage loading,
+        final OverlapArea area,
+        final Event event
+    ) {
+        this(() -> loading, area, event);
     }
 
     /**

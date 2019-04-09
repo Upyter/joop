@@ -61,6 +61,11 @@ public class Text implements Shape {
     private final java.awt.Color color;
 
     /**
+     * The font of the text.
+     */
+    private final Font font;
+
+    /**
      * Ctor.
      * @param content The characters of the text.
      * @param pos The position of the text.
@@ -174,12 +179,13 @@ public class Text implements Shape {
         this.content = content;
         this.area = area;
         this.color = color.result(java.awt.Color::new);
+        this.font = new Font("Times new Roman", Font.PLAIN, 25);
     }
 
     @Override
     public final void draw(final Graphics graphics) {
         graphics.setColor(this.color);
-        graphics.setFont(new Font("Times new Roman", Font.PLAIN, 25));
+        graphics.setFont(this.font);
         Area.applyOn(
             this.area.value(),
             (x, y, w, h) -> graphics.drawString(this.content.get(), x, y + h)

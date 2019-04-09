@@ -51,7 +51,7 @@ public class Line implements Shape {
     /**
      * The color of the line.
      */
-    private final Color color;
+    private final java.awt.Color color;
 
     /**
      * Ctor. Creates a black line.
@@ -84,12 +84,12 @@ public class Line implements Shape {
     public Line(final Pos first, final Pos second, final Color color) {
         this.first = first;
         this.second = second;
-        this.color = color;
+        this.color = color.result(java.awt.Color::new);
     }
 
     @Override
     public final void draw(final Graphics graphics) {
-        graphics.setColor(this.color.result(java.awt.Color::new));
+        graphics.setColor(this.color);
         Tuple.applyOn(
             this.first,
             // @checkstyle ParameterName (1 line)

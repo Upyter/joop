@@ -50,7 +50,7 @@ public class Rect implements Shape {
     /**
      * The color of the rect.
      */
-    private final Color color;
+    private final java.awt.Color color;
 
     /**
      * The event of the rect.
@@ -134,13 +134,13 @@ public class Rect implements Shape {
      */
     public Rect(final OverlapArea area, final Color color, final Event event) {
         this.area = area;
-        this.color = color;
+        this.color = color.result(java.awt.Color::new);
         this.event = event;
     }
 
     @Override
     public final void draw(final Graphics graphics) {
-        graphics.setColor(this.color.result(java.awt.Color::new));
+        graphics.setColor(this.color);
         Area.applyOn(this.area, graphics::fillRect);
     }
 

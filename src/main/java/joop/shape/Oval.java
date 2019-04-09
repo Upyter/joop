@@ -44,7 +44,7 @@ public class Oval implements Shape {
     /**
      * The color of the oval.
      */
-    private final Color color;
+    private final java.awt.Color color;
 
     /**
      * Ctor.
@@ -74,12 +74,12 @@ public class Oval implements Shape {
      */
     public Oval(final Area area, final Color color) {
         this.area = area;
-        this.color = color;
+        this.color = color.result(java.awt.Color::new);
     }
 
     @Override
     public final void draw(final Graphics graphics) {
-        graphics.setColor(this.color.result(java.awt.Color::new));
+        graphics.setColor(this.color);
         Area.applyOn(this.area, graphics::fillOval);
     }
 

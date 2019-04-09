@@ -21,7 +21,6 @@
 
 package joop.shape;
 
-import java.util.Objects;
 import joop.event.Event;
 import unit.area.Area;
 import unit.area.AreaOf;
@@ -83,12 +82,7 @@ public class ResourceImage extends Image {
         final String path, final OverlapArea area, final Event event
     ) {
         super(
-            Objects.requireNonNull(
-                Thread
-                    .currentThread()
-                    .getContextClassLoader()
-                    .getResource(path)
-            ).getFile(),
+            new ResourceFile(path).get(),
             area,
             event
         );
