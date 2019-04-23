@@ -29,7 +29,6 @@ import unit.color.Black;
 import unit.color.Color;
 import unit.pos.FixPos;
 import unit.pos.Pos;
-import unit.tuple.Tuple;
 
 /**
  * A line.
@@ -90,14 +89,11 @@ public class Line implements Shape {
     @Override
     public final void draw(final Graphics graphics) {
         graphics.setColor(this.color);
-        Tuple.applyOn(
-            this.first,
-            // @checkstyle ParameterName (1 line)
-            (fx, fy) -> Tuple.applyOn(
-                this.second,
-                // @checkstyle ParameterName (1 line)
-                (sx, sy) -> graphics.drawLine(fx, fy, sx, sy)
-            )
+        graphics.drawLine(
+            (int) this.first.x(),
+            (int) this.first.y(),
+            (int) this.second.x(),
+            (int) this.second.y()
         );
     }
 

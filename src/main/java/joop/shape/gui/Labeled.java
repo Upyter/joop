@@ -66,7 +66,7 @@ public class Labeled implements Shape {
     ) {
         this(
             pen.shape(area, new White(), (x, y) -> { }),
-            area.result((pos, size) -> new Text(text, new SoftPos(pos))),
+            new Text(text, new SoftPos(area.x(), area.y())),
             area
         );
     }
@@ -84,7 +84,7 @@ public class Labeled implements Shape {
     ) {
         this(
             pen.shape(area, new White(), (x, y) -> { }),
-            area.result((pos, size) -> new Text(text, new SoftPos(pos))),
+            new Text(text, new SoftPos(area.x(), area.y())),
             area
         );
     }
@@ -104,7 +104,7 @@ public class Labeled implements Shape {
     ) {
         this(
             pen.shape(area, new White(), event),
-            area.result((pos, size) -> new Text(text, new SoftPos(pos))),
+            new Text(text, new SoftPos(area.x(), area.y())),
             area
         );
     }
@@ -124,7 +124,7 @@ public class Labeled implements Shape {
     ) {
         this(
             pen.shape(area, new White(), event),
-            area.result((pos, size) -> new Text(text, new SoftPos(pos))),
+            new Text(text, new SoftPos(area.x(), area.y())),
             area
         );
     }
@@ -144,7 +144,7 @@ public class Labeled implements Shape {
     ) {
         this(
             pen.shape(area, new White(), event),
-            area.result((pos, size) -> new Text(text, new SoftPos(pos))),
+            new Text(text, new SoftPos(area.x(), area.y())),
             area
         );
     }
@@ -164,7 +164,7 @@ public class Labeled implements Shape {
     ) {
         this(
             pen.shape(area, new White(), event),
-            area.result((pos, size) -> new Text(text, new SoftPos(pos))),
+            new Text(text, new SoftPos(area.x(), area.y())),
             area
         );
     }
@@ -183,7 +183,12 @@ public class Labeled implements Shape {
     @Override
     public final void draw(final Graphics graphics) {
         final var backup = graphics.getClip();
-        Area.applyOn(this.area, graphics::setClip);
+        graphics.setClip(
+            (int) this.area.x(),
+            (int) this.area.y(),
+            (int) this.area.w(),
+            (int) this.area.h()
+        );
         this.shape.draw(graphics);
         this.text.draw(graphics);
         graphics.setClip(backup);

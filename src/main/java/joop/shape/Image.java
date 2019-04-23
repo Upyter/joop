@@ -261,12 +261,13 @@ public class Image implements Shape {
 
     @Override
     public final void draw(final Graphics graphics) {
-        Area.applyOn(
-            this.area,
-            // @checkstyle ParameterName (1 line)
-            (x, y, width, height) -> graphics.drawImage(
-                this.loading.value(), x, y, width, height, null
-            )
+        graphics.drawImage(
+            this.loading.value(),
+            (int) this.area.x(),
+            (int) this.area.y(),
+            (int) this.area.w(),
+            (int) this.area.h(),
+            null
         );
     }
 

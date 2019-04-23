@@ -26,7 +26,6 @@ import java.util.function.Consumer;
 import javax.swing.JFrame;
 import joop.shape.Shape;
 import unit.area.Adjustment;
-import unit.area.Area;
 import unit.area.adjustment.NoAdjustment;
 
 /**
@@ -51,14 +50,10 @@ public class ShapeSized implements Consumer<JFrame> {
 
     @Override
     public final void accept(final JFrame frame) {
-        Area.applyOn(
-            this.shape.adjustment(NoAdjustment.cached()),
-            (x, y, width, height) -> {
-                frame.getContentPane().setPreferredSize(
-                    new Dimension(width, height)
-                );
-                frame.pack();
-            }
+        final var area = this.shape.adjustment(NoAdjustment.cached());
+        frame.getContentPane().setPreferredSize(
+            new Dimension((int) area.w(), (int) area.h())
         );
+        frame.pack();
     }
 }

@@ -24,7 +24,6 @@ package joop.shape.layout;
 import io.vavr.collection.List;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.function.Supplier;
 import joop.event.mouse.InputHardware;
 import joop.shape.Shape;
 import unit.area.Adjustment;
@@ -74,10 +73,8 @@ public class Row implements Shape {
                 () -> {
                     final var areas = new ArrayList<Area>(shapes.size());
                     shapes.forEach(shape -> areas.add(shape.adjustment(new NoAdjustment())));
-                    return Area.result(
-                        new Covered(areas),
-                        (x, y, w, h) -> new SoftSize(w, h)
-                    );
+                    final var covered = new Covered(areas);
+                    return new SoftSize((int) covered.w(), (int) covered.h());
                 }
             ).value(),
             shapes
@@ -113,21 +110,21 @@ public class Row implements Shape {
         final var areas = this.shapes.map(
             shape -> shape.adjustment(new NoAdjustment())
         );
-        final Supplier<Integer> widths = new CleanWidth(areas);
-        final int unavailable = new UnavailableWidth(areas).get();
-        final Supplier<Integer> width = new Width(this.area);
+        final var widths = new CleanWidth(areas);
+        final int unavailable = new UnavailableWidth(areas).getAsInt();
+        final var width = new Width(this.area);
         final var sizeAdjustment = new unit.tuple.adjustment.Short<Integer, Integer>(
             integer -> {
-                if (widths.get() == 0) {
+                if (widths.getAsInt() == 0) {
                     final int empties = areas.count(
-                        a -> a.result((pos, size) -> !size.isFix())
+                        a -> !a.cleanW().isFix()
                     );
-                    return (width.get() - unavailable) / empties;
+                    return (width.getAsInt() - unavailable) / empties;
                 } else {
-                    return (int) (integer / (double) widths.get() * Math.max(0, width.get() - unavailable));
+                    return (int) (integer / (double) widths.getAsInt() * Math.max(0, width.getAsInt() - unavailable));
                 }
             },
-            height -> new Height(this.area).get()
+            height -> new Height(this.area).getAsInt()
         );
         this.area.adjustment(adjustment);
         this.shapes.foldLeft(
@@ -135,10 +132,7 @@ public class Row implements Shape {
             (previous, shape) -> shape.adjustment(
                 new Short(
                     new unit.tuple.adjustment.Short<>(
-                        x -> Area.result(
-                            previous,
-                            (x1, y1, w1, h1) -> x + x1 + Math.max(0, w1)
-                        ),
+                        x -> x + (int) previous.x() + (int) Math.max(0, previous.w()),
                         y -> adjustment.posAdjustment().adjustedSecond(y)
                     ),
                     sizeAdjustment

@@ -80,7 +80,12 @@ public class Oval implements Shape {
     @Override
     public final void draw(final Graphics graphics) {
         graphics.setColor(this.color);
-        Area.applyOn(this.area, graphics::fillOval);
+        graphics.fillOval(
+            (int) this.area.x(),
+            (int) this.area.y(),
+            (int) this.area.w(),
+            (int) this.area.h()
+        );
     }
 
     @Override

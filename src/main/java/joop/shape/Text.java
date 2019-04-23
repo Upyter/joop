@@ -147,14 +147,14 @@ public class Text implements Shape {
             new Cached<>(
                 () -> {
                     Font font = new Font("Times new Roman", Font.PLAIN, 25);
-                    final var bounds = pos.result(
-                        (x, y) -> font.createGlyphVector(
+                    final var bounds = font.createGlyphVector(
                             new Canvas()
                                 .getFontMetrics(font)
                                 .getFontRenderContext(),
                             content.get()
-                        ).getPixelBounds(null, x, y)
-                    );
+                        ).getPixelBounds(null, (int) pos.x(), (int) pos.y());
+                    System.out.println("FixSize: " + new FixSize(bounds.width, bounds.height).w());
+                    System.out.println("FixSize: " + new FixSize(bounds.width, bounds.height).h());
                     return new AreaOf(
                         pos,
                         new FixSize(bounds.width, bounds.height)
@@ -179,16 +179,18 @@ public class Text implements Shape {
         this.content = content;
         this.area = area;
         this.color = color.result(java.awt.Color::new);
-        this.font = new Font("Times new Roman", Font.PLAIN, 25);
+        this.font = new Font("Arial", Font.PLAIN, 25);
     }
 
     @Override
     public final void draw(final Graphics graphics) {
         graphics.setColor(this.color);
         graphics.setFont(this.font);
-        Area.applyOn(
-            this.area.value(),
-            (x, y, w, h) -> graphics.drawString(this.content.get(), x, y + h)
+        final var current = this.area.value();
+        graphics.drawString(
+            this.content.get(),
+            (int) current.x(),
+            (int) (current.y() + current.h())
         );
     }
 

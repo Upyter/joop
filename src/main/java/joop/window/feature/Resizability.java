@@ -21,11 +21,16 @@
 
 package joop.window.feature;
 
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.function.Consumer;
 import javax.swing.JFrame;
 import unit.area.Area;
 import unit.functional.Lazy;
+import unit.scalar.FixScalar;
+import unit.scalar.SoftScalar;
 import unit.size.Size;
+import unit.size.SoftSize;
 
 /**
  * Makes a window resizable if its size is soft. Otherwise it will be
@@ -44,7 +49,12 @@ public class Resizability implements Consumer<JFrame> {
      * @param area The area of the window to get the size from.
      */
     public Resizability(final Area area) {
-        this(() -> area.result((pos, size) -> size));
+        this(
+            () -> new SoftSize(
+                area.cleanW().isFix() ? new FixScalar(area.w()) : new SoftScalar(area.cleanW().cleanValue()),
+                area.cleanH().isFix() ? new FixScalar(area.h()) : new SoftScalar(area.cleanH().cleanValue())
+            )
+        );
     }
 
     /**
@@ -65,6 +75,34 @@ public class Resizability implements Consumer<JFrame> {
 
     @Override
     public final void accept(final JFrame frame) {
-        frame.setResizable(!this.size.value().isFix());
+        final var current = this.size.value();
+        if (current.cleanW().isFix() && current.cleanH().isFix()) {
+            frame.setResizable(false);
+            System.out.println("FIX");
+        } else {
+            frame.setResizable(true);
+            frame.addComponentListener(
+                new ComponentAdapter() {
+                    @Override
+                    public void componentResized(ComponentEvent event) {
+                        final var current = Resizability.this.size.value();
+                        final int width;
+                        if (current.cleanW().isFix()) {
+                            width = (int) current.w();
+                        } else {
+                            width = frame.getWidth();
+                        }
+                        final int height;
+                        if (current.cleanH().isFix()) {
+                            height = (int) current.h();
+                        } else {
+                            height = frame.getHeight();
+                        }
+                        frame.setSize(width, height);
+                        super.componentResized(event);
+                    }
+                }
+            );
+        }
     }
 }

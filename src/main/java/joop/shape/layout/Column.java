@@ -24,7 +24,6 @@ package joop.shape.layout;
 import io.vavr.collection.List;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.function.Supplier;
 import joop.event.mouse.InputHardware;
 import joop.shape.Shape;
 import unit.area.Adjustment;
@@ -74,10 +73,8 @@ public class Column implements Shape {
                 () -> {
                     final var areas = new ArrayList<Area>(shapes.size());
                     shapes.forEach(shape -> areas.add(shape.adjustment(new NoAdjustment())));
-                    return Area.result(
-                        new Covered(areas),
-                        (x, y, w, h) -> new SoftSize(w, h)
-                    );
+                    final var covered = new Covered(areas);
+                    return new SoftSize((int) covered.w(), (int) covered.h());
                 }
             ).value(),
             shapes
@@ -116,19 +113,19 @@ public class Column implements Shape {
         final var areas = this.shapes.map(
             shape -> shape.adjustment(new NoAdjustment())
         );
-        final Supplier<Integer> heights = new CleanHeight(areas);
-        final int unavailable = new UnavailableHeight(areas).get();
-        final Supplier<Integer> height = new Height(this.area);
+        final var heights = new CleanHeight(areas);
+        final var unavailable = new UnavailableHeight(areas).getAsInt();
+        final var height = new Height(this.area);
         final var sizeAdjustment = new unit.tuple.adjustment.Short<Integer, Integer>(
-            width -> new Width(this.area).get(),
+            width -> new Width(this.area).getAsInt(),
             integer -> {
-                if (heights.get() == 0) {
+                if (heights.getAsInt() == 0) {
                     final int empties = areas.count(
-                        a -> a.result((pos, size) -> !size.isFix())
+                        a -> !a.cleanH().isFix()
                     );
-                    return (height.get() - unavailable) / empties;
+                    return (height.getAsInt() - unavailable) / empties;
                 } else {
-                    return (int) (integer / (double) heights.get() * Math.max(0, height.get() - unavailable));
+                    return (int) (integer / (double) heights.getAsInt() * Math.max(0, height.getAsInt() - unavailable));
                 }
             }
         );
@@ -139,10 +136,7 @@ public class Column implements Shape {
                 new Short(
                     new unit.tuple.adjustment.Short<>(
                         x -> adjustment.posAdjustment().adjustedFirst(x),
-                        y -> Area.result(
-                            previous,
-                            (x1, y1, w1, h1) -> y + y1 + Math.max(0, h1)
-                        )
+                        y -> y + (int) previous.y() + (int) Math.max(0, previous.h())
                     ),
                     sizeAdjustment
                 )

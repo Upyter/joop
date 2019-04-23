@@ -36,12 +36,12 @@ import unit.size.AdjustableSize;
 import unit.size.SoftSize;
 
 /**
- * A filled rectangle.
+ * An unfilled rectangle.
  * <p>This class doesn't change its own state. Whether it is immutable or not,
  * depends on the given constructor arguments.</p>
- * @since 0.7
+ * @since 0.74
  */
-public class Rect implements Shape {
+public class UnfilledRect implements Shape {
     /**
      * The area of the rect.
      */
@@ -62,7 +62,7 @@ public class Rect implements Shape {
      * This is useful in layouts because they may handle the position
      * and size.
      */
-    public Rect() {
+    public UnfilledRect() {
         this(0, 0, 0, 0);
     }
 
@@ -72,7 +72,7 @@ public class Rect implements Shape {
      * and size.
      * @param color The color of the rect.
      */
-    public Rect(final Color color) {
+    public UnfilledRect(final Color color) {
         this(new AreaOf(new SoftPos(), new SoftSize()), color);
     }
 
@@ -85,7 +85,7 @@ public class Rect implements Shape {
      * @checkstyle ParameterName (4 lines)
      * @checkstyle ParameterNumber (3 lines)
      */
-    public Rect(
+    public UnfilledRect(
         final int x, final int y, final int width, final int height
     ) {
         this(new AreaOf(x, y, width, height), new Black());
@@ -95,7 +95,7 @@ public class Rect implements Shape {
      * Ctor. The position will be 0|0 (soft).
      * @param size The size of the rect.
      */
-    public Rect(final AdjustableSize size, final Color color) {
+    public UnfilledRect(final AdjustableSize size, final Color color) {
         this(new AreaOf(new SoftPos(), size), color);
     }
 
@@ -103,7 +103,7 @@ public class Rect implements Shape {
      * Ctor. Creates a black rect.
      * @param area The area of the rect.
      */
-    public Rect(final Area area) {
+    public UnfilledRect(final Area area) {
         this(area, new Black());
     }
 
@@ -112,7 +112,7 @@ public class Rect implements Shape {
      * @param area The area of the rect.
      * @param color The color of the rect.
      */
-    public Rect(final Area area, final Color color) {
+    public UnfilledRect(final Area area, final Color color) {
         this(area, color, (mouse, overlap) -> { });
     }
 
@@ -122,7 +122,7 @@ public class Rect implements Shape {
      * @param color The color of the rect.
      * @param event The event of the rect.
      */
-    public Rect(final Area area, final Color color, final Event event) {
+    public UnfilledRect(final Area area, final Color color, final Event event) {
         this(new OverlapAreaOf(area), color, event);
     }
 
@@ -132,7 +132,7 @@ public class Rect implements Shape {
      * @param color The color of the rect.
      * @param event The event of the rect.
      */
-    public Rect(final OverlapArea area, final Color color, final Event event) {
+    public UnfilledRect(final OverlapArea area, final Color color, final Event event) {
         this.area = area;
         this.color = color.result(java.awt.Color::new);
         this.event = event;
@@ -141,11 +141,11 @@ public class Rect implements Shape {
     @Override
     public final void draw(final Graphics graphics) {
         graphics.setColor(this.color);
-        graphics.fillRect(
-            (int) area.x(),
-            (int) area.y(),
-            (int) area.w(),
-            (int) area.h()
+        graphics.drawRect(
+            (int) this.area.x(),
+            (int) this.area.y(),
+            (int) this.area.w() - 1,
+            (int) this.area.h() - 1
         );
     }
 

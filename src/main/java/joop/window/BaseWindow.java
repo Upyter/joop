@@ -36,7 +36,6 @@ import unit.area.Area;
 import unit.area.adjustment.NoAdjustment;
 import unit.functional.Cached;
 import unit.functional.Lazy;
-import unit.tuple.Tuple;
 
 /**
  * Represents a simple window. To apply some settings on this window,
@@ -106,27 +105,17 @@ public class BaseWindow implements Showable {
                             shape.draw(graphics);
                         }
                     };
-                    Tuple.applyOn(
-                        area,
-                        (pos, size) -> Tuple.applyOn(
-                            size,
-                            (width, height) -> panel.setPreferredSize(
-                                new Dimension(width, height)
-                            )
-                        )
+                    panel.setPreferredSize(
+                        new Dimension((int) area.w(), (int) area.h())
                     );
                     panel.setBackground(Color.WHITE);
                     result.add(panel);
                     result.pack();
                     result.setVisible(true);
                     result.setResizable(false);
-                    Area.applyOn(
-                        area,
-                        // @checkstyle ParameterName (1 line)
-                        (x, y, width, height) -> result.setLocation(
-                            x - result.getInsets().left,
-                            y - result.getInsets().top
-                        )
+                    result.setLocation(
+                        (int) area.x() - result.getInsets().left,
+                        (int) area.y() - result.getInsets().top
                     );
                     feature.accept(result);
                     shape.registerFor(new Delegation(result));

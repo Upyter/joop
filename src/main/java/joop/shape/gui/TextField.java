@@ -27,12 +27,12 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import joop.event.keyboard.Press;
 import joop.event.mouse.InputHardware;
-import joop.shape.Rect;
 import joop.shape.Shape;
 import joop.shape.Text;
+import joop.shape.UnfilledRect;
 import unit.area.Adjustment;
 import unit.area.Area;
-import unit.color.RGBA;
+import unit.color.Black;
 import unit.pos.SoftPos;
 
 /**
@@ -61,19 +61,16 @@ public class TextField implements Shape {
                 }
             }
         };
-        this.shape = new Rect(
+        this.shape = new UnfilledRect(
             area,
-            new RGBA(50, 203, 43),
+            new Black(),
             new Press(text::add)
         );
         this.text = new Text(
             text::getValue,
             new SoftPos(
-                () -> Area.result(
-                    area,
-                    (x, y, w, h) -> Math.min(0, w - width(text.getValue(), area))
-                ),
-                0
+                () -> (int) Math.min(1, area.w() - width(text.getValue(), area)),
+                1
             )
         );
         this.area = area;
@@ -81,23 +78,27 @@ public class TextField implements Shape {
 
     private static int width(String string, Area area) {
         Font font = new Font("Times new Roman", Font.PLAIN, 25);
-        final var bounds = Area.result(
-            area,
-            (x, y, w, h) -> font.createGlyphVector(
-                new Canvas()
-                    .getFontMetrics(font)
-                    .getFontRenderContext(),
-                string
-            ).getPixelBounds(null, x, y)
-        );
+        final var bounds = font.createGlyphVector(
+            new Canvas()
+                .getFontMetrics(font)
+                .getFontRenderContext(),
+            string
+        ).getPixelBounds(null, (float) area.x(), (float) area.y());
         return bounds.width;
     }
 
     @Override
     public final void draw(final Graphics graphics) {
-        Area.applyOn(this.area, graphics::setClip);
+        final var backup = graphics.getClip();
+        graphics.setClip(
+            (int) this.area.x(),
+            (int) this.area.y(),
+            (int) this.area.w(),
+            (int) this.area.h()
+        );
         this.shape.draw(graphics);
         this.text.draw(graphics);
+        graphics.setClip(backup);
     }
 
     @Override
@@ -107,6 +108,7 @@ public class TextField implements Shape {
 
     @Override
     public final Area adjustment(final Adjustment adjustment) {
+        this.text.adjustment(adjustment);
         return this.shape.adjustment(adjustment);
     }
 }
