@@ -26,7 +26,7 @@ import joop.shape.Oval;
 import joop.window.BaseWindow;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
-import unit.area.AreaOf;
+import unit.area.SoftArea;
 import unit.color.RGBA;
 
 /**
@@ -81,7 +81,7 @@ public final class WindowAndOvalTest {
         final var blue = 255;
         MatcherAssert.assertThat(
             new Oval(
-                new AreaOf(x, y, width, height),
+                new SoftArea(x, y, width, height),
                 new RGBA(0, 0, blue)
             ),
             new CorrectContent(

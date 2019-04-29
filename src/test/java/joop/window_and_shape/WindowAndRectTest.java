@@ -27,7 +27,7 @@ import joop.window.BaseWindow;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import unit.area.Area;
-import unit.area.AreaOf;
+import unit.area.SoftArea;
 import unit.color.RGBA;
 
 /**
@@ -79,7 +79,7 @@ public final class WindowAndRectTest {
         final var height = 140;
         MatcherAssert.assertThat(
             new Rect(
-                new AreaOf(x, y, width, height)
+                new SoftArea(x, y, width, height)
             ),
             new CorrectContent(
                 WindowAndRectTest.BLACK_RECT_PATH,
@@ -108,7 +108,7 @@ public final class WindowAndRectTest {
         final var red = 255;
         MatcherAssert.assertThat(
             new Rect(
-                new AreaOf(x, y, width, height),
+                new SoftArea(x, y, width, height),
                 new RGBA(red, 0, 0)
             ),
             new CorrectContent(

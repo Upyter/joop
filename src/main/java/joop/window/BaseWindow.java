@@ -33,7 +33,7 @@ import joop.event.mouse.Delegation;
 import joop.shape.EmptyShape;
 import joop.shape.Shape;
 import unit.area.Area;
-import unit.area.adjustment.NoAdjustment;
+import unit.area.NoAdjustment;
 import unit.functional.Cached;
 import unit.functional.Lazy;
 
@@ -94,7 +94,7 @@ public class BaseWindow implements Showable {
             new Cached<>(
                 () -> {
                     final var result = new JFrame();
-                    shape.adjustment(NoAdjustment.cached());
+                    shape.adjustment(NoAdjustment.instance());
                     result.setDefaultCloseOperation(
                         WindowConstants.EXIT_ON_CLOSE
                     );

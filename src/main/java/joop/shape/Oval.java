@@ -25,7 +25,7 @@ import java.awt.Graphics;
 import joop.event.mouse.InputHardware;
 import unit.area.Adjustment;
 import unit.area.Area;
-import unit.area.AreaOf;
+import unit.area.SoftArea;
 import unit.color.Black;
 import unit.color.Color;
 
@@ -56,7 +56,7 @@ public class Oval implements Shape {
      * @checkstyle ParameterName (2 lines)
      */
     public Oval(final int x, final int y, final int width, final int height) {
-        this(new AreaOf(x, y, width, height));
+        this(new SoftArea(x, y, width, height));
     }
 
     /**

@@ -24,7 +24,7 @@ package joop.shape.layout;
 import io.vavr.collection.List;
 import joop.shape.Shape;
 import unit.area.Area;
-import unit.size.AdjustableSize;
+import unit.size.Size;
 
 /**
  * A grid of shapes.
@@ -38,7 +38,7 @@ public class Grid extends Column {
      * @param shapes The shapes for the grid. The array represents the
      *  columns and the inner the rows of the grid.
      */
-    public Grid(final AdjustableSize size, final List<Shape>... shapes) {
+    public Grid(final Size size, final List<Shape>... shapes) {
         this(size, List.of(shapes));
     }
 
@@ -48,7 +48,7 @@ public class Grid extends Column {
      * @param shapes The shapes for the grid. The outer list represents the
      *  columns and the inner the rows of the grid.
      */
-    public Grid(final AdjustableSize size, final List<List<Shape>> shapes) {
+    public Grid(final Size size, final List<List<Shape>> shapes) {
         super(size, shapes.map(Row::new));
     }
 

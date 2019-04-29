@@ -33,7 +33,7 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import unit.area.Area;
-import unit.area.AreaOf;
+import unit.area.SoftArea;
 
 /**
  * Tests for {@link BaseWindow}.
@@ -55,7 +55,7 @@ public final class BaseWindowTest {
         final var width = 453;
         final var height = 642;
         new BaseWindow(
-            new AreaOf(x, y, width, height)
+            new SoftArea(x, y, width, height)
         ).show();
         final long milliseconds = 350L;
         Thread.sleep(milliseconds);
@@ -79,7 +79,7 @@ public final class BaseWindowTest {
         final var height = 122;
         final List<Dimension> sizes = new ArrayList<>(1);
         final var window = new BaseWindow(
-            new AreaOf(width, height),
+            new SoftArea(width, height),
             (JFrame frame) -> sizes.add(frame.getContentPane().getSize())
         );
         MatcherAssert.assertThat(

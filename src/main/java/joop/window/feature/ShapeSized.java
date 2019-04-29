@@ -26,7 +26,7 @@ import java.util.function.Consumer;
 import javax.swing.JFrame;
 import joop.shape.Shape;
 import unit.area.Adjustment;
-import unit.area.adjustment.NoAdjustment;
+import unit.area.NoAdjustment;
 
 /**
  * Used to give a window the size of the given shape.
@@ -50,7 +50,7 @@ public class ShapeSized implements Consumer<JFrame> {
 
     @Override
     public final void accept(final JFrame frame) {
-        final var area = this.shape.adjustment(NoAdjustment.cached());
+        final var area = this.shape.adjustment(NoAdjustment.instance());
         frame.getContentPane().setPreferredSize(
             new Dimension((int) area.w(), (int) area.h())
         );

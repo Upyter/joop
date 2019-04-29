@@ -26,14 +26,12 @@ import joop.event.Event;
 import joop.event.mouse.InputHardware;
 import unit.area.Adjustment;
 import unit.area.Area;
-import unit.area.AreaOf;
 import unit.area.OverlapArea;
 import unit.area.OverlapAreaOf;
+import unit.area.SoftArea;
 import unit.color.Black;
 import unit.color.Color;
-import unit.pos.SoftPos;
-import unit.size.AdjustableSize;
-import unit.size.SoftSize;
+import unit.size.Size;
 
 /**
  * A filled rectangle.
@@ -73,7 +71,7 @@ public class Rect implements Shape {
      * @param color The color of the rect.
      */
     public Rect(final Color color) {
-        this(new AreaOf(new SoftPos(), new SoftSize()), color);
+        this(new SoftArea(), color);
     }
 
     /**
@@ -88,15 +86,15 @@ public class Rect implements Shape {
     public Rect(
         final int x, final int y, final int width, final int height
     ) {
-        this(new AreaOf(x, y, width, height), new Black());
+        this(new SoftArea(x, y, width, height), new Black());
     }
 
     /**
      * Ctor. The position will be 0|0 (soft).
      * @param size The size of the rect.
      */
-    public Rect(final AdjustableSize size, final Color color) {
-        this(new AreaOf(new SoftPos(), size), color);
+    public Rect(final Size size, final Color color) {
+        this(new SoftArea(size), color);
     }
 
     /**
@@ -142,10 +140,10 @@ public class Rect implements Shape {
     public final void draw(final Graphics graphics) {
         graphics.setColor(this.color);
         graphics.fillRect(
-            (int) area.x(),
-            (int) area.y(),
-            (int) area.w(),
-            (int) area.h()
+            (int) this.area.x(),
+            (int) this.area.y(),
+            (int) this.area.w(),
+            (int) this.area.h()
         );
     }
 

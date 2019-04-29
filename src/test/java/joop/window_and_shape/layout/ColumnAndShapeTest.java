@@ -26,7 +26,7 @@ import joop.shape.Rect;
 import joop.shape.layout.Column;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
-import unit.area.AreaOf;
+import unit.area.SoftArea;
 import unit.color.RGBA;
 
 /**
@@ -86,15 +86,15 @@ public final class ColumnAndShapeTest {
         MatcherAssert.assertThat(
             new Column(
                 new Rect(
-                    new AreaOf(x1, y, width, height1),
+                    new SoftArea(x1, y, width, height1),
                     new RGBA(red, 0, 0)
                 ),
                 new Rect(
-                    new AreaOf(x2, y, width, height2),
+                    new SoftArea(x2, y, width, height2),
                     new RGBA(0, green, 0)
                 ),
                 new Rect(
-                    new AreaOf(x3, y, width, height3),
+                    new SoftArea(x3, y, width, height3),
                     new RGBA(0, 0, blue)
                 )
             ),

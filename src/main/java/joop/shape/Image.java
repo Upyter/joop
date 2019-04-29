@@ -32,12 +32,12 @@ import joop.event.Event;
 import joop.event.mouse.InputHardware;
 import unit.area.Adjustment;
 import unit.area.Area;
-import unit.area.AreaOf;
 import unit.area.OverlapArea;
 import unit.area.OverlapAreaOf;
+import unit.area.SoftArea;
 import unit.functional.Cached;
 import unit.functional.Lazy;
-import unit.pos.AdjustablePos;
+import unit.pos.Pos;
 
 /**
  * An image. This class won't cache the result of the given {@link Lazy}
@@ -104,7 +104,7 @@ public class Image implements Shape {
      * @param file The image file.
      */
     public Image(final File file) {
-        this(file, new AreaOf());
+        this(file, new SoftArea());
     }
 
     /**
@@ -168,8 +168,8 @@ public class Image implements Shape {
      * @param loading The loading of the image.
      * @param pos The position of the image.
      */
-    public Image(final BufferedImage loading, final AdjustablePos pos) {
-        this(loading, new AreaOf(pos));
+    public Image(final BufferedImage loading, final Pos pos) {
+        this(loading, new SoftArea(pos));
     }
 
     /**
@@ -177,8 +177,8 @@ public class Image implements Shape {
      * @param loading The loading of the image.
      * @param pos The position of the image.
      */
-    public Image(final Lazy<BufferedImage> loading, final AdjustablePos pos) {
-        this(loading, new AreaOf(pos));
+    public Image(final Lazy<BufferedImage> loading, final Pos pos) {
+        this(loading, new SoftArea(pos));
     }
 
     /**
@@ -208,9 +208,7 @@ public class Image implements Shape {
      * @param event The event of the image.
      */
     public Image(
-        final BufferedImage loading,
-        final Area area,
-        final Event event
+        final BufferedImage loading, final Area area, final Event event
     ) {
         this(loading, new OverlapAreaOf(area), event);
     }
@@ -222,9 +220,7 @@ public class Image implements Shape {
      * @param event The event of the image.
      */
     public Image(
-        final Lazy<BufferedImage> loading,
-        final Area area,
-        final Event event
+        final Lazy<BufferedImage> loading, final Area area, final Event event
     ) {
         this(loading, new OverlapAreaOf(area), event);
     }
@@ -236,9 +232,7 @@ public class Image implements Shape {
      * @param event The event of the image.
      */
     public Image(
-        final BufferedImage loading,
-        final OverlapArea area,
-        final Event event
+        final BufferedImage loading, final OverlapArea area, final Event event
     ) {
         this(() -> loading, area, event);
     }

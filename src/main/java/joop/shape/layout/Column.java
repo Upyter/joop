@@ -28,19 +28,17 @@ import joop.event.mouse.InputHardware;
 import joop.shape.Shape;
 import unit.area.Adjustment;
 import unit.area.Area;
-import unit.area.AreaOf;
+import unit.area.AreaAdjustment;
 import unit.area.Covered;
+import unit.area.NoAdjustment;
 import unit.area.Sizeless;
-import unit.area.adjustment.NoAdjustment;
-import unit.area.adjustment.Short;
-import unit.area.supplier.CleanHeight;
-import unit.area.supplier.Height;
-import unit.area.supplier.UnavailableHeight;
-import unit.area.supplier.Width;
+import unit.area.SoftArea;
 import unit.functional.Cached;
-import unit.pos.SoftPos;
-import unit.size.AdjustableSize;
+import unit.size.Size;
+import unit.size.SizeAdjustment;
 import unit.size.SoftSize;
+import unit.size.raw.AvailableSize;
+import unit.size.raw.UnavailableSize;
 
 /**
  * A layout that adjust its shapes to be in a column
@@ -72,33 +70,34 @@ public class Column implements Shape {
             new Cached<>(
                 () -> {
                     final var areas = new ArrayList<Area>(shapes.size());
-                    shapes.forEach(shape -> areas.add(shape.adjustment(new NoAdjustment())));
-                    final var covered = new Covered(areas);
-                    return new SoftSize((int) covered.w(), (int) covered.h());
+                    shapes.forEach(
+                        shape -> areas.add(
+                            shape.adjustment(NoAdjustment.instance())
+                        )
+                    );
+                    final Area covered = new Covered(areas);
+                    return new SoftSize(covered.w(), covered.h());
                 }
             ).value(),
             shapes
         );
     }
 
-    public Column(final AdjustableSize size, final Shape... shapes) {
+    public Column(final Size size, final Shape... shapes) {
         this(
             size,
             List.of(shapes)
         );
     }
 
-    public Column(final AdjustableSize size, final List<Shape> shapes) {
+    public Column(final Size size, final List<Shape> shapes) {
         this(
-            new AreaOf(new SoftPos(), size),
+            new SoftArea(size),
             shapes
         );
     }
 
-    public Column(
-        final Area area,
-        final List<Shape> shapes
-    ) {
+    public Column(final Area area, final List<Shape> shapes) {
         this.area = area;
         this.shapes = shapes;
     }
@@ -111,21 +110,20 @@ public class Column implements Shape {
     @Override
     public final Area adjustment(final Adjustment adjustment) {
         final var areas = this.shapes.map(
-            shape -> shape.adjustment(new NoAdjustment())
+            shape -> shape.adjustment(NoAdjustment.instance())
         );
-        final var heights = new CleanHeight(areas);
-        final var unavailable = new UnavailableHeight(areas).getAsInt();
-        final var height = new Height(this.area);
-        final var sizeAdjustment = new unit.tuple.adjustment.Short<Integer, Integer>(
-            width -> new Width(this.area).getAsInt(),
-            integer -> {
-                if (heights.getAsInt() == 0) {
+        final var available = new AvailableSize(areas);
+        final var unavailable = new UnavailableSize(areas);
+        final unit.size.Adjustment sizeAdjustment = new SizeAdjustment(
+            () -> this.area.w(),
+            height -> {
+                if (available.h() == 0.0) {
                     final int empties = areas.count(
                         a -> !a.cleanH().isFix()
                     );
-                    return (height.getAsInt() - unavailable) / empties;
+                    return (this.area.h() - unavailable.h()) / empties;
                 } else {
-                    return (int) (integer / (double) heights.getAsInt() * Math.max(0, height.getAsInt() - unavailable));
+                    return height.cleanValue() / available.h() * Math.max(0.0, this.area.h() - unavailable.h());
                 }
             }
         );
@@ -133,11 +131,9 @@ public class Column implements Shape {
         this.shapes.foldLeft(
             (Area) new Sizeless(this.area),
             (previous, shape) -> shape.adjustment(
-                new Short(
-                    new unit.tuple.adjustment.Short<>(
-                        x -> adjustment.posAdjustment().adjustedFirst(x),
-                        y -> y + (int) previous.y() + (int) Math.max(0, previous.h())
-                    ),
+                new AreaAdjustment(
+                    adjustment::adjustedX,
+                    (x, y, w, h) -> y.cleanValue() + previous.y() + Math.max(0.0, previous.h()),
                     sizeAdjustment
                 )
             )

@@ -36,13 +36,12 @@ import org.apache.commons.lang3.mutable.MutableBoolean;
 import unit.Overlap;
 import unit.area.Adjustment;
 import unit.area.Area;
-import unit.area.AreaOf;
 import unit.area.OverlapAreaOf;
+import unit.area.SoftArea;
 import unit.color.White;
 import unit.functional.Action;
 import unit.functional.Toggleable;
-import unit.pos.SoftPos;
-import unit.size.AdjustableSize;
+import unit.size.Size;
 import unit.size.SoftSize;
 
 /**
@@ -114,9 +113,9 @@ public class Button implements Shape {
      * @param size The size of the button.
      * @param action The action to be applied when the button is released.
      */
-    public Button(final AdjustableSize size, final Action action) {
+    public Button(final Size size, final Action action) {
         this(
-            new AreaOf(new SoftPos(), size),
+            new SoftArea(size),
             action
         );
     }

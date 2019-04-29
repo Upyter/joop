@@ -26,14 +26,12 @@ import joop.event.Event;
 import joop.event.mouse.InputHardware;
 import unit.area.Adjustment;
 import unit.area.Area;
-import unit.area.AreaOf;
 import unit.area.OverlapArea;
 import unit.area.OverlapAreaOf;
+import unit.area.SoftArea;
 import unit.color.Black;
 import unit.color.Color;
-import unit.pos.SoftPos;
-import unit.size.AdjustableSize;
-import unit.size.SoftSize;
+import unit.size.Size;
 
 /**
  * An unfilled rectangle.
@@ -73,7 +71,7 @@ public class UnfilledRect implements Shape {
      * @param color The color of the rect.
      */
     public UnfilledRect(final Color color) {
-        this(new AreaOf(new SoftPos(), new SoftSize()), color);
+        this(new SoftArea(), color);
     }
 
     /**
@@ -88,15 +86,15 @@ public class UnfilledRect implements Shape {
     public UnfilledRect(
         final int x, final int y, final int width, final int height
     ) {
-        this(new AreaOf(x, y, width, height), new Black());
+        this(new SoftArea(x, y, width, height), new Black());
     }
 
     /**
      * Ctor. The position will be 0|0 (soft).
      * @param size The size of the rect.
      */
-    public UnfilledRect(final AdjustableSize size, final Color color) {
-        this(new AreaOf(new SoftPos(), size), color);
+    public UnfilledRect(final Size size, final Color color) {
+        this(new SoftArea(size), color);
     }
 
     /**

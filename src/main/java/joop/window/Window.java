@@ -31,10 +31,10 @@ import joop.window.feature.NoFeature;
 import joop.window.feature.Resizability;
 import joop.window.feature.ShapeSized;
 import unit.area.Area;
-import unit.area.AreaOf;
-import unit.pos.AdjustablePos;
-import unit.size.AdjustableSize;
-import unit.size.SoftSize;
+import unit.area.MixArea;
+import unit.area.SoftArea;
+import unit.pos.Pos;
+import unit.size.Size;
 
 /**
  * A class to create a window with the most used features. Use
@@ -49,15 +49,8 @@ public class Window extends BaseWindow {
      * @param pos The position of the window.
      * @param shape The shape to put on the window.
      */
-    public Window(
-        final AdjustablePos pos,
-        final Shape shape
-    ) {
-        this(
-            "",
-            pos,
-            shape
-        );
+    public Window(final Pos pos, final Shape shape) {
+        this("", pos, shape);
     }
 
     /**
@@ -66,14 +59,10 @@ public class Window extends BaseWindow {
      * @param size The size of the window.
      * @param shape The shape to put on the window.
      */
-    public Window(
-        final AdjustablePos pos,
-        final AdjustableSize size,
-        final Shape shape
-    ) {
+    public Window(final Pos pos, final Size size, final Shape shape) {
         this(
             "",
-            new AreaOf(pos, size),
+            new MixArea(pos, size),
             shape
         );
     }
@@ -83,10 +72,10 @@ public class Window extends BaseWindow {
      * @param size The size of the window.
      * @param shape The shape to put on the window.
      */
-    public Window(final AdjustableSize size, final Shape shape) {
+    public Window(final Size size, final Shape shape) {
         this(
             "",
-            new AreaOf(size),
+            new SoftArea(size),
             shape,
             new Centered()
         );
@@ -98,12 +87,10 @@ public class Window extends BaseWindow {
      * @param size The size of the window.
      * @param shape The shape to put on the window.
      */
-    public Window(
-        final String title, final AdjustableSize size, final Shape shape
-    ) {
+    public Window(final String title, final Size size, final Shape shape) {
         this(
             title,
-            new AreaOf(size),
+            new SoftArea(size),
             shape,
             new Centered()
         );
@@ -115,14 +102,10 @@ public class Window extends BaseWindow {
      * @param pos The position of the window.
      * @param shape The shape to put on the window.
      */
-    public Window(
-        final String title,
-        final AdjustablePos pos,
-        final Shape shape
-    ) {
+    public Window(final String title, final Pos pos, final Shape shape) {
         this(
             title,
-            new AreaOf(pos, new SoftSize()),
+            new SoftArea(pos),
             shape,
             new ShapeSized(shape)
         );
@@ -136,14 +119,11 @@ public class Window extends BaseWindow {
      * @param shape The shape to put on the window.
      */
     public Window(
-        final String title,
-        final AdjustablePos pos,
-        final AdjustableSize size,
-        final Shape shape
+        final String title, final Pos pos, final Size size, final Shape shape
     ) {
         this(
             title,
-            new AreaOf(pos, size),
+            new MixArea(pos, size),
             shape
         );
     }
@@ -165,10 +145,7 @@ public class Window extends BaseWindow {
      * @param shape The shape to put on the window.
      */
     public Window(final Shape shape) {
-        this(
-            "",
-            shape
-        );
+        this("", shape);
     }
 
     /**
@@ -182,7 +159,7 @@ public class Window extends BaseWindow {
     public Window(final String title, final Shape shape) {
         this(
             title,
-            new AreaOf(new SoftSize()),
+            new SoftArea(),
             shape,
             new FoundArea(shape)
         );

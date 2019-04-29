@@ -26,11 +26,9 @@ import joop.event.mouse.Press;
 import joop.shape.gui.Labeled;
 import joop.shape.layout.Column;
 import unit.area.Area;
-import unit.area.AreaOf;
+import unit.area.SoftArea;
 import unit.color.RGBA;
-import unit.pos.SoftPos;
-import unit.size.AdjustableSize;
-import unit.size.SoftSize;
+import unit.size.Size;
 
 /**
  * A textual list.
@@ -44,7 +42,7 @@ public class ListView extends Column {
      * @param size The size of the list view.
      * @param texts The texts to be shown in the list.
      */
-    public ListView(final AdjustableSize size , final String... texts) {
+    public ListView(final Size size , final String... texts) {
         this(size, List.of(texts));
     }
 
@@ -74,10 +72,7 @@ public class ListView extends Column {
             texts.map(
                 text -> new Labeled(
                     text,
-                    new AreaOf(
-                        new SoftPos(),
-                        new SoftSize()
-                    ),
+                    new SoftArea(),
                     (area, color, event) -> new Visible(
                         visibility -> new Rect(
                             area,
@@ -99,9 +94,9 @@ public class ListView extends Column {
      * @param size The size of the list view.
      * @param texts The texts to be shown in the list.
      */
-    public ListView(final AdjustableSize size, final List<String> texts) {
+    public ListView(final Size size, final List<String> texts) {
         this(
-            new AreaOf(new SoftPos(), size),
+            new SoftArea(size),
             texts
         );
     }
@@ -117,10 +112,7 @@ public class ListView extends Column {
             texts.map(
                 text -> new Labeled(
                     text,
-                    new AreaOf(
-                        new SoftPos(),
-                        new SoftSize()
-                    ),
+                    new SoftArea(),
                     (area1, color, event) -> new Visible(
                         visibility -> new Rect(
                             area1,

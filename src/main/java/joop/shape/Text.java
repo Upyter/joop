@@ -29,12 +29,12 @@ import java.util.function.Supplier;
 import joop.event.mouse.InputHardware;
 import unit.area.Adjustment;
 import unit.area.Area;
-import unit.area.AreaOf;
+import unit.area.MixArea;
 import unit.color.Black;
 import unit.color.Color;
 import unit.functional.Cached;
 import unit.functional.Lazy;
-import unit.pos.AdjustablePos;
+import unit.pos.Pos;
 import unit.pos.SoftPos;
 import unit.size.FixSize;
 
@@ -70,7 +70,7 @@ public class Text implements Shape {
      * @param content The characters of the text.
      * @param pos The position of the text.
      */
-    public Text(final String content, final AdjustablePos pos) {
+    public Text(final String content, final Pos pos) {
         this(() -> content, pos);
     }
 
@@ -95,7 +95,7 @@ public class Text implements Shape {
      * @param content The characters of the text.
      * @param pos The position of the text.
      */
-    public Text(final int content, final AdjustablePos pos) {
+    public Text(final int content, final Pos pos) {
         this(() -> Integer.toString(content), pos, new Black());
     }
 
@@ -104,7 +104,7 @@ public class Text implements Shape {
      * @param content The characters of the text.
      * @param pos The position of the text.
      */
-    public Text(final IntSupplier content, final AdjustablePos pos) {
+    public Text(final IntSupplier content, final Pos pos) {
         this(() -> Integer.toString(content.getAsInt()), pos, new Black());
     }
 
@@ -113,7 +113,7 @@ public class Text implements Shape {
      * @param content The characters of the text.
      * @param pos The position of the text.
      */
-    public Text(final Supplier<String> content, final AdjustablePos pos) {
+    public Text(final Supplier<String> content, final Pos pos) {
         this(content, pos, new Black());
     }
 
@@ -123,7 +123,7 @@ public class Text implements Shape {
      * @param pos The position of the text.
      * @param color The color of the rect.
      */
-    public Text(final String content, final AdjustablePos pos, final Color color) {
+    public Text(final String content, final Pos pos, final Color color) {
         this(
             () -> content,
             pos,
@@ -139,7 +139,7 @@ public class Text implements Shape {
      */
     public Text(
         final Supplier<String> content,
-        final AdjustablePos pos,
+        final Pos pos,
         final Color color
     ) {
         this(
@@ -153,9 +153,7 @@ public class Text implements Shape {
                                 .getFontRenderContext(),
                             content.get()
                         ).getPixelBounds(null, (int) pos.x(), (int) pos.y());
-                    System.out.println("FixSize: " + new FixSize(bounds.width, bounds.height).w());
-                    System.out.println("FixSize: " + new FixSize(bounds.width, bounds.height).h());
-                    return new AreaOf(
+                    return new MixArea(
                         pos,
                         new FixSize(bounds.width, bounds.height)
                     );

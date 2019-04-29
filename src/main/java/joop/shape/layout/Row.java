@@ -28,19 +28,17 @@ import joop.event.mouse.InputHardware;
 import joop.shape.Shape;
 import unit.area.Adjustment;
 import unit.area.Area;
-import unit.area.AreaOf;
+import unit.area.AreaAdjustment;
 import unit.area.Covered;
+import unit.area.NoAdjustment;
 import unit.area.Sizeless;
-import unit.area.adjustment.NoAdjustment;
-import unit.area.adjustment.Short;
-import unit.area.supplier.CleanWidth;
-import unit.area.supplier.Height;
-import unit.area.supplier.UnavailableWidth;
-import unit.area.supplier.Width;
+import unit.area.SoftArea;
 import unit.functional.Cached;
-import unit.pos.SoftPos;
-import unit.size.AdjustableSize;
+import unit.size.Size;
+import unit.size.SizeAdjustment;
 import unit.size.SoftSize;
+import unit.size.raw.AvailableSize;
+import unit.size.raw.UnavailableSize;
 
 /**
  * A row of shapes.
@@ -72,25 +70,29 @@ public class Row implements Shape {
             new Cached<>(
                 () -> {
                     final var areas = new ArrayList<Area>(shapes.size());
-                    shapes.forEach(shape -> areas.add(shape.adjustment(new NoAdjustment())));
-                    final var covered = new Covered(areas);
-                    return new SoftSize((int) covered.w(), (int) covered.h());
+                    shapes.forEach(
+                        shape -> areas.add(
+                            shape.adjustment(NoAdjustment.instance())
+                        )
+                    );
+                    final Area covered = new Covered(areas);
+                    return new SoftSize(covered.w(), covered.h());
                 }
             ).value(),
             shapes
         );
     }
 
-    public Row(final AdjustableSize size, final Shape... shapes) {
+    public Row(final Size size, final Shape... shapes) {
         this(
-            new AreaOf(new SoftPos(), size),
+            new SoftArea(size),
             List.of(shapes)
         );
     }
 
-    public Row(final AdjustableSize size, final List<Shape> shapes) {
+    public Row(final Size size, final List<Shape> shapes) {
         this(
-            new AreaOf(new SoftPos(), size),
+            new SoftArea(size),
             shapes
         );
     }
@@ -108,33 +110,30 @@ public class Row implements Shape {
     @Override
     public final Area adjustment(final Adjustment adjustment) {
         final var areas = this.shapes.map(
-            shape -> shape.adjustment(new NoAdjustment())
+            shape -> shape.adjustment(NoAdjustment.instance())
         );
-        final var widths = new CleanWidth(areas);
-        final int unavailable = new UnavailableWidth(areas).getAsInt();
-        final var width = new Width(this.area);
-        final var sizeAdjustment = new unit.tuple.adjustment.Short<Integer, Integer>(
-            integer -> {
-                if (widths.getAsInt() == 0) {
+        final var available = new AvailableSize(areas);
+        final var unavailable = new UnavailableSize(areas).w();
+        final var sizeAdjustment = new SizeAdjustment(
+            width -> {
+                if (available.w() == 0.0) {
                     final int empties = areas.count(
                         a -> !a.cleanW().isFix()
                     );
-                    return (width.getAsInt() - unavailable) / empties;
+                    return (this.area.w() - unavailable) / empties;
                 } else {
-                    return (int) (integer / (double) widths.getAsInt() * Math.max(0, width.getAsInt() - unavailable));
+                    return width.cleanValue() / available.w() * Math.max(0.0, this.area.w() - unavailable);
                 }
             },
-            height -> new Height(this.area).getAsInt()
+            height -> this.area.h()
         );
         this.area.adjustment(adjustment);
         this.shapes.foldLeft(
             (Area) new Sizeless(this.area),
             (previous, shape) -> shape.adjustment(
-                new Short(
-                    new unit.tuple.adjustment.Short<>(
-                        x -> x + (int) previous.x() + (int) Math.max(0, previous.w()),
-                        y -> adjustment.posAdjustment().adjustedSecond(y)
-                    ),
+                new AreaAdjustment(
+                    (x, y, w, h) -> x.cleanValue() + previous.x() + Math.max(0.0, previous.w()),
+                    adjustment::adjustedY,
                     sizeAdjustment
                 )
             )

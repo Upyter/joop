@@ -33,7 +33,7 @@ import net.avh4.util.reflection.StackUtils;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
-import unit.area.AreaOf;
+import unit.area.SoftArea;
 import unit.functional.Cached;
 import unit.functional.Lazy;
 
@@ -125,7 +125,7 @@ public class CorrectContent extends TypeSafeDiagnosingMatcher<Shape> {
         final Shape shape, final Description description
     ) {
         new BaseWindow(
-            new AreaOf(this.width, this.height),
+            new SoftArea(this.width, this.height),
             shape
         ).show();
         try {

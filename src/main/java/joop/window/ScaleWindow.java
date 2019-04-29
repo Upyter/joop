@@ -31,12 +31,11 @@ import joop.window.feature.NoFeature;
 import joop.window.feature.Resizability;
 import joop.window.feature.ShapeSized;
 import unit.area.Area;
-import unit.area.AreaOf;
-import unit.area.adjustment.Short;
-import unit.pos.AdjustablePos;
-import unit.size.AdjustableSize;
-import unit.size.SoftSize;
-import unit.tuple.adjustment.NoAdjustment;
+import unit.area.AreaAdjustment;
+import unit.area.MixArea;
+import unit.area.SoftArea;
+import unit.pos.Pos;
+import unit.size.Size;
 
 /**
  * A window that adjusts its shape to its own size. Whether this window is
@@ -52,10 +51,7 @@ public class ScaleWindow extends Window {
      * @param size The size of the window.
      * @param shape The shape on the window.
      */
-    public ScaleWindow(
-        final AdjustableSize size,
-        final Shape shape
-    ) {
+    public ScaleWindow(final Size size, final Shape shape) {
         this("", size, shape);
     }
 
@@ -64,10 +60,7 @@ public class ScaleWindow extends Window {
      * @param pos The position of the window.
      * @param shape The shape on the window.
      */
-    public ScaleWindow(
-        final AdjustablePos pos,
-        final Shape shape
-    ) {
+    public ScaleWindow(final Pos pos, final Shape shape) {
         this("", pos, shape);
     }
 
@@ -77,12 +70,8 @@ public class ScaleWindow extends Window {
      * @param size The size of the window.
      * @param shape The shape on the window.
      */
-    public ScaleWindow(
-        final AdjustablePos pos,
-        final AdjustableSize size,
-        final Shape shape
-    ) {
-        this("", new AreaOf(pos, size), shape);
+    public ScaleWindow(final Pos pos, final Size size, final Shape shape) {
+        this("", new MixArea(pos, size), shape);
     }
 
     /**
@@ -91,14 +80,10 @@ public class ScaleWindow extends Window {
      * @param size The size of the window.
      * @param shape The shape on the window.
      */
-    public ScaleWindow(
-        final String title,
-        final AdjustableSize size,
-        final Shape shape
-    ) {
+    public ScaleWindow(final String title, final Size size, final Shape shape) {
         this(
             title,
-            new AreaOf(size),
+            new SoftArea(size),
             shape,
             new Centered()
         );
@@ -110,14 +95,10 @@ public class ScaleWindow extends Window {
      * @param pos The position of the window.
      * @param shape The shape on the window.
      */
-    public ScaleWindow(
-        final String title,
-        final AdjustablePos pos,
-        final Shape shape
-    ) {
+    public ScaleWindow(final String title, final Pos pos, final Shape shape) {
         this(
             title,
-            new AreaOf(pos, new SoftSize()),
+            new SoftArea(pos),
             shape,
             new ShapeSized(shape)
         );
@@ -131,12 +112,9 @@ public class ScaleWindow extends Window {
      * @param shape The shape on the window.
      */
     public ScaleWindow(
-        final String title,
-        final AdjustablePos pos,
-        final AdjustableSize size,
-        final Shape shape
+        final String title, final Pos pos, final Size size, final Shape shape
     ) {
-        this(title, new AreaOf(pos, size), shape, NoFeature.cached());
+        this(title, new MixArea(pos, size), shape, NoFeature.cached());
     }
 
     /**
@@ -166,7 +144,7 @@ public class ScaleWindow extends Window {
     public ScaleWindow(final String title, final Shape shape) {
         this(
             title,
-            new AreaOf(new SoftSize()),
+            new SoftArea(),
             shape,
             new FoundArea(shape)
         );
@@ -202,12 +180,11 @@ public class ScaleWindow extends Window {
             new Features(
                 feature,
                 frame -> shape.adjustment(
-                    new Short(
-                        NoAdjustment.cached(),
-                        new unit.tuple.adjustment.Short<>(
-                            width -> frame.getContentPane().getWidth(),
-                            height -> frame.getContentPane().getHeight()
-                        )
+                    new AreaAdjustment(
+                        (x, y, w, h) -> x.cleanValue(),
+                        (x, y, w, h) -> y.cleanValue(),
+                        (x, y, w, h) -> frame.getContentPane().getWidth(),
+                        (x, y, w, h) -> frame.getContentPane().getHeight()
                     )
                 ),
                 new Resizability(area)

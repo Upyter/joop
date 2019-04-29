@@ -22,10 +22,8 @@
 package joop.shape.gui;
 
 import unit.area.Area;
-import unit.area.AreaOf;
+import unit.area.SoftArea;
 import unit.functional.Action;
-import unit.pos.SoftPos;
-import unit.size.SoftSize;
 
 /**
  * A labeled button.
@@ -47,10 +45,7 @@ public class TextButton extends Labeled {
     ) {
         super(
             text,
-            new AreaOf(
-                new SoftPos(),
-                new SoftSize()
-            ),
+            new SoftArea(),
             (area1, color, ignored) -> new Button(area1, action)
         );
     }
@@ -66,10 +61,7 @@ public class TextButton extends Labeled {
     ) {
         super(
             text,
-            new AreaOf(
-                new SoftPos(),
-                new SoftSize()
-            ),
+            new SoftArea(),
             (area1, color, ignored) -> new Button(area1, action)
         );
     }

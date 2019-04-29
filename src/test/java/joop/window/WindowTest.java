@@ -29,7 +29,7 @@ import net.avh4.util.imagecomparison.hamcrest.ImageComparisonMatchers;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import unit.area.Area;
-import unit.area.AreaOf;
+import unit.area.SoftArea;
 
 /**
  * Tests for {@link Window}.
@@ -55,7 +55,7 @@ public final class WindowTest {
         final var rectHeight = 440;
         new Window(
             title,
-            new AreaOf(x, y, width, height),
+            new SoftArea(x, y, width, height),
             new Rect(0, 0, rectWidth, rectHeight)
         ).show();
         final long sleep = 250L;

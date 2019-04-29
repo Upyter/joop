@@ -25,7 +25,7 @@ import java.awt.Graphics;
 import joop.event.mouse.InputHardware;
 import unit.area.Adjustment;
 import unit.area.Area;
-import unit.area.AreaOf;
+import unit.area.SoftArea;
 
 /**
  * A shape that doesn't apply any action. It can be used instead of null.
@@ -40,7 +40,7 @@ public class EmptyShape implements Shape {
 
     @Override
     public final Area adjustment(final Adjustment adjustment) {
-        return new AreaOf();
+        return new SoftArea(0.0, 0.0);
     }
 
     @Override

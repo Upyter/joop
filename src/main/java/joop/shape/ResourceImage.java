@@ -23,9 +23,9 @@ package joop.shape;
 
 import joop.event.Event;
 import unit.area.Area;
-import unit.area.AreaOf;
 import unit.area.OverlapArea;
 import unit.area.OverlapAreaOf;
+import unit.area.SoftArea;
 
 /**
  * An image from the resources folder. This is a shortcut for:
@@ -38,7 +38,7 @@ public class ResourceImage extends Image {
      * @param path The path to the image (inside the resources folder).
      */
     public ResourceImage(final String path) {
-        this(path, new AreaOf());
+        this(path, new SoftArea());
     }
 
     /**
