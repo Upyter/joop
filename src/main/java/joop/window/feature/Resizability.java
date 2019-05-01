@@ -29,8 +29,8 @@ import unit.area.Area;
 import unit.functional.Lazy;
 import unit.scalar.FixScalar;
 import unit.scalar.SoftScalar;
+import unit.size.MixSize;
 import unit.size.Size;
-import unit.size.SoftSize;
 
 /**
  * Makes a window resizable if its size is soft. Otherwise it will be
@@ -50,7 +50,7 @@ public class Resizability implements Consumer<JFrame> {
      */
     public Resizability(final Area area) {
         this(
-            () -> new SoftSize(
+            () -> new MixSize(
                 area.cleanW().isFix() ? new FixScalar(area.w()) : new SoftScalar(area.cleanW().cleanValue()),
                 area.cleanH().isFix() ? new FixScalar(area.h()) : new SoftScalar(area.cleanH().cleanValue())
             )

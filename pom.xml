@@ -27,7 +27,7 @@
 
     <groupId>io.github.upyter</groupId>
     <artifactId>joop</artifactId>
-    <version>0.74</version>
+    <version>0.76</version>
     <packaging>jar</packaging>
     <name>joop</name>
     <description>Object oriented java 2d wrapper for shapes</description>
@@ -90,7 +90,7 @@
         <dependency>
             <groupId>com.github.Upyter</groupId>
             <artifactId>unit</artifactId>
-            <version>ce23624bc8</version>
+            <version>37b08d1eab</version>
         </dependency>
         <!-- to compare swing drawing with expectation images -->
         <dependency>

@@ -76,7 +76,14 @@ public class Column implements Shape {
                         )
                     );
                     final Area covered = new Covered(areas);
-                    return new SoftSize(covered.w(), covered.h());
+                    var height = 0.0;
+                    for (final Area area : areas) {
+                        height += area.h() + area.y();
+                    }
+                    return new SoftSize(
+                        covered.w(),
+                        height
+                    );
                 }
             ).value(),
             shapes
@@ -115,7 +122,7 @@ public class Column implements Shape {
         final var available = new AvailableSize(areas);
         final var unavailable = new UnavailableSize(areas);
         final unit.size.Adjustment sizeAdjustment = new SizeAdjustment(
-            () -> this.area.w(),
+            this.area::w,
             height -> {
                 if (available.h() == 0.0) {
                     final int empties = areas.count(
