@@ -34,9 +34,10 @@ import unit.area.NoAdjustment;
 import unit.area.Sizeless;
 import unit.area.SoftArea;
 import unit.functional.Cached;
+import unit.scalar.WrapScalar;
+import unit.size.MixSize;
 import unit.size.Size;
 import unit.size.SizeAdjustment;
-import unit.size.SoftSize;
 import unit.size.raw.AvailableSize;
 import unit.size.raw.UnavailableSize;
 
@@ -77,12 +78,23 @@ public class Column implements Shape {
                     );
                     final Area covered = new Covered(areas);
                     var height = 0.0;
+                    boolean anyWSoft = false;
+                    boolean anyHSoft = false;
                     for (final Area area : areas) {
-                        height += area.h() + area.y();
+                        height += area.cleanH().cleanValue()
+                            + area.cleanY().cleanValue();
+                        if (!area.cleanW().isFix()) {
+                            anyWSoft = true;
+                        }
+                        if (!area.cleanH().isFix()) {
+                            anyHSoft = true;
+                        }
                     }
-                    return new SoftSize(
-                        covered.w(),
-                        height
+                    final var width = covered.w();
+                    final var heightResult = height;
+                    return new MixSize(
+                        new WrapScalar(!anyWSoft, () -> width),
+                        new WrapScalar(!anyHSoft, () -> heightResult)
                     );
                 }
             ).value(),
@@ -121,13 +133,11 @@ public class Column implements Shape {
         );
         final var available = new AvailableSize(areas);
         final var unavailable = new UnavailableSize(areas);
-        final unit.size.Adjustment sizeAdjustment = new SizeAdjustment(
+        final var sizeAdjustment = new SizeAdjustment(
             this.area::w,
             height -> {
                 if (available.h() == 0.0) {
-                    final int empties = areas.count(
-                        a -> !a.cleanH().isFix()
-                    );
+                    final double empties = areas.count(a -> !a.cleanH().isFix());
                     return (this.area.h() - unavailable.h()) / empties;
                 } else {
                     return height.cleanValue() / available.h() * Math.max(0.0, this.area.h() - unavailable.h());

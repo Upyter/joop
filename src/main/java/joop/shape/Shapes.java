@@ -28,9 +28,13 @@ import joop.event.mouse.InputHardware;
 import unit.area.Adjustment;
 import unit.area.Area;
 import unit.area.Covered;
+import unit.area.MixArea;
 import unit.area.NoAdjustment;
 import unit.functional.Cached;
 import unit.functional.Lazy;
+import unit.pos.SoftPos;
+import unit.scalar.WrapScalar;
+import unit.size.MixSize;
 
 /**
  * A collection of shapes.
@@ -71,7 +75,29 @@ public class Shapes implements Shape {
                         shape.adjustment(NoAdjustment.instance())
                     )
                 );
-                return new Covered(areas);
+                boolean anyWSoft = false;
+                boolean anyHSoft = false;
+                for (final Area area : areas) {
+                    if (!area.cleanW().isFix()) {
+                        anyWSoft = true;
+                    }
+                    if (!area.cleanH().isFix()) {
+                        anyHSoft = true;
+                    }
+                }
+                final var covered = new Covered(areas);
+                final var width = covered.w();
+                final var height = covered.h();
+                return new MixArea(
+                    new SoftPos(
+                        covered.x(),
+                        covered.y()
+                    ),
+                    new MixSize(
+                        new WrapScalar(!anyWSoft, () -> width),
+                        new WrapScalar(!anyHSoft, () -> height)
+                    )
+                );
             }
         );
     }

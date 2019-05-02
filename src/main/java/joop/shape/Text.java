@@ -24,6 +24,7 @@ package joop.shape;
 import java.awt.Canvas;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.util.function.Function;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 import joop.event.mouse.InputHardware;
@@ -32,7 +33,6 @@ import unit.area.Area;
 import unit.area.MixArea;
 import unit.color.Black;
 import unit.color.Color;
-import unit.functional.Cached;
 import unit.functional.Lazy;
 import unit.pos.Pos;
 import unit.pos.SoftPos;
@@ -53,7 +53,7 @@ public class Text implements Shape {
     /**
      * The area of the text.
      */
-    private final Lazy<Area> area;
+    private final Area area;
 
     /**
      * The color of the rect.
@@ -144,22 +144,83 @@ public class Text implements Shape {
     ) {
         this(
             content,
-            new Cached<>(
-                () -> {
-                    Font font = new Font("Times new Roman", Font.PLAIN, 25);
+            pos,
+            color,
+            new Font("Arial", Font.PLAIN, 20)
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param content The characters of the text.
+     * @param pos The position of the text.
+     * @param color The color of the rect.
+     * @param font The font to be used.
+     */
+    public Text(
+        final Supplier<String> content,
+        final Pos pos,
+        final Color color,
+        final Font font
+    ) {
+        this(
+            content,
+            area -> new MixArea(pos, new FixSize(area.w(), area.h())),
+            color,
+            font
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param content The characters of the text.
+     * @param area The area of the text.
+     * @param color The color of the rect.
+     */
+    public Text(
+        final Supplier<String> content,
+        final Function<Area, Area> area,
+        final Color color
+    ) {
+        this(
+            content,
+            area,
+            color,
+            new Font("Arial", Font.PLAIN, 20)
+        );
+    }
+
+    /**
+     * Ctor.
+     * @param content The characters of the text.
+     * @param area The area of the text.
+     * @param color The color of the rect.
+     * @param font The font to be used.
+     */
+    public Text(
+        final Supplier<String> content,
+        final Function<Area, Area> area,
+        final Color color,
+        final Font font
+    ) {
+        this(
+            content,
+            area.apply(
+                ((Lazy<Area>) () -> {
                     final var bounds = font.createGlyphVector(
-                            new Canvas()
-                                .getFontMetrics(font)
-                                .getFontRenderContext(),
-                            content.get()
-                        ).getPixelBounds(null, (int) pos.x(), (int) pos.y());
+                        new Canvas()
+                            .getFontMetrics(font)
+                            .getFontRenderContext(),
+                        content.get()
+                    ).getLogicalBounds();
                     return new MixArea(
-                        pos,
-                        new FixSize(bounds.width, bounds.height)
+                        new SoftPos(),
+                        new FixSize(bounds.getWidth(), bounds.getHeight())
                     );
-                }
+                }).value()
             ),
-            color
+            color,
+            font
         );
     }
 
@@ -171,31 +232,31 @@ public class Text implements Shape {
      */
     private Text(
         final Supplier<String> content,
-        final Lazy<Area> area,
-        final Color color
+        final Area area,
+        final Color color,
+        final Font font
     ) {
         this.content = content;
         this.area = area;
         this.color = color.result(java.awt.Color::new);
-        this.font = new Font("Arial", Font.PLAIN, 25);
+        this.font = font;
     }
 
     @Override
     public final void draw(final Graphics graphics) {
         graphics.setColor(this.color);
         graphics.setFont(this.font);
-        final var current = this.area.value();
         graphics.drawString(
             this.content.get(),
-            (int) current.x(),
-            (int) (current.y() + current.h())
+            (int) this.area.x(),
+            (int) (this.area.y() + this.area.h())
         );
     }
 
     @Override
     public final Area adjustment(final Adjustment adjustment) {
-        this.area.value().adjustment(adjustment);
-        return this.area.value();
+        this.area.adjustment(adjustment);
+        return this.area;
     }
 
     @Override

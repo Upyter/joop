@@ -22,8 +22,11 @@
 package joop.shape.gui;
 
 import unit.area.Area;
+import unit.area.MixArea;
 import unit.area.SoftArea;
 import unit.functional.Action;
+import unit.pos.SoftPos;
+import unit.size.Size;
 
 /**
  * A labeled button.
@@ -40,9 +43,7 @@ public class TextButton extends Labeled {
      * @param text The text of the button.
      * @param action The action to be run when the button is released.
      */
-    public TextButton(
-        final int text, final Action action
-    ) {
+    public TextButton(final int text, final Action action) {
         super(
             text,
             new SoftArea(),
@@ -56,13 +57,42 @@ public class TextButton extends Labeled {
      * @param text The text of the button.
      * @param action The action to be run when the button is released.
      */
-    public TextButton(
-        final String text, final Action action
-    ) {
+    public TextButton(final String text, final Action action) {
         super(
             text,
             new SoftArea(),
             (area1, color, ignored) -> new Button(area1, action)
+        );
+    }
+
+    /**
+     * Uses x = 0 and y = 0 as its position. The position will be soft.
+     * @param text The text of the button.
+     * @param size The size of the button
+     * @param action The action to be run when the button is released.
+     */
+    public TextButton(final int text, final Size size, final Action action) {
+        this(
+            Integer.toString(text),
+            size,
+            action
+        );
+    }
+
+    /**
+     * Uses x = 0 and y = 0 as its position. The position will be soft.
+     * @param text The text of the button.
+     * @param size The size of the button
+     * @param action The action to be run when the button is released.
+     */
+    public TextButton(final String text, final Size size, final Action action) {
+        this(
+            text,
+            new MixArea(
+                new SoftPos(),
+                size
+            ),
+            action
         );
     }
 
@@ -72,9 +102,7 @@ public class TextButton extends Labeled {
      * @param area The area of the button
      * @param action The action to be run when the button is released.
      */
-    public TextButton(
-        final int text, final Area area, final Action action
-    ) {
+    public TextButton(final int text, final Area area, final Action action) {
         super(
             text,
             area,
@@ -88,9 +116,7 @@ public class TextButton extends Labeled {
      * @param area The area of the button
      * @param action The action to be run when the button is released.
      */
-    public TextButton(
-        final String text, final Area area, final Action action
-    ) {
+    public TextButton(final String text, final Area area, final Action action) {
         super(
             text,
             area,

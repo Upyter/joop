@@ -30,8 +30,10 @@ import joop.event.mouse.InputHardware;
 import joop.shape.Shape;
 import joop.shape.Text;
 import joop.shape.UnfilledRect;
+import org.apache.commons.lang3.mutable.Mutable;
 import unit.area.Adjustment;
 import unit.area.Area;
+import unit.area.SoftArea;
 import unit.color.Black;
 import unit.pos.SoftPos;
 
@@ -43,48 +45,68 @@ public class TextField implements Shape {
     private final Shape shape;
     private final Shape text;
 
+    public TextField() {
+        this(new SoftArea());
+    }
+
     public TextField(final Area area) {
-        final var text = new Object() {
-            private String string = "A";
+        this(area, new Mutable<>() {
+            private String value = "";
 
+            @Override
             public String getValue() {
-                return string;
+                return this.value;
             }
 
-            public void add(final char c) {
-                if (c == KeyEvent.VK_BACK_SPACE) {
-                    if (!string.isEmpty()) {
-                        string = string.substring(0, string.length() - 1);
-                    }
-                } else {
-                    this.string += c;
-                }
+            @Override
+            public void setValue(final String s) {
+                this.value = s;
             }
-        };
+        });
+    }
+
+    public TextField(
+        final Area area,
+        final Mutable<String> target
+    ) {
         this.shape = new UnfilledRect(
             area,
             new Black(),
-            new Press(text::add)
+            new Press(
+                c -> {
+                    var current = target.getValue();
+                    if (c == KeyEvent.VK_BACK_SPACE) {
+                        if (!current.isEmpty()) {
+                            current = current.substring(
+                                0, current.length() - 1
+                            );
+                        }
+                    } else {
+                        current += c;
+                    }
+                    target.setValue(current);
+                }
+            )
         );
         this.text = new Text(
-            text::getValue,
+            target::getValue,
             new SoftPos(
-                () -> (int) Math.min(1, area.w() - width(text.getValue(), area)),
+                () -> Math.min(1.0, area.w() - width(target.getValue(), area)),
                 1
             )
         );
         this.area = area;
     }
 
-    private static int width(String string, Area area) {
-        Font font = new Font("Times new Roman", Font.PLAIN, 25);
+    private static double width(String string, Area area) {
+        Font font = new Font("Arial", Font.PLAIN, 20);
         final var bounds = font.createGlyphVector(
             new Canvas()
                 .getFontMetrics(font)
                 .getFontRenderContext(),
             string
-        ).getPixelBounds(null, (float) area.x(), (float) area.y());
-        return bounds.width;
+        ).getLogicalBounds();
+        return bounds.getWidth();
     }
 
     @Override

@@ -127,7 +127,7 @@ public class Button implements Shape {
      */
     public Button(final Area area, final Action action) {
         this(
-            new OverlapAreaOf(area),
+            area,
             action,
             new MutableBoolean()
         );

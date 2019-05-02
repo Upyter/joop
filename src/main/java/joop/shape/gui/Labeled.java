@@ -31,6 +31,8 @@ import joop.shape.Text;
 import joop.shape.pen.Pen;
 import unit.area.Adjustment;
 import unit.area.Area;
+import unit.area.Centered;
+import unit.color.Black;
 import unit.color.White;
 import unit.pos.SoftPos;
 
@@ -65,9 +67,10 @@ public class Labeled implements Shape {
         final Pen<Shape, Area> pen
     ) {
         this(
-            pen.shape(area, new White(), (x, y) -> { }),
-            new Text(text, new SoftPos(area.x(), area.y())),
-            area
+            () -> text,
+            area,
+            pen,
+            (source, overlap) -> { }
         );
     }
 
@@ -83,9 +86,10 @@ public class Labeled implements Shape {
         final Pen<Shape, Area> pen
     ) {
         this(
-            pen.shape(area, new White(), (x, y) -> { }),
-            new Text(text, new SoftPos(area.x(), area.y())),
-            area
+            text,
+            area,
+            pen,
+            (source, overlap) -> { }
         );
     }
 
@@ -103,9 +107,10 @@ public class Labeled implements Shape {
         final Event event
     ) {
         this(
-            pen.shape(area, new White(), event),
-            new Text(text, new SoftPos(area.x(), area.y())),
-            area
+            () -> text,
+            area,
+            pen,
+            event
         );
     }
 
@@ -123,9 +128,10 @@ public class Labeled implements Shape {
         final Event event
     ) {
         this(
-            pen.shape(area, new White(), event),
-            new Text(text, new SoftPos(area.x(), area.y())),
-            area
+            () -> text,
+            area,
+            pen,
+            event
         );
     }
 
@@ -164,7 +170,14 @@ public class Labeled implements Shape {
     ) {
         this(
             pen.shape(area, new White(), event),
-            new Text(text, new SoftPos(area.x(), area.y())),
+            new Text(
+                text,
+                own -> new Centered(
+                    own,
+                    area
+                ),
+                new Black()
+            ),
             area
         );
     }

@@ -34,9 +34,10 @@ import unit.area.NoAdjustment;
 import unit.area.Sizeless;
 import unit.area.SoftArea;
 import unit.functional.Cached;
+import unit.scalar.WrapScalar;
+import unit.size.MixSize;
 import unit.size.Size;
 import unit.size.SizeAdjustment;
-import unit.size.SoftSize;
 import unit.size.raw.AvailableSize;
 import unit.size.raw.UnavailableSize;
 
@@ -76,7 +77,25 @@ public class Row implements Shape {
                         )
                     );
                     final Area covered = new Covered(areas);
-                    return new SoftSize(covered.w(), covered.h());
+                    var width = 0.0;
+                    boolean anyWSoft = false;
+                    boolean anyHSoft = false;
+                    for (final Area area : areas) {
+                        width += area.cleanW().cleanValue()
+                            + area.cleanX().cleanValue();
+                        if (!area.cleanW().isFix()) {
+                            anyWSoft = true;
+                        }
+                        if (!area.cleanH().isFix()) {
+                            anyHSoft = true;
+                        }
+                    }
+                    final var height = covered.h();
+                    final var widthResult = width;
+                    return new MixSize(
+                        new WrapScalar(!anyWSoft, () -> widthResult),
+                        new WrapScalar(!anyHSoft, () -> height)
+                    );
                 }
             ).value(),
             shapes
@@ -113,19 +132,17 @@ public class Row implements Shape {
             shape -> shape.adjustment(NoAdjustment.instance())
         );
         final var available = new AvailableSize(areas);
-        final var unavailable = new UnavailableSize(areas).w();
+        final var unavailable = new UnavailableSize(areas);
         final var sizeAdjustment = new SizeAdjustment(
             width -> {
                 if (available.w() == 0.0) {
-                    final int empties = areas.count(
-                        a -> !a.cleanW().isFix()
-                    );
-                    return (this.area.w() - unavailable) / empties;
+                    final double empties = areas.count(a -> !a.cleanW().isFix());
+                    return (this.area.w() - unavailable.w()) / empties;
                 } else {
-                    return width.cleanValue() / available.w() * Math.max(0.0, this.area.w() - unavailable);
+                    return width.cleanValue() / available.w() * Math.max(0.0, this.area.w() - unavailable.w());
                 }
             },
-            height -> this.area.h()
+            this.area::h
         );
         this.area.adjustment(adjustment);
         this.shapes.foldLeft(
