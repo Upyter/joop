@@ -127,6 +127,7 @@
     <build>
         <plugins>
             <!-- code analysis tool -->
+            <!--
             <plugin>
                 <groupId>com.qulice</groupId>
                 <artifactId>qulice-maven-plugin</artifactId>
@@ -148,7 +149,7 @@
                     </execution>
                 </executions>
             </plugin>
-
+               -->
             <!-- to set the java version to 10-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
